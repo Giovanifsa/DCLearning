@@ -1,0 +1,5 @@
+<beans>
+	<interceptors>
+		<class>ecommerce.control.TransactionManager</class>
+	</interceptors>
+</beans>

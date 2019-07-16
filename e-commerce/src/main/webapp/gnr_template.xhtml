@@ -1,0 +1,42 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+          "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:b="http://bootsfaces.net/ui" 
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+	<title>E-Commerce</title>
+
+	<h:outputStylesheet library="css" name="background.css" />
+
+	<ui:insert name="head" />
+</h:head>
+
+<h:body>
+	<div class="bg">
+		<b:navBar brand="E-Commerce" brandHref="#" inverse="true" brand-align="left">
+			<b:navbarLinks>
+				<b:navLink value="Loja" href="store.xhtml" active="#{view.viewId == '/store.xhtml'}" />
+			</b:navbarLinks>
+			
+			<b:navbarLinks pull="right">
+				<b:navCommandLink value="Finalizar sessão" href="#" action="#{loginBean.endSession}" rendered="#{loginBean.isUserLogged()}" />
+			</b:navbarLinks>
+			
+			<b:navbarLinks pull="right">
+				<b:navLink value="Iniciar sessão" href="login.xhtml" rendered="#{loginBean.isUserLogged() == false and view.viewId != '/login.xhtml'}" />
+			</b:navbarLinks>
+			
+			<b:navbarLinks pull="right">
+				<b:navLink value="Carrinho (#{shoppingCartBean.getCartQuantity()} itens - R$ #{shoppingCartBean.calcFinalPrice()})" href="cart.xhtml" iconAwesome="shopping-cart"/>
+			</b:navbarLinks>
+			
+		</b:navBar>
+
+		<ui:insert name="body"></ui:insert>
+	</div>
+</h:body>
+</html>
