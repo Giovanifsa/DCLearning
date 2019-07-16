@@ -8,6 +8,7 @@ import javax.inject.Named;
 
 @Named
 public class HashMechanism implements Serializable {
+	
 	public byte[] defaultHashBytes(byte[] bytes) throws NoSuchAlgorithmException {
 		MessageDigest digester = MessageDigest.getInstance("SHA-256");
 		return digester.digest(bytes);

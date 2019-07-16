@@ -25,5 +25,4 @@ public class CartProduct {
 		this.product = product;
 	}
 	
-	
 }
