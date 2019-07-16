@@ -96,6 +96,7 @@ public class LoginBean implements Serializable {
 
 	public String getPassword() {
 		return password;
+		
 	}
 
 	public void setPassword(String password) {
