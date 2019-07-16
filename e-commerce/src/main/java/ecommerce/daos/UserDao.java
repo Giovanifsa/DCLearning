@@ -1,4 +1,4 @@
-package ecommerce.database;
+package ecommerce.daos;
 
 import java.io.Serializable;
 import java.security.NoSuchAlgorithmException;
@@ -14,7 +14,7 @@ import ecommerce.models.User;
 import ecommerce.tools.HashMechanism;
 
 @Named
-public class UserManager implements Serializable {
+public class UserDao implements Serializable {
 	@Inject
 	private EntityManager em;
 	
