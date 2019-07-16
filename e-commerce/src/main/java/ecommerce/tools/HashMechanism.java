@@ -12,8 +12,4 @@ public class HashMechanism implements Serializable {
 		MessageDigest digester = MessageDigest.getInstance("SHA-256");
 		return digester.digest(bytes);
 	}
-	
-	public void teste() {
-		
-	}
 }
