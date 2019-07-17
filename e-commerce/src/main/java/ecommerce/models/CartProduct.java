@@ -25,4 +25,7 @@ public class CartProduct {
 		this.product = product;
 	}
 	
+	public double getPrice() {
+		return (product.getPrice() * quantity);
+	}
 }

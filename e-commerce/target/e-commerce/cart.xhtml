@@ -4,12 +4,36 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
 	xmlns:h="http://xmlns.jcp.org/jsf/html"
-	xmlns:f="http://xmlns.jcp.org/jsf/core">
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:b="http://bootsfaces.net/ui" xmlns:p="http://primefaces.org/ui">
 
 <ui:composition template="gnr_template.xhtml">
-	<ui:define name="body" >
+	<ui:define name="body">
 		<h:form>
-			
+		<b:container>
+			<p:dataScroller value="#{shoppingCartBean.selectedProducts}" var="product"
+				chunkSize="10">
+				<f:facet name="header">
+            		Itens no carrinho de compras
+        		</f:facet>
+
+				<h:panelGrid columns="3" columnClasses="logo,detail">
+					<p:graphicImage value="#{productBean.image}">
+						<f:param name="product_id" value="#{product.id}" />
+					</p:graphicImage>
+
+					<p:outputPanel>
+						<h:panelGrid columns="2" cellpadding="5">
+							<h2><p:outputLabel value="#{product.name}" /></h2>
+							<h:outputText value="Quantidade - "/>
+							<b:touchSpin value="#{product.quantity}"></b:touchSpin>
+						</h:panelGrid>
+					</p:outputPanel>
+					
+					<b:commandButton value="Teste"></b:commandButton>
+				</h:panelGrid>
+			</p:dataScroller>
+		</b:container>
 		</h:form>
 	</ui:define>
 </ui:composition>
