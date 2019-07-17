@@ -20,10 +20,10 @@ public class ShoppingCartBean implements Serializable {
 	public double calcFinalPrice() {
 		double price = 0.0d;
 		
-		for (CartProduct e : selectedProducts) {
-			price += (e.getProduct().getPrice() * e.getQuantity());
-		}
-		
+//		for (CartProduct e : selectedProducts) {
+//			price += (e.getProduct().getPrice() * e.getQuantity());
+//		}
+//		
 		return price;
 	}
 	

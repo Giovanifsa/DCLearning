@@ -1,17 +1,31 @@
 package ecommerce.models;
 
-import javax.persistence.Id;
+import java.math.BigDecimal;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Lob;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
+import javax.validation.constraints.NotNull;
+
+@Entity
 public class Product {
 	@Id
 	private long code;
-	
+
+	@NotNull
 	private String name;
+
+	@Lob
 	private String description;
-	private double price;
-	private double profitMarginPercentual;
+	private BigDecimal price;
+	private BigDecimal profitMarginPercentual;
 	
+	@OneToOne
 	private BinaryData prodImage;
+	
+	@ManyToOne
 	private Store prodStore;
 	
 	public long getCode() {
@@ -38,19 +52,19 @@ public class Product {
 		this.description = description;
 	}
 	
-	public double getPrice() {
+	public BigDecimal getPrice() {
 		return price;
 	}
 	
-	public void setPrice(double price) {
+	public void setPrice(BigDecimal price) {
 		this.price = price;
 	}
 	
-	public double getProfitMarginPercentual() {
+	public BigDecimal getProfitMarginPercentual() {
 		return profitMarginPercentual;
 	}
 	
-	public void setProfitMarginPercentual(double profitMarginPercentual) {
+	public void setProfitMarginPercentual(BigDecimal profitMarginPercentual) {
 		this.profitMarginPercentual = profitMarginPercentual;
 	}
 	

@@ -14,7 +14,7 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import ecommerce.database.UserManager;
+import ecommerce.daos.UserDao;
 import ecommerce.models.User;
 import ecommerce.tools.HashMechanism;
 
@@ -37,7 +37,7 @@ public class LoginBean implements Serializable {
 	@Inject
 	private SessionDataBean sessionBean;
 	@Inject
-	private UserManager userManager;
+	private UserDao userManager;
 	@Inject
 	private HashMechanism hashMechanism;
 	
