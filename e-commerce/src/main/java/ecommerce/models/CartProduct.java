@@ -1,5 +1,7 @@
 package ecommerce.models;
 
+import java.math.BigDecimal;
+
 public class CartProduct {
 	private int quantity;
 	private Product product;
@@ -25,7 +27,7 @@ public class CartProduct {
 		this.product = product;
 	}
 	
-	public double getPrice() {
-		return (product.getPrice() * quantity);
+	public BigDecimal getPrice() {
+		return (product.getPrice().multiply(new BigDecimal(quantity)));
 	}
 }
