@@ -18,6 +18,7 @@ import ecommerce.models.Product;
 import ecommerce.models.User;
 import ecommerce.tools.HashMechanism;
 
+@SuppressWarnings("serial")
 @Named
 @SessionScoped
 public class CartBean implements Serializable {
@@ -31,14 +32,6 @@ public class CartBean implements Serializable {
 	private HashMechanism hashing;
 	
 	private ArrayList<CartProduct> selectedProducts = new ArrayList<>();
-	
-	@PostConstruct
-	public void postContruct() {
-		Product p = productDao.getProduct(1);
-		CartProduct cartProd = new CartProduct(p, 27);
-		
-		selectedProducts.add(cartProd);
-	}
 	
 	public String removeCartProduct(CartProduct cartProduct) {
 		for (CartProduct e : selectedProducts) {

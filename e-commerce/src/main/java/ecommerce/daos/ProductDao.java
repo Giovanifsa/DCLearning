@@ -1,6 +1,7 @@
 package ecommerce.daos;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -11,6 +12,7 @@ import ecommerce.control.Transactional;
 import ecommerce.models.BinaryData;
 import ecommerce.models.Product;
 import ecommerce.models.ResourceFile;
+import ecommerce.models.Store;
 
 @Named
 public class ProductDao implements Serializable {
@@ -26,9 +28,7 @@ public class ProductDao implements Serializable {
 	}
 
 	public List<Product> listarProdutos(){
-		
-		String jpql = "select p from Product p";
-		return em.createQuery(jpql, Product.class).getResultList();
+		return em.createQuery("select p from Product p", Product.class).getResultList();
 	}
 	
 	@Transactional
@@ -50,10 +50,32 @@ public class ProductDao implements Serializable {
 	}
 
 	public void remover(Product produto) {
-		int code = (int) produto.getCode();
-		String jpql ="delete from Product p where p.code = :pCode";
-//		em.remove(em.merge(produto));
-		em.createQuery(jpql).setParameter("pCode", code);
+		em.remove(em.merge(produto));
+	}
+	
+	public void populaBanco() {
+		System.out.println("Inicio");
 		
+		Product p = new Product();
+		ResourceFile imagem = new ResourceFile();
+		Store loja = new Store();
+		
+		loja.setCnpj("123456789123");
+		loja.setFantasyName("Loja 00");
+		
+		imagem.setFileName("capita.png");
+		imagem.setFilePath("resource/images/");
+		
+		p.setCode(123456);
+		p.setDescription("Filme da Capitã Marvel");
+		p.setName("Capitã Marvel");
+		p.setPrice(new BigDecimal(9.5));
+		p.setProdImage(imagem);
+		p.setProfitMarginPercentual(new BigDecimal(2.20));
+		p.setProdStore(loja);
+		p.setSells(550);
+		
+		System.out.println("Fim");
+		em.persist(p);
 	}
 }
