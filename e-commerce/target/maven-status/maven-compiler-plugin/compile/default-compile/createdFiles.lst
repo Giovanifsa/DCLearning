@@ -1,5 +1,7 @@
 ecommerce\models\User.class
 ecommerce\control\TransactionManager.class
+ecommerce\daos\UserDao.class
+ecommerce\daos\ProductDao.class
 ecommerce\beans\LoginBean$3.class
 ecommerce\beans\LoginBean$2.class
 ecommerce\models\Product.class
@@ -12,9 +14,7 @@ ecommerce\tools\Producer.class
 ecommerce\beans\LoginBean.class
 ecommerce\control\PageRestrictor.class
 ecommerce\tools\HashMechanism.class
-ecommerce\database\FileManager.class
 ecommerce\control\Transactional.class
-ecommerce\database\ProductManager.class
 ecommerce\models\Store.class
 ecommerce\models\CartProduct.class
-ecommerce\database\UserManager.class
+ecommerce\daos\FileDao.class

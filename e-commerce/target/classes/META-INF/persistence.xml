@@ -10,6 +10,7 @@
 		<class>ecommerce.models.User</class>
 		<class>ecommerce.models.BinaryData</class>
 		<class>ecommerce.models.Product</class>
+		<class>ecommerce.models.Store</class>
 
 		<properties>
 			<property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver" />

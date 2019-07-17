@@ -13,26 +13,26 @@
 	<ui:define name="body">
 		<b:form>
 			<b:container fluid="true">
-				<b:panel title="Iniciar sessão" look="primary" collapsible="false" large-screen="5" >
-					<b:panelGrid colSpans="2,7,3">
+				<b:panel title="Iniciar sessão" look="primary" collapsible="false" large-screen="7" medium-screen="7">
+					<b:panelGrid  colSpans="2,5,5">
 						<h:outputText value="E-mail:" />
 						
 						<b:inputText id="loginEmailField" placeholder="usuario@datacoper.com"
 								value="#{loginBean.email}" required="true" binding="#{loginBean.loginEmailField}"
-								required-message="É necessário preencher este campo." validator="#{loginBean.validateEmail}"  />
+								required-message="Campo necessário." validator="#{loginBean.validateEmail}"  />
 								
 						<b:message for="loginEmailField"/>
 						
 						<h:outputText value="Senha:" />
 						
 						<b:inputSecret id="loginPasswordField" placeholder="Senha" value="#{loginBean.password}"
-								required="true" required-message="É necessário preencher este campo." validator="#{loginBean.validatePassword}"/>
+								required="true" required-message="Campo necessário." validator="#{loginBean.validatePassword}"/>
 								
 						<b:message for="loginPasswordField"/>
 					</b:panelGrid>
 					
 					<b:row>
-						<b:column offset="2" large-screen="7">
+						<b:column offset-lg="2" large-screen="5">
 							<b:commandButton value="Iniciar sessão" look="primary"
 								style="width:100%" action="#{loginBean.doLogin}" />
 						</b:column>

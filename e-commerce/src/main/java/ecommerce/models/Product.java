@@ -1,9 +1,22 @@
 package ecommerce.models;
 
-import javax.persistence.Id;
+import java.util.List;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+
+@Entity
 public class Product {
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private int id;
+	
+	@Column(unique = true)
 	private long code;
 	
 	private String name;
@@ -11,8 +24,13 @@ public class Product {
 	private double price;
 	private double profitMarginPercentual;
 	
+	@OneToOne
 	private BinaryData prodImage;
+	
+	@OneToOne
 	private Store prodStore;
+	
+	private int sells;
 	
 	public long getCode() {
 		return code;
@@ -62,16 +80,32 @@ public class Product {
 		this.prodImage = prodImage;
 	}
 	
+	@Override
+	public boolean equals(Object obj) {
+		return (obj != null && obj instanceof Product && ((Product)obj).code == code);
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public int getSells() {
+		return sells;
+	}
+
+	public void setSells(int sells) {
+		this.sells = sells;
+	}
+
 	public Store getProdStore() {
 		return prodStore;
 	}
 
 	public void setProdStore(Store prodStore) {
 		this.prodStore = prodStore;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		return (obj != null && obj instanceof Product && ((Product)obj).code == code);
 	}
 }
