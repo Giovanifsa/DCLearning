@@ -18,6 +18,7 @@ import ecommerce.models.Product;
 import ecommerce.models.User;
 import ecommerce.tools.HashMechanism;
 
+@SuppressWarnings("serial")
 @Named
 @SessionScoped
 public class CartBean implements Serializable {
