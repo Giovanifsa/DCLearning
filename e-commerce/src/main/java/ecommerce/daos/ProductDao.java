@@ -10,6 +10,7 @@ import javax.persistence.EntityManager;
 import ecommerce.control.Transactional;
 import ecommerce.models.BinaryData;
 import ecommerce.models.Product;
+import ecommerce.models.ResourceFile;
 
 @Named
 public class ProductDao implements Serializable {
@@ -29,7 +30,7 @@ public class ProductDao implements Serializable {
 		em.merge(p);
 	}
 	
-	public BinaryData getProductImage(int productId) {
+	public ResourceFile getProductImage(int productId) {
 		return em.find(Product.class, productId).getProdImage();
 	}
 	

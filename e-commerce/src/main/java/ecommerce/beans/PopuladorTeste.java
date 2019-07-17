@@ -11,6 +11,7 @@ import javax.persistence.Persistence;
 
 import ecommerce.models.BinaryData;
 import ecommerce.models.Product;
+import ecommerce.models.ResourceFile;
 import ecommerce.models.Store;
 import ecommerce.models.User;
 import ecommerce.tools.HashMechanism;
@@ -31,9 +32,9 @@ public class PopuladorTeste {
 		s.setOwner(u);
 		s.setTotalExpenses(24.0d);
 		
-		BinaryData file = new BinaryData();
-		file.setFileData(Files.readAllBytes(Paths.get("C:\\Users\\giova\\Desktop\\DCLearning\\foto_teste.png")));
-		file.setFileNameExt("foto_teste.png");
+		ResourceFile file = new ResourceFile();
+		file.setFileName("foto_teste.png");
+		file.setFilePath("foto_teste.png");
 		
 		Product p = new Product();
 		p.setCode(12309321093921L);

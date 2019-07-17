@@ -20,7 +20,7 @@ import ecommerce.tools.HashMechanism;
 
 @Named
 @SessionScoped
-public class ShoppingCartBean implements Serializable {
+public class CartBean implements Serializable {
 	@Inject
 	private ProductDao productDao;
 	
