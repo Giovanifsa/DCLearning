@@ -10,7 +10,7 @@ import ecommerce.control.Transactional;
 import ecommerce.models.BinaryData;
 
 @Named
-public class FileDao implements Serializable {
+public class ArquivoDAO implements Serializable {
 	@Inject
 	private EntityManager em;
 	

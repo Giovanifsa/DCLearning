@@ -6,11 +6,21 @@ import java.security.NoSuchAlgorithmException;
 
 import javax.inject.Named;
 
+/**
+ * Classe que realiza hash de strings e bytes
+ * @author Giovani
+ *
+ */
 @Named
 public class HashMechanism implements Serializable {
-	
-	public byte[] defaultHashBytes(byte[] bytes) throws NoSuchAlgorithmException {
+	/**
+	 * Aplica SHA-256 em algum dado. Strings podem ser transformadas em bytes[] pelo método getBytes.
+	 * @param dado
+	 * @return byte[] contendo o hash dos dados enviados por parâmetro.
+	 * @throws NoSuchAlgorithmException
+	 */
+	public byte[] aplicarSHA256(byte[] dado) throws NoSuchAlgorithmException {
 		MessageDigest digester = MessageDigest.getInstance("SHA-256");
-		return digester.digest(bytes);
+		return digester.digest(dado);
 	}
 }

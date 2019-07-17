@@ -1,6 +1,7 @@
 package ecommerce.beans;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,7 +12,6 @@ import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import ecommerce.daos.FileDao;
 import ecommerce.daos.ProductDao;
 import ecommerce.models.CartProduct;
 import ecommerce.models.Product;
@@ -25,20 +25,9 @@ public class CartBean implements Serializable {
 	private ProductDao productDao;
 	
 	@Inject
-	private FileDao fileDao;
-	
-	@Inject
 	private HashMechanism hashing;
 	
 	private ArrayList<CartProduct> selectedProducts = new ArrayList<>();
-	
-	@PostConstruct
-	public void postContruct() {
-		Product p = productDao.getProduct(1);
-		CartProduct cartProd = new CartProduct(p, 27);
-		
-		selectedProducts.add(cartProd);
-	}
 	
 	public String removeCartProduct(CartProduct cartProduct) {
 		for (CartProduct e : selectedProducts) {
@@ -52,13 +41,13 @@ public class CartBean implements Serializable {
 		return "cart";
 	}
 	
-	public double calcFinalPrice() {
-		double price = 0.0d;
+	public BigDecimal calcFinalPrice() {
+		BigDecimal price = new BigDecimal(0);
 		
-//		for (CartProduct e : selectedProducts) {
-//			price += (e.getProduct().getPrice() * e.getQuantity());
-//		}
-//		
+		for (CartProduct e : selectedProducts) {
+			price = price.add(e.getProduct().getPrice().multiply(new BigDecimal(e.getQuantity())));
+		}
+		
 		return price;
 	}
 	

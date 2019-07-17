@@ -10,6 +10,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.validation.constraints.NotNull;
@@ -34,11 +35,10 @@ public class Product {
 	@OneToOne(fetch = FetchType.EAGER)
 	private ResourceFile prodImage;
 	
-	@OneToOne(fetch = FetchType.EAGER)
-
+	@ManyToOne(fetch = FetchType.EAGER)
 	private Store prodStore;
 	
-	private int sells;
+	private int sells = 0;
 	
 	public long getCode() {
 		return code;

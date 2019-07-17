@@ -12,7 +12,6 @@ public class ResourceFile {
 	public int id;
 	
 	private String fileName;
-	private String filePath;
 	
 	public int getId() {
 		return id;
@@ -29,14 +28,4 @@ public class ResourceFile {
 	public void setFileName(String fileName) {
 		this.fileName = fileName;
 	}
-	
-	public String getFilePath() {
-		return filePath;
-	}
-	
-	public void setFilePath(String filePath) {
-		this.filePath = filePath;
-	}
-	
-	
 }

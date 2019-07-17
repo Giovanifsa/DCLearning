@@ -34,7 +34,7 @@ public class UserDao implements Serializable {
 	
 	@Transactional
 	public User createUser(String email, String password) throws NoSuchAlgorithmException {
-		User u = new User(email, hasher.defaultHashBytes(password.getBytes()));
+		User u = new User(email, hasher.aplicarSHA256(password.getBytes()));
 		em.persist(u);
 		
 		return u;

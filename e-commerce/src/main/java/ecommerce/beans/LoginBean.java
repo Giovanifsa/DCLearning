@@ -53,7 +53,7 @@ public class LoginBean implements Serializable {
 		
 		User user = userManager.findUser(email);
 		
-		if (user != null && Arrays.equals(user.getHashedPassword(), hashMechanism.defaultHashBytes(password.getBytes()))) {
+		if (user != null && Arrays.equals(user.getHashedPassword(), hashMechanism.aplicarSHA256(password.getBytes()))) {
 			sessionBean.setCurrentUser(user);
 		}
 		
