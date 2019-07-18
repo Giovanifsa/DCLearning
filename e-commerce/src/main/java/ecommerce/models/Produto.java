@@ -95,6 +95,14 @@ public class Produto {
 	public BigDecimal getMargemDeLucroPorcentual() {
 		return margemDeLucroPorcentual;
 	}
+	
+	/**
+	 * Calcula o preço final para o usuário (com a margem de lucro do vendedor).
+	 * @return Preço final calculado.
+	 */
+	public BigDecimal calcularPrecoFinal() {
+		return (preco.multiply(margemDeLucroPorcentual).add(preco));
+	}
 
 	public void setMargemDeLucroPorcentual(BigDecimal margemDeLucroPorcentual) {
 		this.margemDeLucroPorcentual = margemDeLucroPorcentual;
