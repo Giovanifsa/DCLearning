@@ -45,7 +45,7 @@ public class LoginBean implements Serializable {
 	//UI
 	private UIComponent campoEmailLogin;
 	
-	public void doLogin() throws NoSuchAlgorithmException {
+	public void iniciarSessao() throws NoSuchAlgorithmException {
 		if (emailLogin == null || emailLogin.isEmpty() ||
 				senhaLogin == null || senhaLogin.isEmpty()) {
 			
@@ -108,7 +108,7 @@ public class LoginBean implements Serializable {
 		}
 	}
 	
-	public void validatePassword(FacesContext fc, UIComponent component, Object value) throws ValidatorException {
+	public void validarSenha(FacesContext fc, UIComponent component, Object value) throws ValidatorException {
 		String valor = value.toString();
 		
 		if (valor.length() < PASSWORD_MIN_SIZE) {
@@ -136,6 +136,14 @@ public class LoginBean implements Serializable {
 
 	public String getSenhaLogin() {
 		return senhaLogin;
+	}
+	
+	public String getEmailLogin() {
+		return emailLogin;
+	}
+
+	public void setEmailLogin(String emailLogin) {
+		this.emailLogin = emailLogin;
 	}
 
 	public void setSenhaLogin(String senhaLogin) {

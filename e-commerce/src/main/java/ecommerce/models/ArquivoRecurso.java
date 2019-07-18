@@ -1,6 +1,9 @@
 package ecommerce.models;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
 /**
  * Representa um resource do site, como uma imagem ou um arquivo qualquer.
@@ -13,6 +16,8 @@ import javax.persistence.Entity;
  */
 @Entity
 public class ArquivoRecurso {
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	
 	private String nomeArquivo;

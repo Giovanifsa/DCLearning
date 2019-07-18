@@ -9,9 +9,8 @@
 		
 		<class>ecommerce.models.Usuario</class>
 		<class>ecommerce.models.Produto</class>
-		<class>ecommerce.models.ResourceFile</class>
-		<class>ecommerce.models.Store</class>
-		<class>ecommerce.models.ResourceFile</class>
+		<class>ecommerce.models.Loja</class>
+		<class>ecommerce.models.ArquivoRecurso</class>
 
 		<properties>
 			<property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver" />
