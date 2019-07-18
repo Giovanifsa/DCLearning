@@ -9,64 +9,63 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
-import ecommerce.daos.ProductDao;
-import ecommerce.models.Product;
-import ecommerce.models.ResourceFile;
-import ecommerce.models.Store;
-import ecommerce.models.User;
-import ecommerce.tools.HashMechanism;
+import ecommerce.daos.ProdutoDAO;
+import ecommerce.models.Produto;
+import ecommerce.models.Loja;
+import ecommerce.models.Usuario;
+import ecommerce.tools.MecanismoDeHash;
 
 public class PopulaBanco {
-
+/*
 	@Inject
 	EntityManager em;
 	
 	@Inject
-	ProductDao dao;
+	ProdutoDAO dao;
 	public static void main(String args[]) throws NoSuchAlgorithmException, IOException {
 		EntityManagerFactory emFactory = Persistence.createEntityManagerFactory("ecommerce");
 		EntityManager em = emFactory.createEntityManager();
 		
-		User u0 = new User();
+		Usuario u0 = new Usuario();
 		u0.setAdmin(false);
 		u0.setEmail("teste0@teste.com");
-		u0.setHashedPassword(new HashMechanism().defaultHashBytes("0000000000000".getBytes()));
+		u0.setHashedPassword(new MecanismoDeHash().aplicarSHA256("0000000000000".getBytes()));
 		
-		User u1 = new User();
+		Usuario u1 = new Usuario();
 		u1.setAdmin(false);
 		u1.setEmail("teste1@teste.com");
-		u1.setHashedPassword(new HashMechanism().defaultHashBytes("1111111111111".getBytes()));
+		u1.setHashedPassword(new MecanismoDeHash().aplicarSHA256("1111111111111".getBytes()));
 		
-		User u2 = new User();
+		Usuario u2 = new Usuario();
 		u2.setAdmin(false);
 		u2.setEmail("teste2@teste.com");
-		u2.setHashedPassword(new HashMechanism().defaultHashBytes("22222222222222".getBytes()));
+		u2.setHashedPassword(new MecanismoDeHash().aplicarSHA256("22222222222222".getBytes()));
 		
-		User u3 = new User();
+		Usuario u3 = new Usuario();
 		u3.setAdmin(false);
 		u3.setEmail("teste3@teste.com");
-		u3.setHashedPassword(new HashMechanism().defaultHashBytes("33333333333333".getBytes()));
+		u3.setHashedPassword(new MecanismoDeHash().aplicarSHA256("33333333333333".getBytes()));
 		
 		
-		Store s0 = new Store();
+		Loja s0 = new Loja();
 		s0.setCnpj("00000000000-1");
 		s0.setFantasyName("Empresa 00");
 		s0.setOwner(u0);
 		s0.setTotalExpenses(24.0d);
 		
-		Store s1 = new Store();
+		Loja s1 = new Loja();
 		s1.setCnpj("1111111111-2");
 		s1.setFantasyName("Empresa 01");
 		s1.setOwner(u1);
 		s1.setTotalExpenses(25.0d);
 		
-		Store s2 = new Store();
+		Loja s2 = new Loja();
 		s2.setCnpj("222222222-3");
 		s2.setFantasyName("Empresa 02");
 		s2.setOwner(u2);
 		s2.setTotalExpenses(24.0d);
 
-		Store s3 = new Store();
+		Loja s3 = new Loja();
 		s3.setCnpj("3333333333-4");
 		s3.setFantasyName("Empresa 03");
 		s3.setOwner(u3);
@@ -74,21 +73,17 @@ public class PopulaBanco {
 		
 		ResourceFile file0 = new ResourceFile();
 		file0.setFileName("capita.png");
-		file0.setFilePath("resource/images");
 		
 		ResourceFile file1 = new ResourceFile();
 		file1.setFileName("formiga.png");
-		file1.setFilePath("resource/images");
 		
 		ResourceFile file2 = new ResourceFile();
 		file2.setFileName("guardioes.png");
-		file2.setFilePath("resource/images");
 		
 		ResourceFile file3 = new ResourceFile();
 		file3.setFileName("hulk.png");
-		file3.setFilePath("resource/images");
 		
-		Product p0 = new Product();
+		Produto p0 = new Produto();
 		p0.setCode(0000000001L);
 		p0.setDescription("Filme da Capitã Marvel");
 		p0.setName("Capitã Marvel");
@@ -98,7 +93,7 @@ public class PopulaBanco {
 		p0.setProfitMarginPercentual(new BigDecimal(2.20));
 		p0.setSells(50);
 		
-		Product p1 = new Product();
+		Produto p1 = new Produto();
 		p1.setCode(1111111112L);
 		p1.setDescription("Filme do Homem Formiga");
 		p1.setName("Homem Formiga");
@@ -108,7 +103,7 @@ public class PopulaBanco {
 		p1.setProfitMarginPercentual(new BigDecimal(2.20));
 		p1.setSells(40);
 		
-		Product p2 = new Product();
+		Produto p2 = new Produto();
 		p2.setCode(222222222223L);
 		p2.setDescription("Filme dos Guardioes da Galaxia");
 		p2.setName("Guardioes da Galaxia");
@@ -118,7 +113,7 @@ public class PopulaBanco {
 		p2.setProfitMarginPercentual(new BigDecimal(2.20));
 		p2.setSells(50);
 		
-		Product p3 = new Product();
+		Produto p3 = new Produto();
 		p3.setCode(333333333334L);
 		p3.setDescription("Filme do Hulk");
 		p3.setName("O Incrivel Hulk");
@@ -150,6 +145,6 @@ public class PopulaBanco {
 		em.persist(p3);
 		
 		em.getTransaction().commit();
-	}
+	}*/
 }
 

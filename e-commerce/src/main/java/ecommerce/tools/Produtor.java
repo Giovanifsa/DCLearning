@@ -9,11 +9,15 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
 /**
- * Classe que produz objetos para injeção do CDI
+ * Classe cujo CDI chamará para instanciar objetos que ele utilizará.
+ * Por padrão, é utilizada para gerar interfaces implementadas
+ * (interfaces não podem ser instanciadas com new), um exemplo é 
+ * o EntityManager, é uma interface implementada por um objeto do hibernate.
+ * 
  * @author Giovani
  *
  */
-public class Producer implements Serializable {
+public class Produtor implements Serializable {
 	private static final EntityManagerFactory emFactory = Persistence.createEntityManagerFactory("ecommerce");
 	
 	/**

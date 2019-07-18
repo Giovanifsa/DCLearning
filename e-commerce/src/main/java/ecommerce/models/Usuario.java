@@ -9,21 +9,21 @@ import javax.persistence.Id;
 import javax.persistence.Transient;
 
 @Entity
-public class User {
+public class Usuario {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	
 	@Column(unique = true)
 	private String email;
-	private byte[] hashedPassword;
+	private byte[] senhaHasheada;
 	private boolean admin;
 	
-	public User() {}
+	public Usuario() {}
 
-	public User(String email, byte[] hashedPassword) {
+	public Usuario(String email, byte[] senhaHasheada) {
 		this.email = email;
-		this.hashedPassword = hashedPassword;
+		this.senhaHasheada = senhaHasheada;
 	}
 
 	public String getEmail() {
@@ -34,12 +34,12 @@ public class User {
 		this.email = email;
 	}
 
-	public byte[] getHashedPassword() {
-		return hashedPassword;
+	public byte[] getSenhaHasheada() {
+		return senhaHasheada;
 	}
 
-	public void setHashedPassword(byte[] hashedPassword) {
-		this.hashedPassword = hashedPassword;
+	public void setSenhaHasheada(byte[] senhaHasheada) {
+		this.senhaHasheada = senhaHasheada;
 	}
 
 	public boolean isAdmin() {

@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
@@ -14,12 +15,12 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import ecommerce.daos.UserDao;
-import ecommerce.models.User;
-import ecommerce.tools.HashMechanism;
+import ecommerce.daos.UsuarioDAO;
+import ecommerce.models.Usuario;
+import ecommerce.tools.MecanismoDeHash;
 
 @Named
-@ViewScoped
+@SessionScoped
 public class LoginBean implements Serializable {
 	public static final int PASSWORD_MIN_SIZE = 8;
 	public static final String EMAIL_REGEX = 
@@ -31,34 +32,34 @@ public class LoginBean implements Serializable {
 					"01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-" + 
 					"\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\])";
 	
-	private String email = "";
-	private String password = "";
+	private Usuario usuarioLogado = null;
+	
+	private String emailLogin = "";
+	private String senhaLogin = "";
 	
 	@Inject
-	private SessionDataBean sessionBean;
+	private UsuarioDAO usuarioDao;
 	@Inject
-	private UserDao userManager;
-	@Inject
-	private HashMechanism hashMechanism;
+	private MecanismoDeHash mecanismoHash;
 	
 	//UI
-	private UIComponent loginEmailField;
+	private UIComponent campoEmailLogin;
 	
 	public void doLogin() throws NoSuchAlgorithmException {
-		if (email == null || email.isEmpty() ||
-				password == null || password.isEmpty()) {
+		if (emailLogin == null || emailLogin.isEmpty() ||
+				senhaLogin == null || senhaLogin.isEmpty()) {
 			
 			return;
 		}
 		
-		User user = userManager.findUser(email);
+		Usuario usuario = usuarioDao.getUsuario(emailLogin);
 		
-		if (user != null && Arrays.equals(user.getHashedPassword(), hashMechanism.aplicarSHA256(password.getBytes()))) {
-			sessionBean.setCurrentUser(user);
+		if (usuario != null && Arrays.equals(usuario.getSenhaHasheada(), mecanismoHash.aplicarSHA256(senhaLogin.getBytes()))) {
+			usuarioLogado = usuario;
 		}
 		
 		else {
-			FacesContext.getCurrentInstance().addMessage(loginEmailField.getClientId(), new FacesMessage() {
+			FacesContext.getCurrentInstance().addMessage(campoEmailLogin.getClientId(), new FacesMessage() {
 				@Override
 				public Severity getSeverity() {
 					return SEVERITY_ERROR;
@@ -72,37 +73,21 @@ public class LoginBean implements Serializable {
 		}
 	}
 	
-	public boolean isUserLogged() {
-		return sessionBean.getCurrentUser() != null;
+	public boolean usuarioEstaLogado() {
+		return usuarioLogado != null;
 	}
 	
-	public String endSession() {
-		if (isUserLogged()) {
-			sessionBean.setCurrentUser(null);
+	public String finalizarSessao() {
+		if (usuarioEstaLogado()) {
+			usuarioLogado = null;
 			
-			return "login?faces-redirect=true";
+			return "loja?faces-redirect=true";
 		}
 		
 		return null;
 	}
-
-	public String getEmail() {
-		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
 	
-	public void validateEmail(FacesContext fc, UIComponent component, Object value) throws ValidatorException {
+	public void validarEmail(FacesContext fc, UIComponent component, Object value) throws ValidatorException {
 		String valor = value.toString();
 		
 		Pattern pattern = Pattern.compile(EMAIL_REGEX);
@@ -141,11 +126,27 @@ public class LoginBean implements Serializable {
 		}
 	}
 
-	public UIComponent getLoginEmailField() {
-		return loginEmailField;
+	public Usuario getUsuarioLogado() {
+		return usuarioLogado;
 	}
 
-	public void setLoginEmailField(UIComponent loginEmailField) {
-		this.loginEmailField = loginEmailField;
+	public void setUsuarioLogado(Usuario usuarioLogado) {
+		this.usuarioLogado = usuarioLogado;
+	}
+
+	public String getSenhaLogin() {
+		return senhaLogin;
+	}
+
+	public void setSenhaLogin(String senhaLogin) {
+		this.senhaLogin = senhaLogin;
+	}
+
+	public UIComponent getCampoEmailLogin() {
+		return campoEmailLogin;
+	}
+
+	public void setCampoEmailLogin(UIComponent campoEmailLogin) {
+		this.campoEmailLogin = campoEmailLogin;
 	}
 }

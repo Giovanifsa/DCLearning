@@ -22,11 +22,11 @@
 							<b:carousel styleClass="wizardPseudoClass"
 								style="width:400px; padding-top:20px" startAnimation="true"
 								showIndicators="false" wrap="false">
-								<ui:repeat value="#{cartBean.getSelectedProducts()}" var="produtoCarrinho">
+								<ui:repeat value="#{carrinhoBean.produtosCarrinho}" var="produtoCarrinho">
 									<b:carouselItem>
 										<b:panel>
-											<h:graphicImage value="/imagensProdutos/abc.jpg" />
-											<h:outputText value="#{produtoCarrinho.product.name}" style="bold"/>
+											<h:graphicImage value="/imagensProdutos/" />
+											<h:outputText value="#{produtoCarrinho.produto.nome}" style="bold"/>
 										</b:panel>
 									</b:carouselItem>
 								</ui:repeat>

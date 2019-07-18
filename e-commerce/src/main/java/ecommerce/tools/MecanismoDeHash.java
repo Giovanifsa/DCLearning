@@ -7,12 +7,15 @@ import java.security.NoSuchAlgorithmException;
 import javax.inject.Named;
 
 /**
- * Classe que realiza hash de strings e bytes
+ * Classe que realiza hash de strings e bytes.
+ * Hash é em resumo a transformação de um dado em um valor único, com base em um cálculo.
+ * Tal cálculo só há uma direção, ou seja, é impossível obter o dado original matemáticamente.
+ * 
  * @author Giovani
  *
  */
 @Named
-public class HashMechanism implements Serializable {
+public class MecanismoDeHash implements Serializable {
 	/**
 	 * Aplica SHA-256 em algum dado. Strings podem ser transformadas em bytes[] pelo método getBytes.
 	 * @param dado

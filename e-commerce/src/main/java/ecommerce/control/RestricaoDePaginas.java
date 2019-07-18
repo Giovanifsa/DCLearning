@@ -8,7 +8,7 @@ import javax.faces.event.PhaseId;
 import javax.faces.event.PhaseListener;
 import javax.inject.Inject;
 
-import ecommerce.beans.CartBean;
+import ecommerce.beans.CarrinhoBean;
 import ecommerce.beans.LoginBean;
 
 public class RestricaoDePaginas implements PhaseListener {
@@ -16,7 +16,7 @@ public class RestricaoDePaginas implements PhaseListener {
 	private LoginBean loginBean;
 	
 	@Inject
-	private CartBean cartBean;
+	private CarrinhoBean carrinhoBean;
 	
 	@Override
 	public void afterPhase(PhaseEvent pEvent) {
@@ -30,13 +30,13 @@ public class RestricaoDePaginas implements PhaseListener {
 		if (context.getViewRoot().getViewId().equals("/finalizarCompra.xhtml")) {
 			NavigationHandler handler = context.getApplication().getNavigationHandler();
 			
-			if (!loginBean.isUserLogged()) {
+			if (!loginBean.usuarioEstaLogado()) {
 				
 				handler.handleNavigation(context, null, "/login?faces-redirect=true&redirecionamento=finalizarCompra");
 				context.renderResponse();
 			}
 			
-			else if (cartBean.getCartQuantity() <= 0) {
+			else if (carrinhoBean.getQuantidadeItens() <= 0) {
 				handler.handleNavigation(context, null, "/listarProdutos?faces-redirect=true");
 				context.renderResponse();
 			}

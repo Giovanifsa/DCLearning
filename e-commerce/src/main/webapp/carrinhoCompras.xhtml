@@ -32,35 +32,35 @@
 			  </tbody>
 			</table>
  -->
-				<h:dataTable class="table table-bordered " value="#{produtoBean.listarProdutos()}" var="produto"
+				<h:dataTable class="table table-bordered " value="#{carrinhoBean.produtosCarrinho}" var="itemCarrinho"
 					id="tabelaProdutos">
 					<h:column>
 						<f:facet name="header">Nome</f:facet>
-						#{produto.name}
+						#{itemCarrinho.produto.nome}
 					</h:column>
 
 					<h:column>
 						<f:facet name="header">Descrição</f:facet>
-						#{produto.description}
+						#{itemCarrinho.produto.descricao}
 					</h:column>
 
 					<h:column>
 						<f:facet name="header">Imagem</f:facet>
-						<img src="#{request.contextPath}/resource/images/#{produto.prodImage}.jpg" />
+						<img src="#{request.contextPath}/#{itemCarrinho.produto.imagemProduto.nomeDiretorio}/#{itemCarrinho.produto.imagemProduto.nomeArquivo}" />
 					</h:column>
 
 					<h:column>
 						<f:facet name="header">Quantidade</f:facet>
-						
+						#{itemCarrinho.quantidade}
 					</h:column>
 
 					<h:column>
 						<f:facet name="header">Preço</f:facet>
-						#{produto.price}
+						#{itemCarrinho.produto.preco}
 					</h:column>
 					<h:column>
 						<f:facet name="header">Remover</f:facet>
-						<h:commandButton action="#{produtoBean.removerProduto()}" value="Remover" />
+						<h:commandButton action="#{carrinhoBean.removerProduto(itemCarrinho)}" value="Remover" />
 					</h:column>
 
 					<h:column>

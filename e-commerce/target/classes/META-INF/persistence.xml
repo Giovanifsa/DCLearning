@@ -7,9 +7,8 @@
 	<persistence-unit name="ecommerce">
 		<provider>org.hibernate.ejb.HibernatePersistence</provider>
 		
-		<class>ecommerce.models.User</class>
-		<class>ecommerce.models.BinaryData</class>
-		<class>ecommerce.models.Product</class>
+		<class>ecommerce.models.Usuario</class>
+		<class>ecommerce.models.Produto</class>
 		<class>ecommerce.models.ResourceFile</class>
 		<class>ecommerce.models.Store</class>
 		<class>ecommerce.models.ResourceFile</class>
