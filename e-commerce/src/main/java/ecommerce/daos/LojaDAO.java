@@ -5,8 +5,6 @@ import java.util.List;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.PersistenceContextType;
 
 import ecommerce.control.Transactional;
 import ecommerce.models.Loja;
@@ -16,10 +14,12 @@ public class LojaDAO implements Serializable {
 	@Inject
 	private EntityManager manager;
 
+	@Transactional
 	public Loja buscarLojaPorCnpj(int cnpj) {
 		return manager.createQuery("SELECT l FROM " + Loja.class.getSimpleName() + " l where l.cnpj = :cnpj", Loja.class).setParameter("cnpj", cnpj).getSingleResult();
 	}
 	
+	@Transactional
 	public List<Loja> listarLojas() {
 		return manager.createQuery("SELECT l FROM " + Loja.class.getSimpleName() + " l", Loja.class).getResultList();
 	}
