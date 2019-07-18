@@ -30,6 +30,7 @@ public class Produto {
 	private String descricao;
 	private BigDecimal preco;
 	private BigDecimal margemDeLucroPorcentual;
+	private BigDecimal custo;
 	
 	@OneToOne(fetch = FetchType.EAGER)
 	private ArquivoRecurso imagemProduto;
@@ -82,6 +83,16 @@ public class Produto {
 
 	public void setDescricao(String descricao) {
 		this.descricao = descricao;
+	}
+	
+	
+
+	public BigDecimal getCusto() {
+		return custo;
+	}
+
+	public void setCusto(BigDecimal custo) {
+		this.custo = custo;
 	}
 
 	public BigDecimal getPreco() {

@@ -59,7 +59,6 @@ public class ProdutoDAO implements Serializable {
 		}
 	}
 	
-	@Transactional
 	public void adicionarProduto(Produto p) {
 		em.persist(p);
 	}
