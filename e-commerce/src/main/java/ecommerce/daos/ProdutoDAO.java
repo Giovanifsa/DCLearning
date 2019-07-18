@@ -35,6 +35,9 @@ public class ProdutoDAO implements Serializable {
 		return em.createQuery("SELECT p FROM " + Produto.class.getSimpleName() + " p", Produto.class).getResultList();
 	}
 	
+	public boolean existeProdutos() {
+		return !buscarProdutosRecentes(1).isEmpty();
+	}
 	
 	@Transactional
 	public void atualizarProduto(Produto p) {

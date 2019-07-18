@@ -3,6 +3,7 @@ package ecommerce.beans;
 import java.io.Serializable;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -15,7 +16,9 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import ecommerce.daos.ProdutoDAO;
 import ecommerce.daos.UsuarioDAO;
+import ecommerce.models.Produto;
 import ecommerce.models.Usuario;
 import ecommerce.tools.MecanismoDeHash;
 
@@ -41,6 +44,8 @@ public class LoginBean implements Serializable {
 	private UsuarioDAO usuarioDao;
 	@Inject
 	private MecanismoDeHash mecanismoHash;
+	@Inject
+	private ProdutoDAO produtoDao;
 	
 	//UI
 	private UIComponent campoEmailLogin;
@@ -156,5 +161,13 @@ public class LoginBean implements Serializable {
 
 	public void setCampoEmailLogin(UIComponent campoEmailLogin) {
 		this.campoEmailLogin = campoEmailLogin;
+	}
+	
+	public boolean deveMostrarRecentes() {
+		return produtoDao.existeProdutos();
+	}
+	
+	public List<Produto> getProdutosRecentes() {
+		return produtoDao.buscarProdutosRecentes(10);
 	}
 }
