@@ -30,7 +30,7 @@
 						<b:message for="nomeField"/>
 						
 						<h:outputText value="Custo:" />
-						<b:inputText id="custo" value="#{novoProdutoBean.produto.preco}"
+						<b:inputText id="custo" value="#{novoProdutoBean.produto.custo}"
 								required="true" required-message="Campo necessário."/>
 								
 						<b:message for="custo"/>
@@ -40,6 +40,12 @@
 								required="true" required-message="Campo necessário."/>
 								
 						<b:message for="margemLucro"/>
+						
+						<h:outputText value="Preço de Venda:" />
+						<b:label id="precoVenda" value="#{novoProdutoBean.produto.preco}"
+								required="true" required-message="Campo necessário."/>
+								
+						<b:message for="precoVenda"/>
 						
 						<h:outputText value="Imagem:" />				
 						<h:inputFile id="imagem" value="#{novoProdutoBean.imagem}"
