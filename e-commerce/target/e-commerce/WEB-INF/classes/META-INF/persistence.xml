@@ -7,20 +7,23 @@
 	<persistence-unit name="ecommerce">
 		<provider>org.hibernate.ejb.HibernatePersistence</provider>
 		
-		<class>ecommerce.models.User</class>
-		<class>ecommerce.models.BinaryData</class>
-		<class>ecommerce.models.Product</class>
-		<class>ecommerce.models.Store</class>
+		<class>ecommerce.models.Usuario</class>
+		<class>ecommerce.models.Produto</class>
+		<class>ecommerce.models.Loja</class>
+		<class>ecommerce.models.ArquivoRecurso</class>
 
 		<properties>
 			<property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver" />
-			<property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost/ecommerce" />
+			<property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost/ecommerce?useTimezone=true&amp;serverTimezone=UTC" />
+			
 			<property name="javax.persistence.jdbc.user" value="root" />
 			<property name="javax.persistence.jdbc.password" value="root" />
-
+			
+ 
 			<property name="hibernate.hbm2ddl.auto" value="update" />
 			<property name="hibernate.show_sql" value="true" />
 			<property name="hibernate.dialect" value="org.hibernate.dialect.MySQL5InnoDBDialect" />
+			<property name="hibernate.format_sql" value="true"/>
 		</properties>
 	</persistence-unit>
 

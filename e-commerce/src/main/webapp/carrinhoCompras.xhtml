@@ -5,72 +5,66 @@
 	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
 	xmlns:h="http://xmlns.jcp.org/jsf/html"
 	xmlns:f="http://xmlns.jcp.org/jsf/core"
-	xmlns:p="http://primefaces.org/ui">
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:b="http://bootsfaces.net/ui">
+
 
 <ui:composition template="gnr_template.xhtml">
 	<ui:define name="body">
-		<h:form>
-			<br />
-			<div id="container">
-			<!-- 
-			<table class="table">
-			  <thead>
-			    <tr>
-			      <th scope="col">#</th>
-			      <th scope="col">First</th>
-			      <th scope="col">Last</th>
-			      <th scope="col">Handle</th>
-			    </tr>
-			  </thead>
-			  <tbody>
-			    <tr>
-			      <th scope="row">1</th>
-			      <td>Mark</td>
-			      <td>Otto</td>
-			      <td>@mdo</td>
-			    </tr>
-			  </tbody>
-			</table>
- -->
-				<h:dataTable class="table table-bordered " value="#{carrinhoBean.produtosCarrinho}" var="itemCarrinho"
-					id="tabelaProdutos">
-					<h:column>
-						<f:facet name="header">Nome</f:facet>
-						#{itemCarrinho.produto.nome}
-					</h:column>
+		<b:form >
+			
+		<b:container id="container" align="center" class="">
+			<b:panel title="Carrinho de compras" look="primary" collapsible="false" large-screen="7" medium-screen="7"
+				offset-lg="2" showCollapseLink="true" tooltip-position="right" small-screen="7">
+			 <!-- CONFIGURA O TAMANHO DO CONTAINER -->
+					<b:dataTable value="#{carrinhoBean.produtosCarrinho()}" var="produto" id="tabelaProdutos" fixedHeader="false">
+						<b:dataTableColumn>
+							<f:facet name="header">Nome</f:facet>
+							#{produto.nome}
+						</b:dataTableColumn>
+						
+						<b:dataTableColumn>
+							<f:facet name="header">Descrição</f:facet>
+							#{produto.descricao}								
+						</b:dataTableColumn>
+						
+						<b:dataTableColumn>
+							<f:facet name="header">Imagem</f:facet>
+							<img src="#{request.contextPath}/resources/images/#{produto.imagemProduto.nomeArquivo}" width="50px" align="middle"/>
+						</b:dataTableColumn>
+						
+						<b:dataTableColumn>
+							<f:facet name="header">Quantidade</f:facet>
+							<p:spinner id="ajaxSpinner" min="1" size="1" >
+         						      <p:ajax  update="tabelaProdutos" />
+     					    </p:spinner>
+						</b:dataTableColumn>
 
-					<h:column>
-						<f:facet name="header">Descrição</f:facet>
-						#{itemCarrinho.produto.descricao}
-					</h:column>
+						<b:dataTableColumn>
+							<f:facet name="header">Preço</f:facet>
+							<div id="preco">R$ #{produto.preco}</div>
+							
+						</b:dataTableColumn>
 
-					<h:column>
-						<f:facet name="header">Imagem</f:facet>
-						<img src="#{request.contextPath}/#{itemCarrinho.produto.imagemProduto.nomeDiretorio}/#{itemCarrinho.produto.imagemProduto.nomeArquivo}" />
-					</h:column>
+						
+						<b:dataTableColumn>
+							<f:facet name="header">Remover</f:facet>
+								<b:commandButton action="#{carrinhoBean.removeProduto(produto)}" process="@this" 
+									 class="btn btn-danger" colLg="40"> 
+								<b:icon value="trash" /><br/>	
+								</b:commandButton>
+								
+						</b:dataTableColumn>
+					</b:dataTable>
+					<b:panelGrid col-spans="4,4,4" tooltipPosition="top">
+						<b:commandButton value="Continuar Comprando"  class="btn btn-primary"
+								onclick="#{carrinhoBean.continuarComprando()}" process="@this" />
+						<b:commandButton id="botaoFinalizar" value="Finalizar compra" type="button" class="btn btn-success" />
+					</b:panelGrid>			
+			</b:panel>					
+		</b:container>
 
-					<h:column>
-						<f:facet name="header">Quantidade</f:facet>
-						#{itemCarrinho.quantidade}
-					</h:column>
-
-					<h:column>
-						<f:facet name="header">Preço</f:facet>
-						#{itemCarrinho.produto.preco}
-					</h:column>
-					<h:column>
-						<f:facet name="header">Remover</f:facet>
-						<h:commandButton action="#{carrinhoBean.removerProduto(itemCarrinho)}" value="Remover" />
-					</h:column>
-
-					<h:column>
-						<f:facet name="header">Alterar</f:facet>
-					</h:column>
-				</h:dataTable>
-				<button type="button" class="btn btn-success">Finalizar</button>
-			</div>
-
-		</h:form>
+		</b:form>
 	</ui:define>
 </ui:composition>
 </html>

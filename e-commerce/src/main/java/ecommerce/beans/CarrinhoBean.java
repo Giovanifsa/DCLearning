@@ -5,17 +5,16 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import ecommerce.control.Transactional;
 import ecommerce.daos.ProdutoDAO;
 import ecommerce.models.ItemCarrinho;
 import ecommerce.models.Produto;
-import ecommerce.models.Usuario;
 import ecommerce.tools.MecanismoDeHash;
 
 @SuppressWarnings("serial")
@@ -29,18 +28,6 @@ public class CarrinhoBean implements Serializable {
 	private MecanismoDeHash hashing;
 	
 	private ArrayList<ItemCarrinho> produtosCarrinho = new ArrayList<>();
-	
-	public String removerProduto(ItemCarrinho cartProduct) {
-		for (ItemCarrinho e : produtosCarrinho) {
-			if (e.equals(cartProduct)) {
-				produtosCarrinho.remove(e);
-				
-				break;
-			}
-		}
-		
-		return "cart?faces-redirect=true";
-	}
 	
 	public BigDecimal calcularPrecoFinal() {
 		BigDecimal price = new BigDecimal(0);
@@ -82,7 +69,33 @@ public class CarrinhoBean implements Serializable {
 		return quantidade;
 	}
 	
-	public List<ItemCarrinho> getProdutosCarrinho() {
-		return produtosCarrinho;
+	public List<Produto> produtosCarrinho() {
+		return produtoDao.listarProdutos();
 	}
+	
+	@Transactional
+	public String removeProduto(Produto produto) {
+		
+		this.produtoDao.removerProduto(produto);
+		
+		return "carrinhoCompras?faces-redirect=true";
+	}
+
+	public int selecionarQuantidade() {
+		
+		int quantidade = 1;
+		if(quantidade == 1) {
+			return quantidade;
+		}
+		return 0;
+	}
+	
+	public String continuarComprando() {
+		return "novaLoja?faces-redirect=true";	//	DEVE RETORNAR A HOME
+	}
+	
+	public String finalizarCompra() {
+		return "finalizarCompra?faces-redirect=true";
+	}
+	
 }

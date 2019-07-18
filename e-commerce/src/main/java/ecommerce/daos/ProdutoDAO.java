@@ -32,7 +32,7 @@ public class ProdutoDAO implements Serializable {
 	}
 
 	public List<Produto> listarProdutos() {
-		return em.createQuery("SELECT p FROM " + Produto.class.getSimpleName() + " p", Produto.class).getResultList();
+		return em.createQuery("select p from Produto p", Produto.class).getResultList();
 	}
 	
 	
@@ -66,32 +66,7 @@ public class ProdutoDAO implements Serializable {
 	}
 
 	public void removerProduto(Produto produto) {
-		em.remove(em.merge(produto));
+		em.remove(produto);
 	}
 	
-	/*
-	public void populaBanco() {
-		System.out.println("Inicio");
-		
-		Produto p = new Produto();
-		ResourceFile imagem = new ResourceFile();
-		Loja loja = new Loja();
-		
-		loja.setCnpj("123456789123");
-		loja.setFantasyName("Loja 00");
-		
-		imagem.setFileName("capita.png");
-		
-		p.setCode(123456);
-		p.setDescription("Filme da Capitã Marvel");
-		p.setName("Capitã Marvel");
-		p.setPrice(new BigDecimal(9.5));
-		p.setProdImage(imagem);
-		p.setProfitMarginPercentual(new BigDecimal(2.20));
-		p.setProdStore(loja);
-		p.setSells(550);
-		
-		System.out.println("Fim");
-		em.persist(p);
-	}*/
 }

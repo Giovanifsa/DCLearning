@@ -6,7 +6,7 @@
     version="2.3"> 
     
     <lifecycle>
-		<phase-listener>ecommerce.control.PageRestrictor</phase-listener>
+		<phase-listener>ecommerce.control.RestricaoDePaginas</phase-listener>
 	</lifecycle>
     
 </faces-config>
