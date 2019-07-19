@@ -60,13 +60,17 @@ public class CarrinhoBean implements Serializable {
 	}
 	
 	public int getQuantidadeItens() {
-		int quantidade = 0;
+		int quantidade =0;
 		
 		for (ItemCarrinho e : produtosCarrinho) {
 			quantidade += e.getQuantidade();
 		}
 		
 		return quantidade;
+	}
+	
+	public double valorCompra(double valor, int qtd) {
+		return valor * qtd;
 	}
 	
 	public List<Produto> produtosCarrinho() {
