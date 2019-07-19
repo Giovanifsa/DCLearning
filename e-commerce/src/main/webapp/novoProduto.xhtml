@@ -87,7 +87,7 @@
 						<b:dataTableColumn>
 							<b:commandButton value="Editar" icon="edit" ajax="true"
 								update="form:formCadastroProduto"
-								onclick="ajax:#{novoProdutoBean.salvarProduto()}; javascript:return false;">
+								onclick="ajax:#{novoProdutoBean}; javascript:return false;">
 								<f:ajax execute="@this" render ="@form"/>
 							</b:commandButton>
 						</b:dataTableColumn>
