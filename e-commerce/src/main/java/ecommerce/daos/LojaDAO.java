@@ -29,6 +29,7 @@ public class LojaDAO implements Serializable {
 		manager.merge(loja);
 	}
 
+
 	public void adicionarLoja(Loja loja) {
 		manager.persist(loja);
 	}
