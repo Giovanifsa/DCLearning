@@ -38,7 +38,8 @@
 		</b:form>
 
 		<b:dataTable value="#{novaLojaBean.listarTodasLojas()}" var="loja" id="listaLoja" emptyMessage="Nenhuma loja cadastrada.">
-	 		<b:dataTableColumn value="#{loja.nomeFantasia}" var="Nome loja"/>
+	 		<b:dataTableColumn value="#{loja.nomeFantasia}"/>
+	 		<b:dataTableColumn value="#{loja.cnpj}"/>
 
 		</b:dataTable>
 	</ui:define>

@@ -9,6 +9,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
+@SuppressWarnings("serial")
 @Entity
 public class Loja implements Serializable {
 	@Id
