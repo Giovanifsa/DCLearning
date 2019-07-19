@@ -12,6 +12,7 @@ import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import ecommerce.control.Transactional;
 import ecommerce.daos.ProdutoDAO;
 import ecommerce.models.ItemCarrinho;
 import ecommerce.models.Produto;
@@ -73,7 +74,7 @@ public class CarrinhoBean implements Serializable {
 	}
 	
 	public int getQuantidadeItens() {
-		int quantidade = 0;
+		int quantidade =0;
 		
 		for (ItemCarrinho e : produtosCarrinho) {
 			quantidade += e.getQuantidade();
@@ -82,7 +83,37 @@ public class CarrinhoBean implements Serializable {
 		return quantidade;
 	}
 	
-	public List<ItemCarrinho> getProdutosCarrinho() {
-		return produtosCarrinho;
+	public double valorCompra(double valor, int qtd) {
+		return valor * qtd;
 	}
+	
+	public List<Produto> produtosCarrinho() {
+		return produtoDao.listarProdutos();
+	}
+	
+	@Transactional
+	public String removeProduto(Produto produto) {
+		
+		this.produtoDao.removerProduto(produto);
+		
+		return "carrinhoCompras?faces-redirect=true";
+	}
+
+	public int selecionarQuantidade() {
+		
+		int quantidade = 1;
+		if(quantidade == 1) {
+			return quantidade;
+		}
+		return 0;
+	}
+	
+	public String continuarComprando() {
+		return "novaLoja?faces-redirect=true";	//	DEVE RETORNAR A HOME
+	}
+	
+	public String finalizarCompra() {
+		return "finalizarCompra?faces-redirect=true";
+	}
+	
 }
