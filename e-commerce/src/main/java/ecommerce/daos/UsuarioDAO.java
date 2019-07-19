@@ -26,7 +26,7 @@ public class UsuarioDAO implements Serializable {
 	 * @param email Email do usuário.
 	 * @return Usuario ou null caso não encontrado.
 	 */
-	public Usuario getUsuario(String email) {
+	public Usuario procurarUsuario(String email) {
 		TypedQuery<Usuario> t = em.createQuery("SELECT u FROM " + Usuario.class.getSimpleName() + " u WHERE u.email = :email", Usuario.class);
 		t.setParameter("email", email);
 		
@@ -45,7 +45,7 @@ public class UsuarioDAO implements Serializable {
 	 * @throws NoSuchAlgorithmException
 	 */
 	@Transactional
-	public Usuario addUsuario(String email, String password) throws NoSuchAlgorithmException {
+	public Usuario adicionarUsuario(String email, String password) throws NoSuchAlgorithmException {
 		Usuario u = new Usuario(email, hasher.aplicarSHA256(password.getBytes()));
 		em.persist(u);
 		
