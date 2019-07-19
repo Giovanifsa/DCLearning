@@ -4,7 +4,9 @@ import java.io.Serializable;
 import java.util.List;
 
 import javax.enterprise.inject.Model;
+import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import ecommerce.control.Transactional;
 import ecommerce.daos.LojaDAO;
