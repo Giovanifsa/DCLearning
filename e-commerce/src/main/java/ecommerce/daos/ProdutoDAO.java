@@ -39,7 +39,7 @@ public class ProdutoDAO implements Serializable {
 		return !buscarProdutosRecentes(1).isEmpty();
 	}
 	
-	@Transactional
+	
 	public void atualizarProduto(Produto p) {
 		em.merge(p);
 	}
@@ -59,7 +59,7 @@ public class ProdutoDAO implements Serializable {
 		}
 	}
 	
-	@Transactional
+	
 	public void adicionarProduto(Produto p) {
 		em.persist(p);
 	}
