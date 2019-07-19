@@ -3,6 +3,7 @@ package ecommerce.beans;
 import java.io.Serializable;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -40,6 +41,13 @@ public class LoginBean implements Serializable {
 	private String emailLogin = "";
 	private String senhaLogin = "";
 	
+	private String cadastroEmail;
+	private String cadastroEmail2;
+	private String cadastroSenha;
+	private String cadastroSenha2;
+	
+	private String redirecionamento;
+	
 	@Inject
 	private UsuarioDAO usuarioDao;
 	@Inject
@@ -49,18 +57,20 @@ public class LoginBean implements Serializable {
 	
 	//UI
 	private UIComponent campoEmailLogin;
+	private UIComponent campoCadastroEmail;
+	private UIComponent campoCadastroSenha;
 	
-	public void iniciarSessao() throws NoSuchAlgorithmException {
+	public String iniciarSessao() throws NoSuchAlgorithmException {
 		if (emailLogin == null || emailLogin.isEmpty() ||
 				senhaLogin == null || senhaLogin.isEmpty()) {
-			
-			return;
 		}
 		
-		Usuario usuario = usuarioDao.getUsuario(emailLogin);
+		Usuario usuario = usuarioDao.procurarUsuario(emailLogin);
 		
 		if (usuario != null && Arrays.equals(usuario.getSenhaHasheada(), mecanismoHash.aplicarSHA256(senhaLogin.getBytes()))) {
 			usuarioLogado = usuario;
+			
+			return processarRedirecionamento("loja?faces-redirect=true");
 		}
 		
 		else {
@@ -75,7 +85,12 @@ public class LoginBean implements Serializable {
 					return "Usuário não encontrado!";
 				}
 			});
+			
+			emailLogin = "";
+			senhaLogin = "";
 		}
+		
+		return null;
 	}
 	
 	public boolean usuarioEstaLogado() {
@@ -116,7 +131,7 @@ public class LoginBean implements Serializable {
 	public void validarSenha(FacesContext fc, UIComponent component, Object value) throws ValidatorException {
 		String valor = value.toString();
 		
-		if (valor.length() < PASSWORD_MIN_SIZE) {
+		if (valor.length() < PASSWORD_MIN_SIZE) {			
 			throw new ValidatorException(new FacesMessage() {
 				@Override
 				public Severity getSeverity() {
@@ -169,5 +184,118 @@ public class LoginBean implements Serializable {
 	
 	public List<Produto> getProdutosRecentes() {
 		return produtoDao.buscarProdutosRecentes(10);
+	}
+
+	public String getCadastroEmail() {
+		return cadastroEmail;
+	}
+
+	public void setCadastroEmail(String cadastroEmail) {
+		this.cadastroEmail = cadastroEmail;
+	}
+
+	public String getCadastroEmail2() {
+		return cadastroEmail2;
+	}
+
+	public void setCadastroEmail2(String cadastroEmail2) {
+		this.cadastroEmail2 = cadastroEmail2;
+	}
+
+	public String getCadastroSenha() {
+		return cadastroSenha;
+	}
+
+	public void setCadastroSenha(String cadastroSenha) {
+		this.cadastroSenha = cadastroSenha;
+	}
+
+	public String getCadastroSenha2() {
+		return cadastroSenha2;
+	}
+
+	public void setCadastroSenha2(String cadastroSenha2) {
+		this.cadastroSenha2 = cadastroSenha2;
+	}
+	
+	public UIComponent getCampoCadastroEmail() {
+		return campoCadastroEmail;
+	}
+
+	public void setCampoCadastroEmail(UIComponent campoCadastroEmail) {
+		this.campoCadastroEmail = campoCadastroEmail;
+	}
+
+	public UIComponent getCampoCadastroSenha() {
+		return campoCadastroSenha;
+	}
+
+	public void setCampoCadastroSenha(UIComponent campoCadastroSenha) {
+		this.campoCadastroSenha = campoCadastroSenha;
+	}
+
+	public void finalizarCadastro() throws NoSuchAlgorithmException {
+		boolean invalido = false;
+		
+		if (!cadastroEmail.equals(cadastroEmail2)) {
+			FacesContext.getCurrentInstance().addMessage(campoCadastroEmail.getClientId(), new FacesMessage() {
+				@Override
+				public Severity getSeverity() {
+					return SEVERITY_ERROR;
+				}
+				
+				@Override
+				public String getSummary() {
+					return "Ambos campos de e-mail devem ser iguais!";
+				}
+			});
+			
+			invalido = true;
+		}
+		
+		if (!cadastroSenha.equals(cadastroSenha2)) {
+			FacesContext.getCurrentInstance().addMessage(campoCadastroSenha.getClientId(), new FacesMessage() {
+				@Override
+				public Severity getSeverity() {
+					return SEVERITY_ERROR;
+				}
+				
+				@Override
+				public String getSummary() {
+					return "Ambos campos de senha devem ser iguais!";
+				}
+			});
+			
+			invalido = true;
+		}
+		
+		if (!invalido) {
+			usuarioLogado = usuarioDao.adicionarUsuario(cadastroEmail, cadastroSenha);
+			
+			limparCampos();
+		}
+	}
+	
+	private String processarRedirecionamento(String padrao) {
+		if (redirecionamento != null) {
+			return redirecionamento + "?faces-redirect=true";
+		}
+		
+		return padrao;
+	}
+	
+	private void limparCampos() {
+		cadastroEmail = null;
+		cadastroEmail2 = null;
+		cadastroSenha = null;
+		cadastroSenha2 = null;
+	}
+
+	public String getRedirecionamento() {
+		return redirecionamento;
+	}
+
+	public void setRedirecionamento(String redirecionamento) {
+		this.redirecionamento = redirecionamento;
 	}
 }

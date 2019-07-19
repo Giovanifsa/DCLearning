@@ -28,8 +28,10 @@ public class Produto {
 
 	@Lob
 	private String descricao;
-	private BigDecimal preco;
-	private BigDecimal margemDeLucroPorcentual;
+	private BigDecimal preco = new BigDecimal(0);
+	
+	//Valor variando de 0-100 (deve ser dividido por 100 para ter a porcentagem real)
+	private BigDecimal margemDeLucroPorcentual = new BigDecimal(0);
 	
 	@OneToOne(fetch = FetchType.EAGER)
 	private ArquivoRecurso imagemProduto;
@@ -101,7 +103,7 @@ public class Produto {
 	 * @return Preço final calculado.
 	 */
 	public BigDecimal calcularPrecoFinal() {
-		return (preco.multiply(margemDeLucroPorcentual).add(preco));
+		return (preco.multiply(margemDeLucroPorcentual.divide(new BigDecimal(100))).add(preco));
 	}
 
 	public void setMargemDeLucroPorcentual(BigDecimal margemDeLucroPorcentual) {

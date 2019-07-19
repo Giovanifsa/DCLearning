@@ -19,19 +19,19 @@
 	<div class="bg">
 		<b:navBar brand="E-Commerce" brandHref="#" inverse="true" brand-align="left">
 			<b:navbarLinks>
-				<b:navLink value="Loja" href="store.xhtml" active="#{view.viewId == '/store.xhtml'}" />
+				<b:navLink value="Loja" href="loja.xhtml" active="#{view.viewId == '/loja.xhtml'}" />
 			</b:navbarLinks>
 			
 			<b:navbarLinks pull="right">
-				<b:navCommandLink value="Finalizar sessão" href="#" action="#{loginBean.endSession}" rendered="#{loginBean.isUserLogged()}" />
+				<b:navCommandLink value="Finalizar sessão" href="#" action="#{loginBean.finalizarSessao()}" rendered="#{loginBean.usuarioEstaLogado()}" />
 			</b:navbarLinks>
 			
 			<b:navbarLinks pull="right">
-				<b:navLink value="Iniciar sessão" href="login.xhtml" rendered="#{loginBean.isUserLogged() == false and view.viewId != '/login.xhtml'}" />
+				<b:navLink value="Iniciar sessão" href="login.xhtml" rendered="#{loginBean.usuarioEstaLogado() == false and view.viewId != '/login.xhtml'}" />
 			</b:navbarLinks>
 			
 			<b:navbarLinks pull="right">
-				<b:navLink value="Carrinho (#{shoppingCartBean.getCartQuantity()} itens - R$ #{shoppingCartBean.calcFinalPrice()})" href="cart.xhtml" iconAwesome="shopping-cart"/>
+				<b:navLink value="Carrinho (#{carrinhoBean.getQuantidadeItens()} itens - R$ #{carrinhoBean.calcularPrecoFinal()})" href="carrinhoCompras.xhtml" iconAwesome="shopping-cart"/>
 			</b:navbarLinks>
 			
 		</b:navBar>

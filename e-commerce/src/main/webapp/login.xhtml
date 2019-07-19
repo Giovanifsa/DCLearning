@@ -7,20 +7,24 @@
 	xmlns:f="http://xmlns.jcp.org/jsf/core"
 	xmlns:b="http://bootsfaces.net/ui" 
 	xmlns:p="http://primefaces.org/ui">
-
+	
+	<f:metadata>
+		<f:viewParam name="redirecionamento" value="#{loginBean.redirecionamento}"></f:viewParam>
+	</f:metadata>
+	
 <ui:composition template="gnr_template.xhtml">
 	<ui:define name="body">
-		<b:form>
-			<b:container fluid="true">
-				<b:row>
-					<b:column large-screen="7" medium-screen="7" >
+		<b:container fluid="true">
+			<b:row>
+				<b:column large-screen="7" medium-screen="7" >
+					<b:form>
 						<b:panel look="primary" collapsible="false" >
 							<f:facet name="heading">
 								<b:iconAwesome value="user-circle" solid="true" style="padding-right:20px"/>
 								<h:outputLabel value="Iniciar sessão" />
 							</f:facet>
 						
-							<b:panelGrid  colSpans="2,5,5">
+							<b:panelGrid colSpans="2,5,5">
 								<h:outputText value="E-mail:" />
 								
 								<b:inputText id="campoEmailLogin" placeholder="usuario@dclearning.com"
@@ -44,23 +48,95 @@
 								</b:column>
 							</b:row>
 						</b:panel>
-					</b:column>
+					</b:form>
 					
-					<b:column medium-screen="5" large-screen="5" hidden="sm,xs" rendered="#{loginBean.deveMostrarRecentes()}">
-						<b:panel title="Últimos produtos" look="info" collapsible="false">
-							<b:carousel interval="3000">
-								<ui:repeat var="produto" value="#{loginBean.getProdutosRecentes()}">
-									<b:carouselItem caption="#{produto.nome}">
-								    	<img src="#{request.contextPath}/#{produto.imagemProduto.nomeDiretorio}/#{produto.imagemProduto.nomeArquivo}"/>
-								  	</b:carouselItem>
-								</ui:repeat>
-							</b:carousel>
+					<b:form>
+						<b:panel look="success" collapsible="false">
+							<f:facet name="heading">
+								<b:iconAwesome value="id-card" solid="true" style="padding-right:20px"/>
+								<h:outputLabel value="Cadastrar nova conta" />
+							</f:facet>
+							
+							<b:row>
+								<b:column large-screen="6" medium-screen="6">
+									<h:outputText value="Seu e-mail:" />
+									
+									<b:inputText id="campoCadastrarEmail" placeholder="novousuario@dclearning.com"
+										value="#{loginBean.cadastroEmail}" required="true"
+										required-message="Campo de email necessário." validator="#{loginBean.validarEmail}" 
+										binding="#{loginBean.campoCadastroEmail}"/>
+										
+									<b:message for="campoCadastrarEmail"/>
+								</b:column>
+								
+								<b:column large-screen="6" medium-screen="6">
+									<h:outputText value="Repita seu e-mail:" />
+									
+									<b:inputText id="campoCadastrarEmail2" placeholder="novousuario@dclearning.com"
+										value="#{loginBean.cadastroEmail2}" required="true"
+										required-message="Campo de repetir email necessário." validator="#{loginBean.validarEmail}"  />
+										
+									<b:message for="campoCadastrarEmail2"/>
+								</b:column>
+							</b:row>
+							
+							<b:row>
+								<b:column large-screen="6" medium-screen="6">
+									<h:outputText value="Sua senha:" />
+									
+									<b:inputSecret id="campoCadastrarSenha" placeholder="Nova senha" value="#{loginBean.cadastroSenha}"
+										required="true" required-message="Campo de senha necessário." validator="#{loginBean.validarSenha}" 
+										binding="#{loginBean.campoCadastroSenha}"/>
+										
+									<b:message for="campoCadastrarSenha"/>
+								</b:column>
+								
+								<b:column large-screen="6" medium-screen="6">
+									<h:outputText value="Repita sua senha:" />
+									
+									<b:inputSecret id="campoCadastrarSenha2" placeholder="Repita sua nova senha" value="#{loginBean.cadastroSenha2}"
+										required="true" required-message="Campo de repetir senha necessário." validator="#{loginBean.validarSenha}"/>
+										
+									<b:message for="campoCadastrarSenha2"/>
+								</b:column>
+							</b:row>
+							
+							<b:row>
+								<b:column>
+									<b:commandButton style="width:100%" value="Cadastrar conta" look="success" action="#{loginBean.finalizarCadastro()}"/>
+								</b:column>
+							</b:row>
 						</b:panel>
-					</b:column>
-				</b:row>
+					</b:form>
+				</b:column>
 				
-			</b:container>
-		</b:form>
+				<b:column medium-screen="5" large-screen="5" hidden="sm,xs" rendered="true">
+					<b:panel look="info" collapsible="false">
+						<f:facet name="heading">
+							<b:iconAwesome value="burn" solid="true" style="padding-right:20px"/>
+							<h:outputLabel value="Lançamentos" />
+						</f:facet>
+					
+						<b:carousel interval="3000">
+							<b:carouselItem caption="Filme do homem formiga">
+							    <img src="#{request.contextPath}/resources/images/formiga.png"/>
+							</b:carouselItem>
+							
+							<b:carouselItem caption="Guardioes">
+							    <img src="#{request.contextPath}/resources/images/guardioes.png"/>
+							</b:carouselItem>
+						
+							<ui:repeat var="produto" value="#{loginBean.getProdutosRecentes()}">
+								<b:carouselItem caption="#{produto.nome}">
+							    	<img src="#{request.contextPath}/#{produto.imagemProduto.nomeDiretorio}/#{produto.imagemProduto.nomeArquivo}"/>
+							  	</b:carouselItem>
+							</ui:repeat>
+						</b:carousel>
+					</b:panel>
+				</b:column>
+			</b:row>
+			
+		</b:container>
 	</ui:define>
 </ui:composition>
 
