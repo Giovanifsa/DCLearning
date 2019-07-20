@@ -5,7 +5,6 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
@@ -16,7 +15,6 @@ import ecommerce.control.Transactional;
 import ecommerce.daos.ProdutoDAO;
 import ecommerce.models.ItemCarrinho;
 import ecommerce.models.Produto;
-import ecommerce.models.Usuario;
 import ecommerce.tools.MecanismoDeHash;
 
 @SuppressWarnings("serial")
@@ -30,18 +28,6 @@ public class CarrinhoBean implements Serializable {
 	private MecanismoDeHash hashing;
 	
 	private ArrayList<ItemCarrinho> produtosCarrinho = new ArrayList<>();
-	
-	public String removerProduto(ItemCarrinho cartProduct) {
-		for (ItemCarrinho e : produtosCarrinho) {
-			if (e.equals(cartProduct)) {
-				produtosCarrinho.remove(e);
-				
-				break;
-			}
-		}
-		
-		return "cart?faces-redirect=true";
-	}
 	
 	public BigDecimal calcularPrecoFinal() {
 		BigDecimal price = new BigDecimal(0);
