@@ -178,9 +178,10 @@ public class LoginBean implements Serializable {
 		this.campoEmailLogin = campoEmailLogin;
 	}
 	
-	public boolean deveMostrarRecentes() {
-		return produtoDao.existeProdutos();
-	}
+	/*	ESSE MÉTODO TAVA DANDO ERRO, POR ISSO COMENTEI
+	 *  SE NÃO ERA PRA COMENTAR, DESCONSIDERA. WILLIAN
+	 * public boolean deveMostrarRecentes() { return produtoDao.existeProdutos(); }
+	 */
 	
 	public List<Produto> getProdutosRecentes() {
 		return produtoDao.buscarProdutosRecentes(10);
