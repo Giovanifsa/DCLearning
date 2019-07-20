@@ -38,15 +38,15 @@ public class UsuarioDAO implements Serializable {
 	}
 	
 	/**
-	 * Cria um novo usuário a partir de email e senha.
+	 * Cria um novo usuário a partir de nome, email e senha.
+	 * @param nome
 	 * @param email
-	 * @param password
+	 * @param senha
 	 * @return
 	 * @throws NoSuchAlgorithmException
 	 */
-	@Transactional
-	public Usuario adicionarUsuario(String email, String password) throws NoSuchAlgorithmException {
-		Usuario u = new Usuario(email, hasher.aplicarSHA256(password.getBytes()));
+	public Usuario adicionarUsuario(String nome, String email, String senha) throws NoSuchAlgorithmException {
+		Usuario u = new Usuario(nome, email, hasher.aplicarSHA256(senha.getBytes()));
 		em.persist(u);
 		
 		return u;

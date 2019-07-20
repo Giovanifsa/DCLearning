@@ -8,6 +8,7 @@ import java.util.List;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -19,7 +20,7 @@ import ecommerce.tools.MecanismoDeHash;
 
 @SuppressWarnings("serial")
 @Named
-@SessionScoped
+@ViewScoped
 public class CarrinhoBean implements Serializable {
 	@Inject
 	private ProdutoDAO produtoDao;
@@ -95,14 +96,12 @@ public class CarrinhoBean implements Serializable {
 	
 	@Transactional
 	public String removeProduto(Produto produto) {
-		
 		this.produtoDao.removerProduto(produto);
 		
 		return "carrinhoCompras?faces-redirect=true";
 	}
 
 	public int selecionarQuantidade() {
-		
 		int quantidade = 1;
 		if(quantidade == 1) {
 			return quantidade;

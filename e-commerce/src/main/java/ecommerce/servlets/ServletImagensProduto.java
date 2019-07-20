@@ -22,6 +22,8 @@ import javax.servlet.annotation.WebServlet;
  */
 @WebServlet("/imagensProdutos/*")
 public class ServletImagensProduto extends HttpServlet {
+	public static final String DIRETORIO_IMAGENS_PRODUTOS = "imagensProdutos";
+	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 	    String filename = request.getPathInfo().substring(1);
 	    

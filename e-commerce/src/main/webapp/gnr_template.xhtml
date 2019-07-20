@@ -12,20 +12,22 @@
 
 	<h:outputStylesheet library="css" name="background.css" />
 	<h:outputStylesheet library="css" name="deslocador_pagina.css" />
-
+	
 	<ui:insert name="head" />
 </h:head>
 
 <h:body>
 	<div class="bg">
-		<b:form>
-			<b:navBar brand="E-Commerce" brandHref="#" inverse="true" brand-align="left" fluid="true" fixed="top" sticky="true">
+		<b:form id="formNavbar" binding="#{templateBean.formNavBar}">
+			<b:navBar brand="E-Commerce" brand-img="#{request.contextPath}/resources/images/ecommerce.png" brand-img-style="height:25px"
+				brandHref="#" inverse="true" brand-align="left" fluid="true" fixed="top" sticky="true">
+				
 				<b:navbarLinks>
 					<b:navLink value="Loja" href="loja.xhtml" active="#{view.viewId == '/loja.xhtml'}" />
 				</b:navbarLinks>
 
 				<b:navbarLinks pull="right" rendered="#{loginBean.usuarioEstaLogado()}">
-					<b:dropMenu value="#{loginBean.usuarioLogado.email}" iconAwesome="user-circle" >
+					<b:dropMenu value="#{loginBean.usuarioLogado.nome}" iconAwesome="user-circle" >
 						<b:navLink value="Suas lojas" href="novaLoja.xhtml"/>
 						<b:navLink value="Seus produtos" href="novoProduto.xhtml"/>
 					</b:dropMenu>
@@ -41,6 +43,8 @@
 					<b:navLink value="Carrinho (#{carrinhoBean.getQuantidadeItens()} itens - R$ #{carrinhoBean.calcularPrecoFinal()})" href="carrinhoCompras.xhtml" iconAwesome="shopping-cart"/>
 				</b:navbarLinks>
 			</b:navBar>
+			
+			<b:messages for="formNavbar"/>
 		</b:form>
 
 		<ui:insert name="body"></ui:insert>

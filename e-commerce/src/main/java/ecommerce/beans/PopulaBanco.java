@@ -29,22 +29,22 @@ public class PopulaBanco {
 		EntityManager em = emFactory.createEntityManager();
 		
 		Usuario u0 = new Usuario();
-		u0.setAdmin(false);
+		u0.setNome("João");
 		u0.setEmail("teste012@0teste.com");
 		u0.setSenhaHasheada(new MecanismoDeHash().aplicarSHA256("11544532353".getBytes()));
 		
 		Usuario u1 = new Usuario();
-		u1.setAdmin(false);
+		u1.setNome("João");
 		u1.setEmail("teste121@1teste.com");
 		u1.setSenhaHasheada(new MecanismoDeHash().aplicarSHA256("53434534".getBytes()));
 		
 		Usuario u2 = new Usuario();
-		u2.setAdmin(false);
+		u2.setNome("João");
 		u2.setEmail("teste212@2teste.com");
 		u2.setSenhaHasheada(new MecanismoDeHash().aplicarSHA256("534345345".getBytes()));
 		
 		Usuario u3 = new Usuario();
-		u3.setAdmin(false);
+		u3.setNome("João");
 		u3.setEmail("teste123@3teste.com");
 		u3.setSenhaHasheada(new MecanismoDeHash().aplicarSHA256("3545345453".getBytes()));
 		

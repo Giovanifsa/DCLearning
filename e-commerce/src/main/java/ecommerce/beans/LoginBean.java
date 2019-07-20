@@ -3,12 +3,10 @@ package ecommerce.beans;
 import java.io.Serializable;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
@@ -17,6 +15,7 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import ecommerce.control.Transactional;
 import ecommerce.daos.ProdutoDAO;
 import ecommerce.daos.UsuarioDAO;
 import ecommerce.models.Produto;
@@ -42,6 +41,7 @@ public class LoginBean implements Serializable {
 	private String senhaLogin = "";
 	
 	//Cadastrar nova conta
+	private String cadastroNome;
 	private String cadastroEmail;
 	private String cadastroEmail2;
 	private String cadastroSenha;
@@ -63,6 +63,8 @@ public class LoginBean implements Serializable {
 	private MecanismoDeHash mecanismoHash;
 	@Inject
 	private ProdutoDAO produtoDao;
+	@Inject
+	private TemplateBean pagTemplate;
 	
 	/**
 	 * Tenta iniciar a sessão do usuário
@@ -79,6 +81,9 @@ public class LoginBean implements Serializable {
 		if (usuario != null && Arrays.equals(usuario.getSenhaHasheada(), mecanismoHash.aplicarSHA256(senhaLogin.getBytes()))) {
 			//Dados corretos, alterando objeto de sessão.
 			dadosSessao.setUsuarioLogado(usuario);
+			
+			pagTemplate.adicionarMensagem(FacesMessage.SEVERITY_INFO, "Sessão iniciada para " + dadosSessao.getUsuarioLogado().getEmail() +
+					" - Seja bem vindo(a) novamente " + dadosSessao.getUsuarioLogado().getNome() + "!", true);
 			
 			//Redirecione para uma página após logar.
 			return processarRedirecionamento("login?faces-redirect=true");
@@ -108,6 +113,8 @@ public class LoginBean implements Serializable {
 	
 	public String finalizarSessao() {
 		if (usuarioEstaLogado()) {
+			pagTemplate.adicionarMensagem(FacesMessage.SEVERITY_INFO, "Sessão encerrada, até mais " +  dadosSessao.getUsuarioLogado().getNome() + "!", true);
+			
 			//Faça logoff
 			dadosSessao.setUsuarioLogado(null);
 			
@@ -152,7 +159,7 @@ public class LoginBean implements Serializable {
 				
 				@Override
 				public String getSummary() {
-					return "Senha inválida! (+" + (PASSWORD_MIN_SIZE - valor.length()) + ")";
+					return "É necessário mais " + (PASSWORD_MIN_SIZE - valor.length()) + " caracteres.";
 				}
 			});
 		}
@@ -251,6 +258,7 @@ public class LoginBean implements Serializable {
 	 * @return String indicando a pagina para redirecionar.
 	 * @throws NoSuchAlgorithmException
 	 */
+	@Transactional
 	public String finalizarCadastro() throws NoSuchAlgorithmException {
 		boolean invalido = false;
 		
@@ -289,7 +297,10 @@ public class LoginBean implements Serializable {
 		}
 		
 		if (!invalido) {
-			dadosSessao.setUsuarioLogado(usuarioDao.adicionarUsuario(cadastroEmail, cadastroSenha));
+			dadosSessao.setUsuarioLogado(usuarioDao.adicionarUsuario(cadastroNome, cadastroEmail, cadastroSenha));
+			pagTemplate.adicionarMensagem(FacesMessage.SEVERITY_INFO, "Usuário cadastrado com sucesso! Sessão iniciada automaticamente como " + 
+					dadosSessao.getUsuarioLogado().getEmail() + " - Seja bem vindo(a) " + dadosSessao.getUsuarioLogado().getNome() + "!", true);
+			
 			return processarRedirecionamento("login?faces-redirect=true");
 		}
 		
@@ -310,5 +321,13 @@ public class LoginBean implements Serializable {
 
 	public void setRedirecionamento(String redirecionamento) {
 		this.redirecionamento = redirecionamento;
+	}
+
+	public String getCadastroNome() {
+		return cadastroNome;
+	}
+
+	public void setCadastroNome(String cadastroNome) {
+		this.cadastroNome = cadastroNome;
 	}
 }

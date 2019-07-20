@@ -1,21 +1,27 @@
 package ecommerce.daos;
 
+import java.io.IOException;
 import java.io.Serializable;
-import java.math.BigDecimal;
+import java.util.InputMismatchException;
 import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
+import javax.servlet.http.Part;
 
-import ecommerce.control.Transactional;
+import ecommerce.models.ArquivoRecurso;
 import ecommerce.models.Produto;
-import ecommerce.models.Loja;
+import ecommerce.servlets.ServletImagensProduto;
 
 @Named
 public class ProdutoDAO implements Serializable {
 	@Inject
 	private EntityManager em;
+	
+	@Inject
+	private ArquivoDAO arquivoDao;
+	
 	private static Object atualizarProdutoLock = new Object();
 	
 	/**
@@ -35,8 +41,6 @@ public class ProdutoDAO implements Serializable {
 		return em.createQuery("select p from Produto p", Produto.class).getResultList();
 	}
 	
-	
-	@Transactional
 	public void atualizarProduto(Produto p) {
 		em.merge(p);
 	}
@@ -44,9 +48,8 @@ public class ProdutoDAO implements Serializable {
 	/**
 	 * Utilize esse método para atualizar a quantia de vendas de um produto.
 	 * Este método é thread-safe, portanto, ele aumenta as vendas de um produto
-	 * garantindo que não haja erros.
+	 * utilizando um semáforo, garantindo que não haja erros.
 	 */
-	@Transactional
 	public void produtoVendido(Produto p, int quantia) {
 		synchronized (atualizarProdutoLock) {
 			Produto dbp = em.find(Produto.class, p.getId());
@@ -55,8 +58,7 @@ public class ProdutoDAO implements Serializable {
 			em.merge(dbp);
 		}
 	}
-	
-	@Transactional
+
 	public void adicionarProduto(Produto p) {
 		em.persist(p);
 	}
@@ -69,4 +71,12 @@ public class ProdutoDAO implements Serializable {
 		em.remove(produto);
 	}
 	
+	public ArquivoRecurso salvarImagemProduto(Part imagem) throws IOException {
+		//Verifica se o arquivo é realmente uma imagem.
+		if (!imagem.getContentType().startsWith("image/")) {
+			throw new InputMismatchException("O arquivo enviado pelo usuário como imagem de produto não é uma imagem!");
+		}
+		
+		return arquivoDao.salvarArquivo(imagem.getSubmittedFileName(), ServletImagensProduto.DIRETORIO_IMAGENS_PRODUTOS, imagem.getInputStream().readAllBytes());
+	}
 }
