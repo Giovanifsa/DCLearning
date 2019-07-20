@@ -44,6 +44,14 @@ public class NovoProdutoBean implements Serializable {
 		return "/NovoProduto?faces-redirect=true";
 	}
 	
+	//Esse métodp atualiza o produto
+	@Transactional
+	public String atualiza(Produto produto) {
+		dao.atualizarProduto(produto);
+		
+		return "/NovoProduto?faces-redirect=true";
+	}
+	
 	//Esse método busca todos os produtos cadastrado
 	public List<Produto> getProdutos(){
 		
@@ -54,10 +62,14 @@ public class NovoProdutoBean implements Serializable {
 	
 	//Esse método deleta o produto
 	@Transactional
-	public String deletaProduto() {
+	public String deletaProduto(Produto produto) {
 		dao.removerProduto(produto);
 		
 		return "/NovoProduto?faces-redirect=true";
+	}
+	
+	public void atualizarProduto(Produto p) {
+		produto = p;
 	}
 
 	//getters and setters
