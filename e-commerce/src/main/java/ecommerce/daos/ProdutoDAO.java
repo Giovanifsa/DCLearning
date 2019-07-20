@@ -9,6 +9,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
 import javax.servlet.http.Part;
+import javax.persistence.TypedQuery;
 
 import ecommerce.models.ArquivoRecurso;
 import ecommerce.models.Produto;
@@ -38,6 +39,11 @@ public class ProdutoDAO implements Serializable {
 	}
 
 	public List<Produto> listarProdutos() {
+		/**
+		 * Retorna uma lista de todos os produtos na tabela de produtos,
+		 * depois de implementado a tela de vendas, deve retornar os produtos
+		 * adicionados ao carrinho, para preencher a tela do carrinho
+		 */
 		return em.createQuery("select p from Produto p", Produto.class).getResultList();
 	}
 	
@@ -69,6 +75,22 @@ public class ProdutoDAO implements Serializable {
 
 	public void removerProduto(Produto produto) {
 		em.remove(produto);
+	}
+
+	public Long quantidadeDisponivel(Produto produto) {
+		
+		/**
+		 * Retorna a quantidade de um produto na tabela produtos.
+		 * No momento propício, deve retornar a quantidade de produtos
+		 * adicionados ao carrinho, através da tela de vendas.
+		 */
+		
+		String jpql = "select count(p) from Produto p";
+		
+		@SuppressWarnings("unchecked")
+		TypedQuery<Long> query = (TypedQuery<Long>) em.createQuery(jpql);
+		
+		return query.getSingleResult();
 	}
 	
 	public ArquivoRecurso salvarImagemProduto(Part imagem) throws IOException {

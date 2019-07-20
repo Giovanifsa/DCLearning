@@ -47,7 +47,6 @@ public class LoginBean implements Serializable {
 	private String cadastroSenha;
 	private String cadastroSenha2;
 	
-	//Parâmetros URL
 	private String redirecionamento;
 	
 	//UI

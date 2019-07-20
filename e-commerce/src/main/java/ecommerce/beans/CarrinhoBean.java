@@ -7,15 +7,20 @@ import java.util.List;
 
 import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
+import javax.faces.component.FacesComponent;
+import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
+import javax.faces.validator.ValidatorException;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.validation.ValidationException;
 
 import ecommerce.control.Transactional;
 import ecommerce.daos.ProdutoDAO;
 import ecommerce.models.ItemCarrinho;
 import ecommerce.models.Produto;
+import ecommerce.models.Spinner;
 import ecommerce.tools.MecanismoDeHash;
 
 @SuppressWarnings("serial")
@@ -27,6 +32,9 @@ public class CarrinhoBean implements Serializable {
 	
 	@Inject
 	private MecanismoDeHash hashing;
+
+	@Inject
+	Spinner spinner;
 	
 	@Inject
 	private DadosSessaoBean dadosSessao;
@@ -86,10 +94,6 @@ public class CarrinhoBean implements Serializable {
 		return quantidade;
 	}
 	
-	public double valorCompra(double valor, int qtd) {
-		return valor * qtd;
-	}
-	
 	public List<Produto> produtosCarrinho() {
 		return produtoDao.listarProdutos();
 	}
@@ -102,7 +106,8 @@ public class CarrinhoBean implements Serializable {
 	}
 
 	public int selecionarQuantidade() {
-		int quantidade = 1;
+		
+		int quantidade = 0;
 		if(quantidade == 1) {
 			return quantidade;
 		}
@@ -110,11 +115,29 @@ public class CarrinhoBean implements Serializable {
 	}
 	
 	public String continuarComprando() {
-		return "novaLoja?faces-redirect=true";	//	DEVE RETORNAR A HOME
+		return "novaLoja?faces-redirect=true";	// RETORNAR A HOME
 	}
 	
 	public String finalizarCompra() {
 		return "finalizarCompra?faces-redirect=true";
+	}
+
+	public String atualizarQuantidade(Produto produto) {
+//	POR ENQUANTO FAZ UM COUNT NO BANCO, TEM QUE MUDAR PRA COUNT NO ESTOQUE		
+		Long estoque = produtoDao.quantidadeDisponivel(produto);
+		
+		if(spinner.getValor() > estoque) {
+			FacesContext.getCurrentInstance().addMessage("messages", new FacesMessage("Quantidade indisponível!"));
+//	TESTAR ESSA MENSAGEM QUANDO TIVER A TELA DE PRODUTOS			
+		}
+		
+		ItemCarrinho item = new ItemCarrinho();
+
+		item.setProduto(produto);
+		item.setQuantidade(spinner.getValor());
+		produtosCarrinho.add(item);
+		
+		return "carrinhoCompras?faces-redirect=true";
 	}
 	
 }

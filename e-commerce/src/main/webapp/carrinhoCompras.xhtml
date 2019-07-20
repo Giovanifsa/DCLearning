@@ -5,76 +5,102 @@
 	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
 	xmlns:h="http://xmlns.jcp.org/jsf/html"
 	xmlns:f="http://xmlns.jcp.org/jsf/core"
-	xmlns:p="http://primefaces.org/ui"
-	xmlns:b="http://bootsfaces.net/ui"
+	xmlns:p="http://primefaces.org/ui" xmlns:b="http://bootsfaces.net/ui"
 	xmlns:jsf="http://xmlns.jcp.org/jsf/composite">
 
 
 <ui:composition template="gnr_template.xhtml">
 	<ui:define name="body">
 		<b:form id="carrinho">
-			
-		<b:container id="container" align="center" class="">
-			<b:panel title="Carrinho de compras" look="primary" collapsible="false" large-screen="7" medium-screen="7"
-				offset-lg="2" showCollapseLink="true" tooltip-position="right" small-screen="7">
-			 <!-- CONFIGURA O TAMANHO DO CONTAINER -->
-			 	<h:outputLabel value="#{carrinhoBean.quantidadeItens}" id="ajaxSpinnerValue" />
-					<b:dataTable value="#{carrinhoBean.produtosCarrinho()}" var="produto" id="tabelaProdutos" 
-								fixedHeader="false" >
-						<b:dataTableColumn>
-							<f:facet name="header">Nome</f:facet>
+			<h:outputLabel />
+			<h:messages id="messages" />
+			<b:container id="container" align="center" class="">
+				<b:panel title="Carrinho de compras" look="primary"
+					collapsible="false" large-screen="12" medium-screen="12"
+					showCollapseLink="false" tooltip-position="right" small-screen="12"
+					rendered="true" largeScreen="12" id="painel" icon="shopping-cart"
+					icon-align="right" display="inline-block">
+
+					<b:dataTable value="#{carrinhoBean.produtosCarrinho()}"
+						responsive="true" var="produto" id="tabelaProdutos"
+						fixedHeader="true" scroll-horizontally="true"
+						mark-search-results="false" paginated="false" rendered="true"
+						scroll-size="true" selection-info="false" info="false" col-md="12"
+						col-lg="12" col-xs="12">
+
+						<b:dataTableColumn label="Produto">
 							#{produto.nome}
 						</b:dataTableColumn>
-						
-						<b:dataTableColumn>
-							<f:facet name="header">Descrição</f:facet>
+
+						<b:dataTableColumn label="Descrição">
 							#{produto.descricao}								
 						</b:dataTableColumn>
-						
-						<b:dataTableColumn>
-							<f:facet name="header">Imagem</f:facet>
-							<img src="#{request.contextPath}/resources/images/#{produto.imagemProduto.nomeArquivo}" width="50px" align="middle"/>
-						</b:dataTableColumn>
-						
-						<b:dataTableColumn data-type="numeric" >
-							<f:facet name="header">Quantidade</f:facet>
-							<p:spinner id="ajax" min="1" size="1" jsf:value="#{carrinhoBean.quantidadeItens}"
-										onclick="#{carrinhoBean.setQuantidadeItem(produto, ajax.index)}" >
-     					    </p:spinner>
-     					    <br/>
 
-							<b:commandButton action="#{carrinhoBean.setQuantidadeItem(produto)}">
-								<b:icon value="refresh"/>							
-         							<p:ajax  event="click" process="@this"
-         						      	update="@form carrinho:tabelaProdutos" />
+						<b:dataTableColumn orderable="false" label="Imagem">
+							<img
+								src="#{request.contextPath}/resources/images/#{produto.imagemProduto.nomeArquivo}"
+								width="50px" align="middle" />
+						</b:dataTableColumn>
+
+
+
+						<b:dataTableColumn orderable="false" width="15%"
+							label="Quantidade">
+
+							<b:touchSpin id="spin" col-md="1" value="#{spinner.valor}"
+								large-screen="11" min="1" max="8" step="1" ajax="true"
+								size="1000" rendered="true" vertical-buttons="true" />
+
+							<br />
+							<br />
+							<b:commandButton col-md="10" process="@this"
+								action="#{carrinhoBean.atualizarQuantidade(produto)}"
+								auto-update="true" rendered="true" update="@this" size="sm"
+								large-screen="11" style-class="btn btn-warning"
+								title="Atualizar quantidade no carrinho">
+								<b:icon value="refresh" />
 							</b:commandButton>
 						</b:dataTableColumn>
-						
-						<b:dataTableColumn >
-							<f:facet name="header">Preço</f:facet>
+
+						<b:dataTableColumn width="9%" label="Preço">
 							<br />
-							R$ #{carrinhoBean.valorCompra(produto.preco, (carrinhoBean.quantidadeItens))}
-							
+							<h:outputLabel value="R$ " id="idPreco" style="text-align:center">
+								 #{produto.preco}
+							</h:outputLabel>
 						</b:dataTableColumn>
-						
-						<b:dataTableColumn>
-							<f:facet name="header">Remover</f:facet>
+
+						<b:dataTableColumn orderable="false" width="9%" label="Remover">
 							<br />
-								<b:commandButton action="#{carrinhoBean.removeProduto(produto)}" process="@this" 
-									 class="btn btn-danger" colLg="40"> 
-								<b:icon value="trash" /><br/>	
-								</b:commandButton>
-								
+							<b:commandButton action="#{carrinhoBean.removeProduto(produto)}"
+								process="@this" class="btn btn-danger" colLg="40"
+								title="Remover produto" ajax="true" update="@form">
+								<b:icon value="trash" />
+								<br />
+							</b:commandButton>
 						</b:dataTableColumn>
 					</b:dataTable>
-					<b:panelGrid col-spans="4,4,4" tooltipPosition="top">
-						<b:commandButton value="Continuar Comprando"  class="btn btn-primary"
+					<b:panel>
+						<b:panelGrid col-spans="6,6" columns="12" rendered="true"
+							col-xs="12" col-sm="12" col-md="12" col-lg="12"
+							small-screen="three-fourths" medium-screen="three-fourths"
+							large-screen="three-fourths">
+							<b:commandButton value="Voltar ao site" rendered="true"
+								title="Continuar comprando na loja" small-screen="half"
+								medium-screen="three-fourths" large-screen="three-fourths"
+								col-xs="6" col-ms="6" col-md="4" col-lg="9" offset-md="1"
+								offset-lg="2" class="btn btn-primary"
 								onclick="#{carrinhoBean.continuarComprando()}" process="@this" />
-						<b:commandButton id="botaoFinalizar" value="Finalizar compra" type="button" class="btn btn-success" />
-					</b:panelGrid>			
-			</b:panel>					
-			
-		</b:container>
+
+							<b:commandButton value="Finalizar compra" id="botaoFinalizar"
+								title="Finalizar compra" class="btn btn-success" rendered="true"
+								small-screen="half" medium-screen="one-fourth"
+								large-screen="one-third" col-xs="6" col-ms="6" col-md="4"
+								col-lg="9" offset-md="2" offset-lg="2" />
+						</b:panelGrid>
+					</b:panel>
+				</b:panel>
+
+			</b:container>
 
 		</b:form>
 	</ui:define>
