@@ -27,23 +27,34 @@ public class CarrinhoBean implements Serializable {
 	@Inject
 	private MecanismoDeHash hashing;
 	
-	private ArrayList<ItemCarrinho> produtosCarrinho = new ArrayList<>();
+	@Inject
+	private DadosSessaoBean dadosSessao;
 	
+	/**
+	 * Calcula o preço final (total) da soma do preço de todos os itens e suas quantidades.
+	 * @return Valor total de compra.
+	 */
 	public BigDecimal calcularPrecoFinal() {
 		BigDecimal price = new BigDecimal(0);
 		
-		for (ItemCarrinho e : produtosCarrinho) {
+		for (ItemCarrinho e : dadosSessao.getProdutosCarrinho()) {
 			price = price.add(e.getProduto().getPreco().multiply(new BigDecimal(e.getQuantidade())));
 		}
 		
 		return price;
 	}
 	
+	/**
+	 * Altera a quantidade de um item no carrinho
+	 * @param p Produto cuja quantidade será alterada.
+	 * @param quantidade Nova quantidade de itens.
+	 */
+	@Deprecated
 	public void setQuantidadeItem(Produto p, int quantidade) {
-		for (ItemCarrinho e : produtosCarrinho) {
+		for (ItemCarrinho e : dadosSessao.getProdutosCarrinho()) {
 			if (e.getProduto().equals(p)) {
 				if (quantidade == 0) {
-					produtosCarrinho.remove(e);
+					dadosSessao.getProdutosCarrinho().remove(e);
 				}
 				
 				else if (quantidade < 0) {
@@ -59,10 +70,15 @@ public class CarrinhoBean implements Serializable {
 		}
 	}
 	
+	/**
+	 * Calcula a quantidade total de itens no carrinho,
+	 * isto é, soma total da quantidade de todos os produtos do carrinho.
+	 * @return Quantidade total dos produtos do carrinho.
+	 */
 	public int getQuantidadeItens() {
-		int quantidade =0;
+		int quantidade = 0;
 		
-		for (ItemCarrinho e : produtosCarrinho) {
+		for (ItemCarrinho e : dadosSessao.getProdutosCarrinho()) {
 			quantidade += e.getQuantidade();
 		}
 		

@@ -24,7 +24,7 @@ import ecommerce.models.Usuario;
 import ecommerce.tools.MecanismoDeHash;
 
 @Named
-@SessionScoped
+@ViewScoped
 public class LoginBean implements Serializable {
 	public static final int PASSWORD_MIN_SIZE = 8;
 	public static final String EMAIL_REGEX = 
@@ -36,18 +36,27 @@ public class LoginBean implements Serializable {
 					"01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-" + 
 					"\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\])";
 	
-	private Usuario usuarioLogado = null;
-	
+	//Página login.xhtml
+	//Iniciar sessão
 	private String emailLogin = "";
 	private String senhaLogin = "";
 	
+	//Cadastrar nova conta
 	private String cadastroEmail;
 	private String cadastroEmail2;
 	private String cadastroSenha;
 	private String cadastroSenha2;
 	
+	//Parâmetros URL
 	private String redirecionamento;
 	
+	//UI
+	private UIComponent campoEmailLogin;
+	private UIComponent campoCadastroEmail;
+	private UIComponent campoCadastroSenha;
+	
+	@Inject
+	private DadosSessaoBean dadosSessao;
 	@Inject
 	private UsuarioDAO usuarioDao;
 	@Inject
@@ -55,11 +64,11 @@ public class LoginBean implements Serializable {
 	@Inject
 	private ProdutoDAO produtoDao;
 	
-	//UI
-	private UIComponent campoEmailLogin;
-	private UIComponent campoCadastroEmail;
-	private UIComponent campoCadastroSenha;
-	
+	/**
+	 * Tenta iniciar a sessão do usuário
+	 * @return
+	 * @throws NoSuchAlgorithmException
+	 */
 	public String iniciarSessao() throws NoSuchAlgorithmException {
 		if (emailLogin == null || emailLogin.isEmpty() ||
 				senhaLogin == null || senhaLogin.isEmpty()) {
@@ -68,11 +77,14 @@ public class LoginBean implements Serializable {
 		Usuario usuario = usuarioDao.procurarUsuario(emailLogin);
 		
 		if (usuario != null && Arrays.equals(usuario.getSenhaHasheada(), mecanismoHash.aplicarSHA256(senhaLogin.getBytes()))) {
-			usuarioLogado = usuario;
+			//Dados corretos, alterando objeto de sessão.
+			dadosSessao.setUsuarioLogado(usuario);
 			
-			return processarRedirecionamento("loja?faces-redirect=true");
+			//Redirecione para uma página após logar.
+			return processarRedirecionamento("login?faces-redirect=true");
 		}
 		
+		//Erro FacesMessage de usuário não encontrado
 		else {
 			FacesContext.getCurrentInstance().addMessage(campoEmailLogin.getClientId(), new FacesMessage() {
 				@Override
@@ -85,25 +97,25 @@ public class LoginBean implements Serializable {
 					return "Usuário não encontrado!";
 				}
 			});
-			
-			emailLogin = "";
-			senhaLogin = "";
 		}
 		
 		return null;
 	}
 	
 	public boolean usuarioEstaLogado() {
-		return usuarioLogado != null;
+		return dadosSessao.getUsuarioLogado() != null;
 	}
 	
 	public String finalizarSessao() {
 		if (usuarioEstaLogado()) {
-			usuarioLogado = null;
+			//Faça logoff
+			dadosSessao.setUsuarioLogado(null);
 			
-			return "loja?faces-redirect=true";
+			//Redirecione para uma página de loja/login?
+			return "login?faces-redirect=true";
 		}
 		
+		//Retorne null para continuar na mesma página
 		return null;
 	}
 	
@@ -147,11 +159,11 @@ public class LoginBean implements Serializable {
 	}
 
 	public Usuario getUsuarioLogado() {
-		return usuarioLogado;
+		return dadosSessao.getUsuarioLogado();
 	}
 
 	public void setUsuarioLogado(Usuario usuarioLogado) {
-		this.usuarioLogado = usuarioLogado;
+		dadosSessao.setUsuarioLogado(usuarioLogado);
 	}
 
 	public String getSenhaLogin() {
@@ -179,7 +191,7 @@ public class LoginBean implements Serializable {
 	}
 	
 	public boolean deveMostrarRecentes() {
-		return produtoDao.existeProdutos();
+		return !produtoDao.buscarProdutosRecentes(1).isEmpty();
 	}
 	
 	public List<Produto> getProdutosRecentes() {
@@ -234,9 +246,15 @@ public class LoginBean implements Serializable {
 		this.campoCadastroSenha = campoCadastroSenha;
 	}
 
-	public void finalizarCadastro() throws NoSuchAlgorithmException {
+	/**
+	 * Finaliza o cadastro com os dados no painel de cadastro.
+	 * @return String indicando a pagina para redirecionar.
+	 * @throws NoSuchAlgorithmException
+	 */
+	public String finalizarCadastro() throws NoSuchAlgorithmException {
 		boolean invalido = false;
 		
+		//Valida se ambos campos de email no cadastro são iguais
 		if (!cadastroEmail.equals(cadastroEmail2)) {
 			FacesContext.getCurrentInstance().addMessage(campoCadastroEmail.getClientId(), new FacesMessage() {
 				@Override
@@ -253,6 +271,7 @@ public class LoginBean implements Serializable {
 			invalido = true;
 		}
 		
+		//Valida se ambos campos de senha no cadastro são iguais
 		if (!cadastroSenha.equals(cadastroSenha2)) {
 			FacesContext.getCurrentInstance().addMessage(campoCadastroSenha.getClientId(), new FacesMessage() {
 				@Override
@@ -270,10 +289,11 @@ public class LoginBean implements Serializable {
 		}
 		
 		if (!invalido) {
-			usuarioLogado = usuarioDao.adicionarUsuario(cadastroEmail, cadastroSenha);
-			
-			limparCampos();
+			dadosSessao.setUsuarioLogado(usuarioDao.adicionarUsuario(cadastroEmail, cadastroSenha));
+			return processarRedirecionamento("login?faces-redirect=true");
 		}
+		
+		return null;
 	}
 	
 	private String processarRedirecionamento(String padrao) {
@@ -282,13 +302,6 @@ public class LoginBean implements Serializable {
 		}
 		
 		return padrao;
-	}
-	
-	private void limparCampos() {
-		cadastroEmail = null;
-		cadastroEmail2 = null;
-		cadastroSenha = null;
-		cadastroSenha2 = null;
 	}
 
 	public String getRedirecionamento() {

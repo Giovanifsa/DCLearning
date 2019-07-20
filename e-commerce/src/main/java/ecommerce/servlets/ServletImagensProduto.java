@@ -24,10 +24,13 @@ import javax.servlet.annotation.WebServlet;
 public class ServletImagensProduto extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 	    String filename = request.getPathInfo().substring(1);
-	    File file = new File(System.getProperty("user.home") + File.separator + "imagensProdutos" + File.separator, filename);
+	    
+	    File file = new File(System.getProperty("user.home") + File.separator + "arquivosWeb" + File.separator, filename);
+	    
 	    response.setHeader("Content-Type", getServletContext().getMimeType(filename));
 	    response.setHeader("Content-Length", String.valueOf(file.length()));
 	    response.setHeader("Content-Disposition", "inline; filename=\"" + filename + "\"");
 	    Files.copy(file.toPath(), response.getOutputStream());
+	    
 	}
 }

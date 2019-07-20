@@ -11,6 +11,7 @@
 	<title>E-Commerce</title>
 
 	<h:outputStylesheet library="css" name="background.css" />
+	<h:outputStylesheet library="css" name="deslocador_pagina.css" />
 
 	<ui:insert name="head" />
 </h:head>
@@ -18,7 +19,7 @@
 <h:body>
 	<div class="bg">
 		<b:form>
-			<b:navBar brand="E-Commerce" brandHref="#" inverse="true" brand-align="left" fluid="true">
+			<b:navBar brand="E-Commerce" brandHref="#" inverse="true" brand-align="left" fluid="true" fixed="top" sticky="true">
 				<b:navbarLinks>
 					<b:navLink value="Loja" href="loja.xhtml" active="#{view.viewId == '/loja.xhtml'}" />
 				</b:navbarLinks>
