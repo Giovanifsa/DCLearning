@@ -14,237 +14,175 @@
 
 <ui:composition template="gnr_template.xhtml">
 	<ui:define name="body">
-		<b:container fluid="true">
+		<b:container fluid="true" >
 			<b:form>
-				<b:panel look="primary" collapsible="false">
+				<b:panel look="danger" collapsible="false" style="width:100%">
 					<f:facet name="heading">
-						<b:iconAwesome value="fa-home " solid="true"
+						<b:iconAwesome value="fa-fire" solid="true"
 							style="padding-left:20px" size="3x" />
-						<h:outputLabel value="Pagina Inicial" />
+						<h:outputLabel value="Últimos Lançamento" />
 					</f:facet>
-					<b:row>
-						<b:column col-sm="6" col-md="4">
-							<b:thumbnail>
-								<img data-src="holder.js/300x200/social"
-									alt="Generic placeholder thumbnail" />
-								<f:facet name="caption">
-									<h3>Thumbnail label</h3>
-									<p>Cras justo odio, dapibus ac facilisis in, egestas eget
-										quam. Donec id elit non mi porta gravida at eget metus. Nullam
-										id dolor id nibh ultricies vehicula ut id elit.</p>
-									<p>
-										<b:button look="primary" value="Comprar" />
-										<b:button value="Detalhes" />
-									</p>
+					<div id="divCarrossel">
+						<p:carousel value="#{loginBean.getProdutosRecentes()}"
+							var="produto" itemStyle="text-align:center" responsive="true">
+							<p:panelGrid columns="2" style="width:100%;margin:10px 0px"
+								columnClasses="label,value" layout="grid"
+								styleClass="ui-panelgrid-blank">
+								<f:facet name="header">
+									<p:graphicImage name="resources/images/furadeira.jpg" />
 								</f:facet>
-							</b:thumbnail>
-						</b:column>
-						<b:column col-sm="6" col-md="4">
-							<b:thumbnail>
-								<img data-src="holder.js/300x200/social"
-									alt="Generic placeholder thumbnail" />
-								<f:facet name="caption">
-									<h3>Thumbnail label</h3>
-									<p>Cras justo odio, dapibus ac facilisis in, egestas eget
-										quam. Donec id elit non mi porta gravida at eget metus. Nullam
-										id dolor id nibh ultricies vehicula ut id elit.</p>
-									<p>
-										<b:button look="primary" value="Comprar" />
-										<b:button value="Detalhes" />
-									</p>
-								</f:facet>
-							</b:thumbnail>
-						</b:column>
-						<b:column col-sm="6" col-md="4">
-							<b:thumbnail>
-								<img data-src="holder.js/300x200/social"
-									alt="Generic placeholder thumbnail" />
-								<f:facet name="caption">
-									<h3>Thumbnail label</h3>
-									<p>Cras justo odio, dapibus ac facilisis in, egestas eget
-										quam. Donec id elit non mi porta gravida at eget metus. Nullam
-										id dolor id nibh ultricies vehicula ut id elit.</p>
-									<p>
-										<b:button look="primary" value="Comprar" />
-										<b:button value="Detalhes" />
-									</p>
-								</f:facet>
-							</b:thumbnail>
-						</b:column>
-  ...
-</b:row>
-					<b:row>
-						<b:column col-sm="6" col-md="4">
-							<b:thumbnail>
-								<img data-src="holder.js/300x200/social"
-									alt="Generic placeholder thumbnail" />
-								<f:facet name="caption">
-									<h3>Thumbnail label</h3>
-									<p>Cras justo odio, dapibus ac facilisis in, egestas eget
-										quam. Donec id elit non mi porta gravida at eget metus. Nullam
-										id dolor id nibh ultricies vehicula ut id elit.</p>
-									<p>
-										<b:button look="primary" value="Comprar" />
-										<b:button value="Detalhes" />
-									</p>
-								</f:facet>
-							</b:thumbnail>
-						</b:column>
-						<b:column col-sm="6" col-md="4">
-							<b:thumbnail>
-								<img data-src="holder.js/300x200/social"
-									alt="Generic placeholder thumbnail" />
-								<f:facet name="caption">
-									<h3>Thumbnail label</h3>
-									<p>Cras justo odio, dapibus ac facilisis in, egestas eget
-										quam. Donec id elit non mi porta gravida at eget metus. Nullam
-										id dolor id nibh ultricies vehicula ut id elit.</p>
-									<p>
-										<b:button look="primary" value="Comprar" />
-										<b:button value="Detalhes" />
-									</p>
-								</f:facet>
-							</b:thumbnail>
-						</b:column>
-						<b:column col-sm="6" col-md="4">
-							<b:thumbnail>
-								<img data-src="holder.js/300x200/social"
-									alt="Generic placeholder thumbnail" />
-								<f:facet name="caption">
-									<h3>Thumbnail label</h3>
-									<p>Cras justo odio, dapibus ac facilisis in, egestas eget
-										quam. Donec id elit non mi porta gravida at eget metus. Nullam
-										id dolor id nibh ultricies vehicula ut id elit.</p>
-									<p>
-										<b:button look="primary" value="Comprar" />
-										<b:button value="Detalhes" />
-									</p>
-								</f:facet>
-							</b:thumbnail>
-						</b:column>
-  ...
-</b:row>
-					<b:row>
-						<b:column col-sm="6" col-md="4">
-							<b:thumbnail>
-								<img data-src="holder.js/300x200/social"
-									alt="Generic placeholder thumbnail" />
-								<f:facet name="caption">
-									<h3>Thumbnail label</h3>
-									<p>Cras justo odio, dapibus ac facilisis in, egestas eget
-										quam. Donec id elit non mi porta gravida at eget metus. Nullam
-										id dolor id nibh ultricies vehicula ut id elit.</p>
-									<p>
-										<b:button look="primary" value="Comprar" />
-										<b:button value="Detalhes" />
-									</p>
-								</f:facet>
-							</b:thumbnail>
-						</b:column>
-						<b:column col-sm="6" col-md="4">
-							<b:thumbnail>
-								<img data-src="holder.js/300x200/social"
-									alt="Generic placeholder thumbnail" />
-								<f:facet name="caption">
-									<h3>Thumbnail label</h3>
-									<p>Cras justo odio, dapibus ac facilisis in, egestas eget
-										quam. Donec id elit non mi porta gravida at eget metus. Nullam
-										id dolor id nibh ultricies vehicula ut id elit.</p>
-									<p>
-										<b:button look="primary" value="Comprar" />
-										<b:button value="Detalhes" />
-									</p>
-								</f:facet>
-							</b:thumbnail>
-						</b:column>
-						<b:column col-sm="6" col-md="4">
-							<b:thumbnail>
-								<img data-src="holder.js/300x200/social"
-									alt="Generic placeholder thumbnail" />
-								<f:facet name="caption">
-									<h3>Thumbnail label</h3>
-									<p>Cras justo odio, dapibus ac facilisis in, egestas eget
-										quam. Donec id elit non mi porta gravida at eget metus. Nullam
-										id dolor id nibh ultricies vehicula ut id elit.</p>
-									<p>
-										<b:button look="primary" value="Comprar" />
-										<b:button value="Detalhes" />
-									</p>
-								</f:facet>
-							</b:thumbnail>
-						</b:column>
-  ...
-</b:row>
-					<b:row>
-						<b:column col-sm="6" col-md="4">
-							<b:thumbnail>
-								<img data-src="holder.js/300x200/social"
-									alt="Generic placeholder thumbnail" />
-								<f:facet name="caption">
-									<h3>Thumbnail label</h3>
-									<p>Cras justo odio, dapibus ac facilisis in, egestas eget
-										quam. Donec id elit non mi porta gravida at eget metus. Nullam
-										id dolor id nibh ultricies vehicula ut id elit.</p>
-									<p>
-										<b:button look="primary" value="Comprar" />
-										<b:button value="Detalhes" />
-									</p>
-								</f:facet>
-							</b:thumbnail>
-						</b:column>
-						<b:column col-sm="6" col-md="4">
-							<b:thumbnail>
-								<img data-src="holder.js/300x200/social"
-									alt="Generic placeholder thumbnail" />
-								<f:facet name="caption">
-									<h3>Thumbnail label</h3>
-									<p>Cras justo odio, dapibus ac facilisis in, egestas eget
-										quam. Donec id elit non mi porta gravida at eget metus. Nullam
-										id dolor id nibh ultricies vehicula ut id elit.</p>
-									<p>
-										<b:button look="primary" value="Comprar" />
-										<b:button value="Detalhes" />
-									</p>
-								</f:facet>
-							</b:thumbnail>
-						</b:column>
-						<b:column col-sm="6" col-md="4">
-							<b:thumbnail>
-								<img data-src="holder.js/300x200/social"
-									alt="Generic placeholder thumbnail" />
-								<f:facet name="caption">
-									<h3>Thumbnail label</h3>
-									<p>Cras justo odio, dapibus ac facilisis in, egestas eget
-										quam. Donec id elit non mi porta gravida at eget metus. Nullam
-										id dolor id nibh ultricies vehicula ut id elit.</p>
-									<p>
-										<b:button look="primary" value="Comprar" />
-										<b:button value="Detalhes" />
-									</p>
-								</f:facet>
-							</b:thumbnail>
-						</b:column>
-  ...
-</b:row>
-					<b:carousel interval="3000">
-						<b:carouselItem caption="Filme do homem formiga">
-							<img src="#{request.contextPath}/resources/images/formiga.png" />
-						</b:carouselItem>
+								<h:outputText value="Descrição" />
+								<h:outputText
+									value="Furadeira e Parafusadeira à Bateria 14V GSR 140-LI 50NM BIVOLT 
+									110V/220V 1,5AH GSR19F8 BOSCH Bosch" />
 
-						<b:carouselItem caption="Guardioes">
-							<img src="#{request.contextPath}/resources/images/guardioes.png" />
-						</b:carouselItem>
+								<h:outputText value="Preço" />
+								<h:outputText
+									value="de R$ 747,77
+									por R$ 658,51 em até 6x de R$ 109,75 sem juros no cartão de crédito
+									ou R$ 619,00 à vista já com desconto de 6%
+									no boleto e depósito" />
+							</p:panelGrid>
 
-						<ui:repeat var="produto"
-							value="#{loginBean.getProdutosRecentes()}">
-							<b:carouselItem caption="#{produto.nome}">
-								<img
-									src="#{request.contextPath}/#{produto.imagemProduto.nomeDiretorio}/#{produto.imagemProduto.nomeArquivo}" />
-							</b:carouselItem>
-						</ui:repeat>
-					</b:carousel>
+							<f:facet name="footer">
+
+							</f:facet>
+						</p:carousel>
+					</div>
 				</b:panel>
 			</b:form>
+
+
+			<b:form>
+				<b:panel look="primary" collapsible="false" style="width:100%">
+					<f:facet name="heading">
+						<b:iconAwesome value="fa-trophy" solid="true"
+							style="padding-left:20px" size="3x" />
+						<h:outputLabel value="Mais Vendidos" />
+					</f:facet>
+					<b:panelGrid columns="3" layout="grid">
+						<b:thumbnail>
+							<img data-src="holder.js/300x200/social"
+								alt="Generic placeholder thumbnail" />
+							<f:facet name="caption">
+								<h3>Thumbnail label</h3>
+								<p>Cras justo odio, dapibus ac facilisis in, egestas eget
+									quam. Donec id elit non mi porta gravida at eget metus. Nullam
+									id dolor id nibh ultricies vehicula ut id elit.</p>
+								<p>
+									<b:button look="primary" value="Comprar" />
+									<b:button value="Detalhes" />
+								</p>
+							</f:facet>
+						</b:thumbnail>
+
+						<b:thumbnail>
+							<img data-src="holder.js/300x200/social"
+								alt="Generic placeholder thumbnail" />
+							<f:facet name="caption">
+								<h3>Thumbnail label</h3>
+								<p>Cras justo odio, dapibus ac facilisis in, egestas eget
+									quam. Donec id elit non mi porta gravida at eget metus. Nullam
+									id dolor id nibh ultricies vehicula ut id elit.</p>
+								<p>
+									<b:button look="primary" value="Comprar" />
+									<b:button value="Detalhes" />
+								</p>
+							</f:facet>
+						</b:thumbnail>
+
+
+						<b:thumbnail>
+							<img data-src="holder.js/300x200/social"
+								alt="Generic placeholder thumbnail" />
+							<f:facet name="caption">
+								<h3>Thumbnail label</h3>
+								<p>Cras justo odio, dapibus ac facilisis in, egestas eget
+									quam. Donec id elit non mi porta gravida at eget metus. Nullam
+									id dolor id nibh ultricies vehicula ut id elit.</p>
+								<p>
+									<b:button look="primary" value="Comprar" />
+									<b:button value="Detalhes" />
+								</p>
+							</f:facet>
+						</b:thumbnail>
+
+						<b:thumbnail>
+							<img data-src="holder.js/300x200/social"
+								alt="Generic placeholder thumbnail" />
+							<f:facet name="caption">
+								<h3>Thumbnail label</h3>
+								<p>Cras justo odio, dapibus ac facilisis in, egestas eget
+									quam. Donec id elit non mi porta gravida at eget metus. Nullam
+									id dolor id nibh ultricies vehicula ut id elit.</p>
+								<p>
+									<b:button look="primary" value="Comprar" />
+									<b:button value="Detalhes" />
+								</p>
+							</f:facet>
+						</b:thumbnail>
+
+						<b:thumbnail>
+							<img data-src="holder.js/300x200/social"
+								alt="Generic placeholder thumbnail" />
+							<f:facet name="caption">
+								<h3>Thumbnail label</h3>
+								<p>Cras justo odio, dapibus ac facilisis in, egestas eget
+									quam. Donec id elit non mi porta gravida at eget metus. Nullam
+									id dolor id nibh ultricies vehicula ut id elit.</p>
+								<p>
+									<b:button look="primary" value="Comprar" />
+									<b:button value="Detalhes" />
+								</p>
+							</f:facet>
+						</b:thumbnail>
+
+						<b:thumbnail>
+							<img data-src="holder.js/300x200/social"
+								alt="Generic placeholder thumbnail" />
+							<f:facet name="caption">
+								<h3>Thumbnail label</h3>
+								<p>Cras justo odio, dapibus ac facilisis in, egestas eget
+									quam. Donec id elit non mi porta gravida at eget metus. Nullam
+									id dolor id nibh ultricies vehicula ut id elit.</p>
+								<p>
+									<b:button look="primary" value="Comprar" />
+									<b:button value="Detalhes" />
+								</p>
+							</f:facet>
+						</b:thumbnail>
+
+						<b:thumbnail>
+							<img data-src="holder.js/300x200/social"
+								alt="Generic placeholder thumbnail" />
+							<f:facet name="caption">
+								<h3>Thumbnail label</h3>
+								<p>Cras justo odio, dapibus ac facilisis in, egestas eget
+									quam. Donec id elit non mi porta gravida at eget metus. Nullam
+									id dolor id nibh ultricies vehicula ut id elit.</p>
+								<p>
+									<b:button look="primary" value="Comprar" />
+									<b:button value="Detalhes" />
+								</p>
+							</f:facet>
+						</b:thumbnail>
+
+					</b:panelGrid>
+
+
+
+				</b:panel>
+			</b:form>
+			
+				<b:panel id="rodape">
+
+					<h1>Empresa:</h1>
+					<h2>CNPJ:99.999.999/0001-00</h2>
+					<h3>Redes Sociais</h3>
+					<b:socialShare shares="twitter,linkedin,facebook" showLabel="true"
+						show-count="false" text="BootsFaces rocks!"
+						block-message="Click to unblock the share buttons" />
+				</b:panel>
 		</b:container>
 	</ui:define>
 </ui:composition>

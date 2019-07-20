@@ -41,7 +41,7 @@ public class NovoProdutoBean implements Serializable {
 		
 		this.produto = new Produto();
 		
-		return "/NovoProduto?faces-redirect=true";
+		return "/novoProduto?faces-redirect=true";
 	}
 	
 	//Esse métodp atualiza o produto
@@ -49,7 +49,7 @@ public class NovoProdutoBean implements Serializable {
 	public String atualiza(Produto produto) {
 		dao.atualizarProduto(produto);
 		
-		return "/NovoProduto?faces-redirect=true";
+		return "/novoProduto?faces-redirect=true";
 	}
 	
 	//Esse método busca todos os produtos cadastrado
@@ -65,7 +65,7 @@ public class NovoProdutoBean implements Serializable {
 	public String deletaProduto(Produto produto) {
 		dao.removerProduto(produto);
 		
-		return "/NovoProduto?faces-redirect=true";
+		return "/novoProduto?faces-redirect=true";
 	}
 	
 	public void atualizarProduto(Produto p) {

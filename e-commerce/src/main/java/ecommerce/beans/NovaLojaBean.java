@@ -13,7 +13,8 @@ import ecommerce.daos.LojaDAO;
 import ecommerce.models.Loja;
 
 @SuppressWarnings("serial")
-@Model
+@Named
+@ViewScoped
 public class NovaLojaBean implements Serializable {
 	private Loja loja = new Loja();
 	

@@ -3,6 +3,7 @@ package ecommerce.beans;
 import java.io.Serializable;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -62,8 +63,6 @@ public class LoginBean implements Serializable {
 	public String iniciarSessao() throws NoSuchAlgorithmException {
 		if (emailLogin == null || emailLogin.isEmpty() ||
 				senhaLogin == null || senhaLogin.isEmpty()) {
-			
-			return;
 		}
 		
 		Usuario usuario = usuarioDao.procurarUsuario(emailLogin);

@@ -20,9 +20,6 @@ ecommerce\servlets\ServletImagensProduto.class
 ecommerce\beans\LoginBean$3.class
 ecommerce\beans\NovaLojaBean.class
 ecommerce\beans\LoginBean$1.class
-ecommerce\beans\ProductBean.class
-ecommerce\beans\SessionDataBean.class
-ecommerce\tools\Producer.class
 ecommerce\beans\LoginBean.class
 ecommerce\daos\ArquivoDAO.class
 ecommerce\daos\UsuarioDAO.class
