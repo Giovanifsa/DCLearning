@@ -13,7 +13,6 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
 
-import ecommerce.control.Transactional;
 import ecommerce.models.ArquivoRecurso;
 
 @Named
