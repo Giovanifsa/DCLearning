@@ -1,0 +1,77 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="gnr_template.xhtml">
+	<ui:define name="body">
+		<h:form if="mainForm">
+		<br/>
+			<div id="container">
+<!-- 
+			<table class="table">
+			  <thead>
+			    <tr>
+			      <th scope="col">#</th>
+			      <th scope="col">First</th>
+			      <th scope="col">Last</th>
+			      <th scope="col">Handle</th>
+			    </tr>
+			  </thead>
+			  <tbody>
+			    <tr>
+			      <th scope="row">1</th>
+			      <td>Mark</td>
+			      <td>Otto</td>
+			      <td>@mdo</td>
+			    </tr>
+			  </tbody>
+			</table>
+ -->
+
+				<h:dataTable class="table table-bordered " value="#{productBean.listarProdutos()}" var="produto" id="tabelaProdutos">					
+					<h:column>
+						<f:facet name="header">Nome</f:facet>
+						#{produto.name}
+					</h:column>
+					
+					<h:column>
+						<f:facet name="header">Descrição</f:facet>
+						#{produto.description}	
+					</h:column>
+					
+					<h:column>
+						<f:facet name="header">Imagem</f:facet>
+						<img src="#{request.contextPath}/file/#{produto.prodImage}" />
+					</h:column>
+
+					<h:column>
+						<f:facet name="header">Quantidade</f:facet>
+					</h:column>
+
+					<h:column>
+						<f:facet name="header">Preço</f:facet>
+						#{produto.price}
+					</h:column>
+
+					<h:column>
+						<f:facet name="header">Remover</f:facet>
+						<p:commandLink action="#{productBean.remover(produto)}" value="Remover" process="@this" update="tabelaProdutos"/> 
+					</h:column>
+
+					<h:column>
+						<f:facet name="header">Alterar</f:facet>
+						<h:commandButton  type="button" class="btn btn-warning" value="Alterar"></h:commandButton>
+					</h:column>
+					</h:dataTable>
+					
+				<button type="button" class="btn btn-success">Finalizar</button>	
+			</div>
+		</h:form>
+	</ui:define>
+</ui:composition>
+</html>
