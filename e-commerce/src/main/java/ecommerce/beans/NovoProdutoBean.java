@@ -9,6 +9,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.servlet.http.Part;
 import ecommerce.control.Transactional;
+import ecommerce.daos.ArquivoDAO;
 import ecommerce.daos.ProdutoDAO;
 import ecommerce.models.Produto;
 
@@ -22,6 +23,8 @@ public class NovoProdutoBean implements Serializable {
 
 	@Inject 
 	private ProdutoDAO dao;
+	@Inject
+	private ArquivoDAO arquivoDAO;
 	
 	private Part imagem;
 	
@@ -88,6 +91,14 @@ public class NovoProdutoBean implements Serializable {
 
 	public void setImagem(Part imagem) {
 		this.imagem = imagem;
+	}
+
+	public ArquivoDAO getArquivoDAO() {
+		return arquivoDAO;
+	}
+
+	public void setArquivoDAO(ArquivoDAO arquivoDAO) {
+		this.arquivoDAO = arquivoDAO;
 	}
 	
 }

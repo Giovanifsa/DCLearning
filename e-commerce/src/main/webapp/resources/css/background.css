@@ -2,6 +2,11 @@ body, html {
   height: 100%;
 }
 .bg {
+  /* Necessário com o uso de NavBar fixo no topo do navegador */
+  /* Desloca a página na parte de cima em 67 pixeis e 20 na parte de baixo */
+  padding-top: 67px;
+  padding-bottom: 20px;	
+
   /* The image used */
   background-image: url("#{resource['images:background-login.jpg']}");
 

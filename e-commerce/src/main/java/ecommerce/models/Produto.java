@@ -1,10 +1,10 @@
 package ecommerce.models;
 
 import java.math.BigDecimal;
-import java.time.ZonedDateTime;
+
 import java.util.Date;
-
-
+import ecommerce.models.ArquivoRecurso;
+import ecommerce.models.Loja;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -13,7 +13,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
-
 import javax.persistence.OneToOne;
 
 import javax.validation.constraints.NotNull;
@@ -36,15 +35,17 @@ public class Produto {
 	@Lob
 	private String descricao;
 	private BigDecimal precoFinal;
-	private BigDecimal margemDeLucroPorcentual;
 	private BigDecimal custo;
 	private int quantidade;
 	private Date data;
 	
+	private BigDecimal preco = new BigDecimal(0);
 	
+	//Valor variando de 0-100 (deve ser dividido por 100 para ter a porcentagem real)
+	private BigDecimal margemDeLucroPorcentual = new BigDecimal(0);
 	
 	@OneToOne(fetch = FetchType.EAGER)
-	private ArquivoRecurso imagem;
+	private ArquivoRecurso imagemProduto;
 	
 	@ManyToOne(fetch = FetchType.EAGER)
 	private Loja lojaDoProduto;
@@ -97,11 +98,11 @@ public class Produto {
 	}
 
 	public BigDecimal getPreco() {
-		return precoFinal;
+		return preco;
 	}
 
 	public void setPreco(BigDecimal preco) {
-		this.precoFinal = preco;
+		this.preco = preco;
 	}
 
 	public BigDecimal getMargemDeLucroPorcentual() {
@@ -112,8 +113,14 @@ public class Produto {
 	 * Calcula o preço final para o usuário (com a margem de lucro do vendedor).
 	 * @return Preço final calculado.
 	 */
+
 	public BigDecimal calcularPrecoFinal(Produto produto) {
 		return (precoFinal.multiply(margemDeLucroPorcentual).add(precoFinal));
+	}
+
+	public BigDecimal calcularPrecoFinal() {
+		return (preco.multiply(margemDeLucroPorcentual.divide(new BigDecimal(100))).add(preco));
+
 	}
 
 	public void setMargemDeLucroPorcentual(BigDecimal margemDeLucroPorcentual) {
@@ -121,11 +128,11 @@ public class Produto {
 	}
 
 	public ArquivoRecurso getImagemProduto() {
-		return imagem;
+		return imagemProduto;
 	}
 
 	public void setImagemProduto(ArquivoRecurso imagemProduto) {
-		this.imagem = imagemProduto;
+		this.imagemProduto = imagemProduto;
 	}
 
 	public Loja getLojaDoProduto() {
@@ -143,6 +150,7 @@ public class Produto {
 	public void setVendas(int vendas) {
 		this.vendas = vendas;
 	}
+
 
 	public BigDecimal getCusto() {
 		return custo;
@@ -184,13 +192,5 @@ public class Produto {
 		this.precoFinal = precoFinal;
 	}
 
-	public ArquivoRecurso getImagem() {
-		return imagem;
-	}
 
-	public void setImagem(ArquivoRecurso imagem) {
-		this.imagem = imagem;
-	}
-	
-	
 }

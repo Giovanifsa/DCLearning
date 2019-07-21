@@ -41,6 +41,7 @@ public class UsuarioDAO implements Serializable {
 	 * Cria um novo usuário a partir de email e senha.
 	 * @param email
 	 * @param password
+	 * @param cadastroSenha 
 	 * @return
 	 * @throws NoSuchAlgorithmException
 	 */

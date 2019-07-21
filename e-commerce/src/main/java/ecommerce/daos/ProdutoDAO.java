@@ -1,5 +1,6 @@
 package ecommerce.daos;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
@@ -16,6 +17,10 @@ import ecommerce.models.Loja;
 public class ProdutoDAO implements Serializable {
 	@Inject
 	private EntityManager em;
+	
+	@Inject
+	private ArquivoDAO arquivoDao;
+	
 	private static Object atualizarProdutoLock = new Object();
 	
 	/**

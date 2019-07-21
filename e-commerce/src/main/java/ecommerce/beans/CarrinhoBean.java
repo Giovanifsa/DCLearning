@@ -7,22 +7,31 @@ import java.util.List;
 
 import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
+import javax.faces.component.FacesComponent;
+import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
+import javax.faces.view.ViewScoped;
+import javax.faces.validator.ValidatorException;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.validation.ValidationException;
 
 import ecommerce.control.Transactional;
 import ecommerce.daos.ProdutoDAO;
 import ecommerce.models.ItemCarrinho;
 import ecommerce.models.Produto;
+import ecommerce.models.Spinner;
 import ecommerce.tools.MecanismoDeHash;
 
 @SuppressWarnings("serial")
 @Named
-@SessionScoped
+@ViewScoped
 public class CarrinhoBean implements Serializable {
 	@Inject
 	private ProdutoDAO produtoDao;
+	
+	@Inject
+	DadosSessaoBean dadosSessao;
 	
 	@Inject
 	private MecanismoDeHash hashing;
@@ -32,18 +41,24 @@ public class CarrinhoBean implements Serializable {
 	public BigDecimal calcularPrecoFinal() {
 		BigDecimal price = new BigDecimal(0);
 		
-		for (ItemCarrinho e : produtosCarrinho) {
+		for (ItemCarrinho e : dadosSessao.getProdutosCarrinho()) {
 			price = price.add(e.getProduto().getPreco().multiply(new BigDecimal(e.getQuantidade())));
 		}
 		
 		return price;
 	}
 	
+	/**
+	 * Altera a quantidade de um item no carrinho
+	 * @param p Produto cuja quantidade será alterada.
+	 * @param quantidade Nova quantidade de itens.
+	 */
+	@Deprecated
 	public void setQuantidadeItem(Produto p, int quantidade) {
-		for (ItemCarrinho e : produtosCarrinho) {
+		for (ItemCarrinho e : dadosSessao.getProdutosCarrinho()) {
 			if (e.getProduto().equals(p)) {
 				if (quantidade == 0) {
-					produtosCarrinho.remove(e);
+					dadosSessao.getProdutosCarrinho().remove(e);
 				}
 				
 				else if (quantidade < 0) {
@@ -59,6 +74,11 @@ public class CarrinhoBean implements Serializable {
 		}
 	}
 	
+	/**
+	 * Calcula a quantidade total de itens no carrinho,
+	 * isto é, soma total da quantidade de todos os produtos do carrinho.
+	 * @return Quantidade total dos produtos do carrinho.
+	 */
 	public int getQuantidadeItens() {
 		int quantidade =0;
 		
@@ -67,10 +87,6 @@ public class CarrinhoBean implements Serializable {
 		}
 		
 		return quantidade;
-	}
-	
-	public double valorCompra(double valor, int qtd) {
-		return valor * qtd;
 	}
 	
 	public List<Produto> produtosCarrinho() {
