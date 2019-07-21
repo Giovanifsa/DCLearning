@@ -17,8 +17,12 @@ import javax.validation.constraints.NotNull;
 
 @Entity
 public class Produto {
+	/*
+	 * Variável static utilizada para representar erro 404 de imagem (não encontrado)
+	 * A imagem é utilizada para quando não há imagens adicionadas ao produto.
+	 */
 	@Transient
-	public static final ArquivoRecurso IMAGEM_NAO_ENCONTRADA = new ArquivoRecurso("nao_encontrado.png", "resources");
+	public static final ArquivoRecurso IMAGEM_NAO_ENCONTRADA = new ArquivoRecurso("resources/images", "nao_encontrado.png");
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

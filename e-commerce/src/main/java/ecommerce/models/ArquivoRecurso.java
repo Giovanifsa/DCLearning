@@ -27,7 +27,7 @@ public class ArquivoRecurso {
 		
 	}
 	
-	public ArquivoRecurso(String nomeArquivo, String nomeDiretorio) {
+	public ArquivoRecurso(String nomeDiretorio, String nomeArquivo) {
 		this.nomeArquivo = nomeArquivo;
 		this.nomeDiretorio = nomeDiretorio;
 	}
