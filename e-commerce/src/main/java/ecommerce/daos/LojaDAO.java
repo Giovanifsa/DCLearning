@@ -6,7 +6,6 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 
-import ecommerce.control.Transactional;
 import ecommerce.models.Loja;
 
 @SuppressWarnings("serial")

@@ -31,13 +31,18 @@ public class CarrinhoBean implements Serializable {
 	private ProdutoDAO produtoDao;
 	
 	@Inject
-	DadosSessaoBean dadosSessao;
+	private MecanismoDeHash hashing;
+
+	@Inject
+	Spinner spinner;
 	
 	@Inject
-	private MecanismoDeHash hashing;
+	private DadosSessaoBean dadosSessao;
 	
-	private ArrayList<ItemCarrinho> produtosCarrinho = new ArrayList<>();
-	
+	/**
+	 * Calcula o preço final (total) da soma do preço de todos os itens e suas quantidades.
+	 * @return Valor total de compra.
+	 */
 	public BigDecimal calcularPrecoFinal() {
 		BigDecimal price = new BigDecimal(0);
 		
@@ -80,9 +85,9 @@ public class CarrinhoBean implements Serializable {
 	 * @return Quantidade total dos produtos do carrinho.
 	 */
 	public int getQuantidadeItens() {
-		int quantidade =0;
+		int quantidade = 0;
 		
-		for (ItemCarrinho e : produtosCarrinho) {
+		for (ItemCarrinho e : dadosSessao.getProdutosCarrinho()) {
 			quantidade += e.getQuantidade();
 		}
 		
@@ -103,7 +108,7 @@ public class CarrinhoBean implements Serializable {
 
 	public int selecionarQuantidade() {
 		
-		int quantidade = 1;
+		int quantidade = 0;
 		if(quantidade == 1) {
 			return quantidade;
 		}
@@ -111,11 +116,29 @@ public class CarrinhoBean implements Serializable {
 	}
 	
 	public String continuarComprando() {
-		return "novaLoja?faces-redirect=true";	//	DEVE RETORNAR A HOME
+		return "novaLoja?faces-redirect=true";	// RETORNAR A HOME
 	}
 	
 	public String finalizarCompra() {
 		return "finalizarCompra?faces-redirect=true";
+	}
+
+	public String atualizarQuantidade(Produto produto) {
+		//	POR ENQUANTO FAZ UM COUNT NO BANCO, TEM QUE MUDAR PRA COUNT NO ESTOQUE		
+		Long estoque = produtoDao.quantidadeDisponivel(produto);
+		
+		if(spinner.getValor() > estoque) {
+			FacesContext.getCurrentInstance().addMessage("messages", new FacesMessage("Quantidade indisponível!"));
+			//	TESTAR ESSA MENSAGEM QUANDO TIVER A TELA DE PRODUTOS			
+		}
+		
+		ItemCarrinho item = new ItemCarrinho();
+
+		item.setProduto(produto);
+		item.setQuantidade(spinner.getValor());
+		dadosSessao.getProdutosCarrinho().add(item);
+		
+		return "carrinhoCompras?faces-redirect=true";
 	}
 	
 }
