@@ -12,10 +12,14 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
 @Entity
 public class Produto {
+	@Transient
+	public static final ArquivoRecurso IMAGEM_NAO_ENCONTRADA = new ArquivoRecurso("nao_encontrado.png", "resources");
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
@@ -98,6 +102,10 @@ public class Produto {
 		return margemDeLucroPorcentual;
 	}
 	
+	public boolean contemImagem() {
+		return imagemProduto != null;
+	}
+	
 	/**
 	 * Calcula o preço final para o usuário (com a margem de lucro do vendedor).
 	 * @return Preço final calculado.
@@ -108,6 +116,19 @@ public class Produto {
 
 	public void setMargemDeLucroPorcentual(BigDecimal margemDeLucroPorcentual) {
 		this.margemDeLucroPorcentual = margemDeLucroPorcentual;
+	}
+	
+	/**
+	 * Retorna a imagem do produto caso exista, ou retorna uma imagem padrão
+	 * de arquivo não encontrado.
+	 * @return
+	 */
+	public ArquivoRecurso getImagemPotencial() {
+		if (imagemProduto != null) {
+			return imagemProduto;
+		}
+		
+		return IMAGEM_NAO_ENCONTRADA;
 	}
 
 	public ArquivoRecurso getImagemProduto() {

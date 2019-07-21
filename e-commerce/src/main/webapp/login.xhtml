@@ -136,7 +136,7 @@
 						
 							<ui:repeat var="produto" value="#{loginBean.getProdutosRecentes()}">
 								<b:carouselItem caption="#{produto.nome}">
-							    	<img src="#{request.contextPath}/#{produto.imagemProduto.nomeDiretorio}/#{produto.imagemProduto.nomeArquivo}"/>
+							    	<img src="#{request.contextPath}/#{produto.getImagemPotencial().nomeDiretorio}/#{produto.getImagemPotencial().nomeArquivo}"/>
 							  	</b:carouselItem>
 							</ui:repeat>
 						</b:carousel>
