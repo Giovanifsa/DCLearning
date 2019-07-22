@@ -18,6 +18,7 @@ import javax.inject.Named;
 import ecommerce.control.Transactional;
 import ecommerce.daos.ProdutoDAO;
 import ecommerce.daos.UsuarioDAO;
+import ecommerce.models.LocalGrowl;
 import ecommerce.models.Produto;
 import ecommerce.models.Usuario;
 import ecommerce.tools.MecanismoDeHash;

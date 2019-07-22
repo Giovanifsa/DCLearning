@@ -47,6 +47,19 @@ public class CarrinhoBean implements Serializable {
 		return price;
 	}
 	
+	public void adicionarAoCarrinho(Produto p, int quantidade) {
+		//Encontra o mesmo produto no carrinho e soma o total com ele
+		for (ItemCarrinho ic : dadosSessao.getProdutosCarrinho()) {
+			if (ic.getProduto().equals(p)) {
+				ic.setQuantidade(ic.getQuantidade() + quantidade);
+				
+				return;
+			}
+		}
+		
+		dadosSessao.getProdutosCarrinho().add(new ItemCarrinho(p, quantidade));
+	}
+	
 	/**
 	 * Altera a quantidade de um item no carrinho
 	 * @param p Produto cuja quantidade será alterada.

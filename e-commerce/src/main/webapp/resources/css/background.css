@@ -8,7 +8,7 @@ body, html {
   padding-bottom: 20px;	
 
   /* The image used */
-  background-image: url("#{resource['images:background-login.jpg']}");
+  background-image: url("#{resource['images:background.jpg']}");
 
   /* Full height */
   height: 100%;

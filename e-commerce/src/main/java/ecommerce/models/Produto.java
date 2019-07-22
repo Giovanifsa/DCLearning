@@ -1,5 +1,8 @@
 package ecommerce.models;
 
+import ecommerce.models.ArquivoRecurso;
+import ecommerce.models.Loja;
+
 import java.math.BigDecimal;
 
 import java.util.Date;
@@ -26,6 +29,7 @@ public class Produto {
 	@Transient
 	public static final ArquivoRecurso IMAGEM_NAO_ENCONTRADA = new ArquivoRecurso("resources/images", "nao_encontrado.png");
 	
+	public static int quantidadeProdutoTotal;
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -122,7 +126,19 @@ public class Produto {
 				multiply(new BigDecimal(1).add(margemDeLucroPorcentual).divide(new BigDecimal(100)));
 	}
 
+<<<<<<< HEAD
 	
+=======
+	@SuppressWarnings("deprecation")
+	public BigDecimal calcularPrecoFinal() {
+		return preco.multiply(margemDeLucroPorcentual.divide(new BigDecimal(100))).setScale(2, BigDecimal.ROUND_HALF_UP);
+	}
+	
+	@SuppressWarnings("deprecation")
+	public BigDecimal calcularPrecoFinal(int quantidade) {
+		return preco.multiply(margemDeLucroPorcentual.divide(new BigDecimal(100))).multiply(new BigDecimal(quantidade)).setScale(2, BigDecimal.ROUND_HALF_UP);
+	}
+>>>>>>> origin/desenvolvimento
 
 	public void setMargemDeLucroPorcentual(BigDecimal margemDeLucroPorcentual) {
 		this.margemDeLucroPorcentual = margemDeLucroPorcentual;
