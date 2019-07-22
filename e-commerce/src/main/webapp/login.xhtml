@@ -8,15 +8,11 @@
 	xmlns:b="http://bootsfaces.net/ui" 
 	xmlns:p="http://primefaces.org/ui">
 	
-	<f:metadata>
-		<f:viewParam name="redirecionamento" value="#{loginBean.redirecionamento}"></f:viewParam>
-	</f:metadata>
-	
 <ui:composition template="gnr_template.xhtml">
 	<ui:define name="body">
 		<b:container fluid="true">
 			<b:row>
-				<b:column large-screen="7" medium-screen="7" >
+				<b:column large-screen="8" medium-screen="7" >
 					<b:form>
 						<b:panel look="primary" collapsible="false" >
 							<f:facet name="heading">
@@ -31,14 +27,14 @@
 										value="#{loginBean.emailLogin}" required="true" binding="#{loginBean.campoEmailLogin}"
 										required-message="Campo necessário." validator="#{loginBean.validarEmail}"  />
 										
-								<b:message for="campoEmailLogin"/>
+								<b:message for="campoEmailLogin" only-most-severe="true"/>
 								
 								<h:outputText value="Senha:" />
 								
 								<b:inputSecret id="campoSenhaLogin" placeholder="Senha" value="#{loginBean.senhaLogin}"
 										required="true" required-message="Campo necessário." validator="#{loginBean.validarSenha}"/>
 										
-								<b:message for="campoSenhaLogin"/>
+								<b:message for="campoSenhaLogin" only-most-severe="true"/>
 							</b:panelGrid>
 							
 							<b:row>
@@ -58,46 +54,58 @@
 							</f:facet>
 							
 							<b:row>
+								<b:column>
+									<h:outputLabel value="Insira seu nome completo:" />
+									
+									<b:inputText id="campoCadastrarNome" placeholder="João Vitor da Silva"
+										value="#{loginBean.cadastroNome}" required="true"
+										required-message="Campo de nome necessário." />
+										
+									<b:message for="campoCadastrarNome" only-most-severe="true"/>
+								</b:column>
+							</b:row>
+							
+							<b:row>
 								<b:column large-screen="6" medium-screen="6">
-									<h:outputText value="Seu e-mail:" />
+									<h:outputLabel value="Seu e-mail:" />
 									
 									<b:inputText id="campoCadastrarEmail" placeholder="novousuario@dclearning.com"
 										value="#{loginBean.cadastroEmail}" required="true"
 										required-message="Campo de email necessário." validator="#{loginBean.validarEmail}" 
 										binding="#{loginBean.campoCadastroEmail}"/>
 										
-									<b:message for="campoCadastrarEmail"/>
+									<b:message for="campoCadastrarEmail" only-most-severe="true"/>
 								</b:column>
 								
 								<b:column large-screen="6" medium-screen="6">
-									<h:outputText value="Repita seu e-mail:" />
+									<h:outputLabel value="Repita seu e-mail:" />
 									
 									<b:inputText id="campoCadastrarEmail2" placeholder="novousuario@dclearning.com"
 										value="#{loginBean.cadastroEmail2}" required="true"
 										required-message="Campo de repetir email necessário." validator="#{loginBean.validarEmail}"  />
 										
-									<b:message for="campoCadastrarEmail2"/>
+									<b:message for="campoCadastrarEmail2" only-most-severe="true"/>
 								</b:column>
 							</b:row>
 							
 							<b:row>
 								<b:column large-screen="6" medium-screen="6">
-									<h:outputText value="Sua senha:" />
+									<h:outputLabel value="Sua senha:" />
 									
 									<b:inputSecret id="campoCadastrarSenha" placeholder="Nova senha" value="#{loginBean.cadastroSenha}"
 										required="true" required-message="Campo de senha necessário." validator="#{loginBean.validarSenha}" 
 										binding="#{loginBean.campoCadastroSenha}"/>
 										
-									<b:message for="campoCadastrarSenha"/>
+									<b:message for="campoCadastrarSenha" only-most-severe="true"/>
 								</b:column>
 								
 								<b:column large-screen="6" medium-screen="6">
-									<h:outputText value="Repita sua senha:" />
+									<h:outputLabel value="Repita sua senha:" />
 									
 									<b:inputSecret id="campoCadastrarSenha2" placeholder="Repita sua nova senha" value="#{loginBean.cadastroSenha2}"
 										required="true" required-message="Campo de repetir senha necessário." validator="#{loginBean.validarSenha}"/>
 										
-									<b:message for="campoCadastrarSenha2"/>
+									<b:message for="campoCadastrarSenha2" only-most-severe="true"/>
 								</b:column>
 							</b:row>
 							
@@ -110,14 +118,14 @@
 					</b:form>
 				</b:column>
 				
-				<b:column medium-screen="5" large-screen="5" hidden="sm,xs" rendered="true">
+				<b:column medium-screen="5" large-screen="4" hidden="sm,xs" rendered="true">
 					<b:panel look="info" collapsible="false">
 						<f:facet name="heading">
 							<b:iconAwesome value="burn" solid="true" style="padding-right:20px"/>
 							<h:outputLabel value="Lançamentos" />
 						</f:facet>
 					
-						<b:carousel interval="3000">
+						<b:carousel interval="3000" >
 							<b:carouselItem caption="Filme do homem formiga">
 							    <img src="#{request.contextPath}/resources/images/formiga.png"/>
 							</b:carouselItem>
@@ -128,7 +136,7 @@
 						
 							<ui:repeat var="produto" value="#{loginBean.getProdutosRecentes()}">
 								<b:carouselItem caption="#{produto.nome}">
-							    	<img src="#{request.contextPath}/#{produto.imagemProduto.nomeDiretorio}/#{produto.imagemProduto.nomeArquivo}"/>
+							    	<img src="#{request.contextPath}/#{produto.getImagemPotencial().nomeDiretorio}/#{produto.getImagemPotencial().nomeArquivo}"/>
 							  	</b:carouselItem>
 							</ui:repeat>
 						</b:carousel>

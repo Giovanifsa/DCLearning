@@ -3,12 +3,10 @@ package ecommerce.beans;
 import java.io.Serializable;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
@@ -44,7 +42,6 @@ public class LoginBean implements Serializable {
 	
 	//Cadastrar nova conta
 	private String cadastroNome;
-
 	private String cadastroEmail;
 	private String cadastroEmail2;
 	private String cadastroSenha;
@@ -52,7 +49,6 @@ public class LoginBean implements Serializable {
 	
 	private String redirecionamento;
 	
-
 	//UI
 	private UIComponent campoEmailLogin;
 	private UIComponent campoCadastroEmail;
@@ -60,7 +56,6 @@ public class LoginBean implements Serializable {
 	
 	@Inject
 	private DadosSessaoBean dadosSessao;
-
 	@Inject
 	private UsuarioDAO usuarioDao;
 	@Inject
@@ -69,7 +64,6 @@ public class LoginBean implements Serializable {
 	private ProdutoDAO produtoDao;
 	@Inject
 	private TemplateBean pagTemplate;
-	private Usuario usuarioLogado;
 	
 	/**
 	 * Tenta iniciar a sessão do usuário
@@ -107,9 +101,6 @@ public class LoginBean implements Serializable {
 					return "Usuário não encontrado!";
 				}
 			});
-			
-			emailLogin = "";
-			senhaLogin = "";
 		}
 		
 		return null;
@@ -167,18 +158,18 @@ public class LoginBean implements Serializable {
 				
 				@Override
 				public String getSummary() {
-					return "Senha inválida! (+" + (PASSWORD_MIN_SIZE - valor.length()) + ")";
+					return "É necessário mais " + (PASSWORD_MIN_SIZE - valor.length()) + " caracteres.";
 				}
 			});
 		}
 	}
 
 	public Usuario getUsuarioLogado() {
-		return usuarioLogado;
+		return dadosSessao.getUsuarioLogado();
 	}
 
 	public void setUsuarioLogado(Usuario usuarioLogado) {
-		this.usuarioLogado = usuarioLogado;
+		dadosSessao.setUsuarioLogado(usuarioLogado);
 	}
 
 	public String getSenhaLogin() {
@@ -287,10 +278,7 @@ public class LoginBean implements Serializable {
 			invalido = true;
 		}
 		
-
-
 		//Valida se ambos campos de senha no cadastro são iguais
-
 		if (!cadastroSenha.equals(cadastroSenha2)) {
 			FacesContext.getCurrentInstance().addMessage(campoCadastroSenha.getClientId(), new FacesMessage() {
 				@Override
@@ -341,5 +329,4 @@ public class LoginBean implements Serializable {
 	public void setCadastroNome(String cadastroNome) {
 		this.cadastroNome = cadastroNome;
 	}
-
 }

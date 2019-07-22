@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 import javax.faces.application.FacesMessage;
+import javax.faces.application.NavigationHandler;
 import javax.faces.application.FacesMessage.Severity;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIForm;
@@ -22,14 +23,15 @@ import javax.inject.Named;
 @Named
 @ViewScoped
 public class TemplateBean implements Serializable {
-	private UIForm formNavBar;
+	private String navbarTextoPesquisa;
+	private UIComponent templateNavbar;
 	
-	public UIForm getFormNavBar() {
-		return formNavBar;
+	public UIComponent getTemplateNavbar() {
+		return templateNavbar;
 	}
 
-	public void setFormNavBar(UIForm formNavBar) {
-		this.formNavBar = formNavBar;
+	public void setTemplateNavbar(UIComponent templateNavbar) {
+		this.templateNavbar = templateNavbar;
 	}
 
 	/**
@@ -41,10 +43,26 @@ public class TemplateBean implements Serializable {
 	 */
 	@SuppressWarnings("unchecked")
 	public void adicionarMensagem(Severity severidade, String mensagem, boolean usarEscopoFlash) {
-		FacesContext.getCurrentInstance().addMessage(formNavBar.getClientId(), new FacesMessage(severidade, mensagem, null));
+		FacesContext.getCurrentInstance().addMessage(templateNavbar.getClientId(), new FacesMessage(severidade, mensagem, null));
 		
 		if (usarEscopoFlash) {			
 			FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
 		}
+	}
+
+	public String getNavbarTextoPesquisa() {
+		return navbarTextoPesquisa;
+	}
+
+	public void setNavbarTextoPesquisa(String navbarTextoPesquisa) {
+		this.navbarTextoPesquisa = navbarTextoPesquisa;
+	}
+	
+	public String pesquisarProduto() {
+		if (navbarTextoPesquisa != null && !navbarTextoPesquisa.isEmpty() && !navbarTextoPesquisa.isBlank()) {
+			return "buscarProdutos?faces-redirect=true&buscando=";
+		}
+
+		return null;
 	}
 }

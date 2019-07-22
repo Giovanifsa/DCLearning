@@ -58,9 +58,4 @@ public class Usuario {
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
-
-	public void setAdmin(boolean b) {
-		
-		
-	}
 }

@@ -4,55 +4,53 @@
 	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
 	xmlns:h="http://xmlns.jcp.org/jsf/html"
 	xmlns:f="http://xmlns.jcp.org/jsf/core"
-	xmlns:b="http://bootsfaces.net/ui" xmlns:p="http://primefaces.org/ui">
+	xmlns:b="http://bootsfaces.net/ui" 
+	xmlns:p="http://primefaces.org/ui">
 
 <h:head>
 	<title>E-Commerce</title>
 
 	<h:outputStylesheet library="css" name="background.css" />
-	<h:outputStylesheet library="css" name="deslocador_pagina.css" />
 	
 	<ui:insert name="head" />
 </h:head>
 
 <h:body>
 	<div class="bg">
-		<b:form>
-			<b:navBar brand="E-Commerce" brandHref="#" inverse="true"
-				brand-align="left" fluid="true" >
-				<b:navbarLinks>
-					<b:navLink value="Loja" icon-awesome="fa-home" href="loja.xhtml"
-						active="#{view.viewId == '/loja.xhtml'}" />
-				</b:navbarLinks>
-					<b:inputText type="search" placeholder="O que você produra?" field-size="sm"
-					col-sm="one-third" offset="2" />
-				<b:navbarLinks pull="right"
-					rendered="#{loginBean.usuarioEstaLogado()}">
-					<b:dropMenu value="#{loginBean.usuarioLogado.email}"
-						iconAwesome="user-circle">
-						<b:navLink value="Suas lojas" href="novaLoja.xhtml" />
-						<b:navLink value="Seus produtos" href="novoProduto.xhtml" />
-					</b:dropMenu>
+		<b:navBar id="templateNavbar" brand="E-Commerce" brand-img="#{request.contextPath}/resources/images/ecommerce.png" brand-img-style="height:25px"
+			brandHref="#" inverse="true" brand-align="left" fluid="true" fixed="top" sticky="true" binding="#{templateBean.templateNavbar}">
+			
+			<b:navbarLinks>
+				<b:navLink value="Loja" href="loja.xhtml" active="#{view.viewId == '/loja.xhtml'}" />
+			</b:navbarLinks>
 
-					<b:navCommandLink value="Sair" href="#"
-						action="#{loginBean.finalizarSessao()}"
-						rendered="#{loginBean.usuarioEstaLogado()}" />
-				</b:navbarLinks>
-
+			<b:form>
 				<b:navbarLinks pull="right">
-					<b:navLink value="Iniciar sessão" href="login.xhtml"
-						rendered="#{loginBean.usuarioEstaLogado() == false and view.viewId != '/login.xhtml'}" />
-				</b:navbarLinks>
-
-				<b:navbarLinks pull="right">
-					<b:navLink
-						value="Carrinho (#{carrinhoBean.getQuantidadeItens()} itens - R$ #{carrinhoBean.calcularPrecoFinal()})"
-						href="carrinhoCompras.xhtml" iconAwesome="shopping-cart" />
-				</b:navbarLinks>
-			</b:navBar>
-		</b:form>
-
+					<b:navLink value="Carrinho (#{carrinhoBean.getQuantidadeItens()} itens - R$ #{carrinhoBean.calcularPrecoFinal()})" href="carrinhoCompras.xhtml" iconAwesome="shopping-cart"
+						active="#{view.viewId == '/carrinhoCompras.xhtml'}"/>
 				
+					<b:dropMenu value="#{loginBean.usuarioLogado.nome}" iconAwesome="user-circle" rendered="#{loginBean.usuarioEstaLogado()}">
+						<b:navLink value="Suas lojas" href="novaLoja.xhtml"/>
+						<b:navLink value="Seus produtos" href="novoProduto.xhtml"/>
+					</b:dropMenu>
+					
+					<b:navLink value="Iniciar sessão" href="login.xhtml" rendered="#{loginBean.usuarioEstaLogado() == false and view.viewId != '/login.xhtml'}" />
+					
+					<b:navCommandLink value="Sair" href="#" action="#{loginBean.finalizarSessao()}" rendered="#{loginBean.usuarioEstaLogado()}" />
+				</b:navbarLinks>
+			</b:form>
+			
+			<h:form styleClass="navbar-form navbar-right">
+			    <div class="form-group">
+			    	<b:inputText placeholder="Procure por um produto" fieldSize="md" value="#{templateBean.navbarTextoPesquisa}"/>
+			    </div>
+			    
+			    <b:commandButton action="#{templateBean.pesquisarProduto()}" value="Pesquisar" look="info" iconAwesome="search"/>
+		    </h:form>
+		</b:navBar>
+		
+		<b:messages for="templateNavbar"/>
+
 		<ui:insert name="body"></ui:insert>
 	</div>
 </h:body>
