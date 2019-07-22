@@ -33,11 +33,6 @@ public class CarrinhoBean implements Serializable {
 	DadosSessaoBean dadosSessao;
 	
 	
-	Spinner spinner;
-	
-	@Inject
-	private DadosSessaoBean dadosSessao;
-	
 	/**
 	 * Calcula o preço final (total) da soma do preço de todos os itens e suas quantidades.
 	 * @return Valor total de compra.
@@ -173,8 +168,8 @@ public class CarrinhoBean implements Serializable {
 		FacesContext fc = FacesContext.getCurrentInstance();
 		fc.getExternalContext().getFlash().setKeepMessages(true);
 		fc.addMessage("messages", new FacesMessage("Spinner: " + spinnerBean.getValor()));
-		item.setQuantidade(spinner.getValor());
-		dadosSessao.getProdutosCarrinho().add(item);
+//		item.setQuantidade(spinner.getValor());
+//		dadosSessao.getProdutosCarrinho().add(item);
 		
 		return "carrinhoCompras?faces-redirect=true";
 	}

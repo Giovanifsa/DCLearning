@@ -67,14 +67,6 @@ public class LoginBean implements Serializable {
 	private TemplateBean pagTemplate;
 	
 	
-	@Inject
-	DadosSessaoBean dadosSessao;
-	
-	//UI
-	private UIComponent campoEmailLogin;
-	private UIComponent campoCadastroEmail;
-	private UIComponent campoCadastroSenha;
-	
 	public String iniciarSessao() throws NoSuchAlgorithmException {
 		if (emailLogin == null || emailLogin.isEmpty() ||
 				senhaLogin == null || senhaLogin.isEmpty()) {

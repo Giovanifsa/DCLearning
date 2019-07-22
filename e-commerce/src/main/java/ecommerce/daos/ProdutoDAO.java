@@ -15,7 +15,6 @@ import javax.persistence.TypedQuery;
 
 import ecommerce.models.ArquivoRecurso;
 import ecommerce.models.Produto;
-import ecommerce.models._Produto;
 import ecommerce.servlets.ServletImagensProduto;
 
 @Named
@@ -90,7 +89,6 @@ public class ProdutoDAO implements Serializable {
 		return query.getResultList();
 	}
 
-	@Transactional
 	public Long getQuantidadeDisponivel(Produto produto) {
 
 		/**

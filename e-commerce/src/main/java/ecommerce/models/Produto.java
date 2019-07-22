@@ -119,7 +119,6 @@ public class Produto {
 		 * @return Preço final calculado.
 		 */
 	}
-	}
 	
 	public boolean contemImagem() {
 		return imagemProduto != null;
