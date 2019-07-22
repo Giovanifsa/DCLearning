@@ -8,5 +8,4 @@
     <lifecycle>
 		<phase-listener>ecommerce.control.RestricaoDePaginas</phase-listener>
 	</lifecycle>
-    
 </faces-config>

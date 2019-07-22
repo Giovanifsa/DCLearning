@@ -15,13 +15,14 @@ public class Usuario {
 	private int id;
 	
 	@Column(unique = true)
+	private String nome;
 	private String email;
 	private byte[] senhaHasheada;
-	private boolean admin;
 	
 	public Usuario() {}
 
-	public Usuario(String email, byte[] senhaHasheada) {
+	public Usuario(String nome, String email, byte[] senhaHasheada) {
+		this.nome = nome;
 		this.email = email;
 		this.senhaHasheada = senhaHasheada;
 	}
@@ -41,20 +42,20 @@ public class Usuario {
 	public void setSenhaHasheada(byte[] senhaHasheada) {
 		this.senhaHasheada = senhaHasheada;
 	}
-
-	public boolean isAdmin() {
-		return admin;
-	}
-
-	public void setAdmin(boolean admin) {
-		this.admin = admin;
-	}
-
+	
 	public int getId() {
 		return id;
 	}
 
 	public void setId(int id) {
 		this.id = id;
+	}
+
+	public String getNome() {
+		return nome;
+	}
+
+	public void setNome(String nome) {
+		this.nome = nome;
 	}
 }

@@ -1,23 +1,31 @@
 package ecommerce.daos;
 
+import java.io.IOException;
 import java.io.Serializable;
+import java.util.InputMismatchException;
 import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.management.RuntimeErrorException;
 import javax.persistence.EntityManager;
+import javax.servlet.http.Part;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
-import ecommerce.control.Transactional;
+import ecommerce.models.ArquivoRecurso;
 import ecommerce.models.Produto;
 import ecommerce.models._Produto;
+import ecommerce.servlets.ServletImagensProduto;
 
 @Named
 public class ProdutoDAO implements Serializable {
 	@Inject
 	private EntityManager em;
+	
+	@Inject
+	private ArquivoDAO arquivoDao;
+	
 	private static Object atualizarProdutoLock = new Object();
 
 	/**
@@ -44,18 +52,16 @@ public class ProdutoDAO implements Serializable {
 		 */
 		return em.createQuery("select p from Produto p", Produto.class).getResultList();
 	}
-
-	@Transactional
+	
 	public void atualizarProduto(Produto p) {
 		em.merge(p);
 	}
 
 	/**
-	 * Utilize esse método para atualizar a quantia de vendas de um produto. Este
-	 * método é thread-safe, portanto, ele aumenta as vendas de um produto
-	 * garantindo que não haja erros.
+	 * Utilize esse método para atualizar a quantia de vendas de um produto.
+	 * Este método é thread-safe, portanto, ele aumenta as vendas de um produto
+	 * utilizando um semáforo, garantindo que não haja erros.
 	 */
-	@Transactional
 	public void produtoVendido(Produto p, int quantia) {
 		synchronized (atualizarProdutoLock) {
 			Produto dbp = em.find(Produto.class, p.getId());
@@ -65,7 +71,6 @@ public class ProdutoDAO implements Serializable {
 		}
 	}
 
-	@Transactional
 	public void adicionarProduto(Produto p) {
 		em.persist(p);
 	}
@@ -76,6 +81,13 @@ public class ProdutoDAO implements Serializable {
 
 	public void removerProduto(Produto produto) {
 		em.remove(produto);
+	}
+	
+	public List<Produto> procurarPorConteudoNome(String nomePesquisa) {
+		TypedQuery<Produto> query = em.createQuery("SELECT p FROM " + Produto.class.getSimpleName() + " p WHERE p.nome LIKE :nomePesquisa", Produto.class);
+		query.setParameter("nomePesquisa", nomePesquisa);
+		
+		return query.getResultList();
 	}
 
 	@Transactional
@@ -93,5 +105,14 @@ public class ProdutoDAO implements Serializable {
 		Query query = em.createQuery(jpql, Produto.class);
 		Long total = (Long) query.getSingleResult();
 		return total;
+	}
+	
+	public ArquivoRecurso salvarImagemProduto(Part imagem) throws IOException {
+		//Verifica se o arquivo é realmente uma imagem.
+		if (!imagem.getContentType().startsWith("image/")) {
+			throw new InputMismatchException("O arquivo enviado pelo usuário como imagem de produto não é uma imagem!");
+		}
+		
+		return arquivoDao.salvarArquivo(imagem.getSubmittedFileName(), ServletImagensProduto.DIRETORIO_IMAGENS_PRODUTOS, imagem.getInputStream().readAllBytes());
 	}
 }

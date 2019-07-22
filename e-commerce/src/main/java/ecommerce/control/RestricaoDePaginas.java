@@ -1,4 +1,3 @@
-
 package ecommerce.control;
 
 import javax.faces.application.NavigationHandler;

@@ -4,9 +4,9 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
 
-import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -18,7 +18,7 @@ import ecommerce.tools.MecanismoDeHash;
 
 @SuppressWarnings("serial")
 @Named
-@SessionScoped
+@ViewScoped
 public class CarrinhoBean implements Serializable {
 	@Inject
 	private ProdutoDAO produtoDao;
@@ -33,9 +33,11 @@ public class CarrinhoBean implements Serializable {
 	DadosSessaoBean dadosSessao;
 	
 	
+	Spinner spinner;
 	
+	@Inject
+	private DadosSessaoBean dadosSessao;
 	
-		
 	/**
 	 * Calcula o preço final (total) da soma do preço de todos os itens e suas quantidades.
 	 * @return Valor total de compra.
@@ -44,10 +46,23 @@ public class CarrinhoBean implements Serializable {
 		BigDecimal price = new BigDecimal(0);
 		
 		for (ItemCarrinho e : dadosSessao.getProdutosCarrinho()) {
-			price = price.add(e.getProduto().getPreco().multiply(new BigDecimal(e.getQuantidade())));
+			price = price.add(e.getProduto().calcularPrecoFinal(e.getQuantidade()));
 		}
 		
 		return price;
+	}
+	
+	public void adicionarAoCarrinho(Produto p, int quantidade) {
+		//Encontra o mesmo produto no carrinho e soma o total com ele
+		for (ItemCarrinho ic : dadosSessao.getProdutosCarrinho()) {
+			if (ic.getProduto().equals(p)) {
+				ic.setQuantidade(ic.getQuantidade() + quantidade);
+				
+				return;
+			}
+		}
+		
+		dadosSessao.getProdutosCarrinho().add(new ItemCarrinho(p, quantidade));
 	}
 	
 	/**
@@ -97,7 +112,6 @@ public class CarrinhoBean implements Serializable {
 	
 	@Transactional
 	public String removeProduto(Produto produto) {
-		
 		this.produtoDao.removerProduto(produto);
 		
 		return "carrinhoCompras?faces-redirect=true";
@@ -159,6 +173,8 @@ public class CarrinhoBean implements Serializable {
 		FacesContext fc = FacesContext.getCurrentInstance();
 		fc.getExternalContext().getFlash().setKeepMessages(true);
 		fc.addMessage("messages", new FacesMessage("Spinner: " + spinnerBean.getValor()));
+		item.setQuantidade(spinner.getValor());
+		dadosSessao.getProdutosCarrinho().add(item);
 		
 		return "carrinhoCompras?faces-redirect=true";
 	}

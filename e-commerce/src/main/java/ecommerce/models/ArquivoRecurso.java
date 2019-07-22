@@ -23,6 +23,15 @@ public class ArquivoRecurso {
 	private String nomeArquivo;
 	private String nomeDiretorio;
 	
+	public ArquivoRecurso() {
+		
+	}
+	
+	public ArquivoRecurso(String nomeDiretorio, String nomeArquivo) {
+		this.nomeArquivo = nomeArquivo;
+		this.nomeDiretorio = nomeDiretorio;
+	}
+	
 	public int getId() {
 		return id;
 	}

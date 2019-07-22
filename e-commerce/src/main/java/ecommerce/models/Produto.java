@@ -1,5 +1,8 @@
 package ecommerce.models;
 
+import ecommerce.models.ArquivoRecurso;
+import ecommerce.models.Loja;
+
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -11,12 +14,21 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
 @Entity
 public class Produto {
+	/*
+	 * Variável static utilizada para representar erro 404 de imagem (não encontrado)
+	 * A imagem é utilizada para quando não há imagens adicionadas ao produto.
+	 */
+	@Transient
+	public static final ArquivoRecurso IMAGEM_NAO_ENCONTRADA = new ArquivoRecurso("resources/images", "nao_encontrado.png");
+	
+	public static int quantidadeProdutoTotal;
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
@@ -29,6 +41,7 @@ public class Produto {
 
 	@Lob
 	private String descricao;
+	private BigDecimal precoFinal;
 	private BigDecimal custo;
 	private int quantidade;
 	private Date data;
@@ -106,13 +119,46 @@ public class Produto {
 		 * @return Preço final calculado.
 		 */
 	}
+	}
 	
+	public boolean contemImagem() {
+		return imagemProduto != null;
+	}
+	
+	/**
+	 * Calcula o preço final para o usuário (com a margem de lucro do vendedor).
+	 * @return Preço final calculado.
+	 */
+
+	public BigDecimal calcularPrecoFinal(Produto produto) {
+		return (precoFinal.multiply(margemDeLucroPorcentual).add(precoFinal));
+	}
+
+	@SuppressWarnings("deprecation")
 	public BigDecimal calcularPrecoFinal() {
-		return (preco.multiply(margemDeLucroPorcentual.divide(new BigDecimal(100))).add(preco));
+		return preco.multiply(margemDeLucroPorcentual.divide(new BigDecimal(100))).setScale(2, BigDecimal.ROUND_HALF_UP);
+	}
+	
+	@SuppressWarnings("deprecation")
+	public BigDecimal calcularPrecoFinal(int quantidade) {
+		return preco.multiply(margemDeLucroPorcentual.divide(new BigDecimal(100))).multiply(new BigDecimal(quantidade)).setScale(2, BigDecimal.ROUND_HALF_UP);
 	}
 
 	public void setMargemDeLucroPorcentual(BigDecimal margemDeLucroPorcentual) {
 		this.margemDeLucroPorcentual = margemDeLucroPorcentual;
+	}
+	
+	/**
+	 * Retorna a imagem do produto caso exista, ou retorna uma imagem padrão
+	 * de arquivo não encontrado.
+	 * @return
+	 */
+	public ArquivoRecurso getImagemPotencial() {
+		if (imagemProduto != null) {
+			return imagemProduto;
+		}
+		
+		return IMAGEM_NAO_ENCONTRADA;
 	}
 
 	public ArquivoRecurso getImagemProduto() {
@@ -138,7 +184,6 @@ public class Produto {
 	public void setVendas(int vendas) {
 		this.vendas = vendas;
 	}
-	
 
 	public BigDecimal getCusto() {
 		return custo;
@@ -164,19 +209,21 @@ public class Produto {
 		this.data = data;
 	}
 
-//	public  int getQuantidadeProdutoTotal() {
-//		return quantidadeProdutoTotal;
-//	}
-//
-//	public void setQuantidadeProdutoTotal(int quantidadeProdutoTotal) {
-//	 this.quantidadeProdutoTotal = quantidadeProdutoTotal;
-//	}
-//
-//	public BigDecimal getPrecoFinal() {
-//		return precoFinal;
-//	}
-//
-//	public void setPrecoFinal(BigDecimal precoFinal) {
-//		this.precoFinal = precoFinal;
-//	}
+	public static int getQuantidadeProdutoTotal() {
+		return quantidadeProdutoTotal;
+	}
+
+	public static void setQuantidadeProdutoTotal(int quantidadeProdutoTotal) {
+		Produto.quantidadeProdutoTotal = quantidadeProdutoTotal;
+	}
+
+	public BigDecimal getPrecoFinal() {
+		return precoFinal;
+	}
+
+	public void setPrecoFinal(BigDecimal precoFinal) {
+		this.precoFinal = precoFinal;
+	}
+
+
 }
