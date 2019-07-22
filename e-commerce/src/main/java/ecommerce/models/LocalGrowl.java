@@ -1,0 +1,10 @@
+package ecommerce.models;
+
+public enum LocalGrowl {
+	SUPERIOR_ESQUERDO,
+	SUPERIOR_DIREITO,
+	SUPERIOR_CENTRO,
+	INFERIOR_ESQUERDO,
+	INFERIOR_DIREITO,
+	INFERIOR_CENTRO,
+}

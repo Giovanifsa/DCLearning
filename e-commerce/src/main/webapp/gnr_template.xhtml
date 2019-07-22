@@ -18,7 +18,7 @@
 <h:body>
 	<div class="bg">
 		<b:navBar id="templateNavbar" brand="E-Commerce" brand-img="#{request.contextPath}/resources/images/ecommerce.png" brand-img-style="height:25px"
-			brandHref="#" inverse="true" brand-align="left" fluid="true" fixed="top" sticky="true" binding="#{templateBean.templateNavbar}">
+			brandHref="#" inverse="true" style="background-color:#003366" brand-align="left" fluid="true" fixed="top" sticky="true" binding="#{templateBean.templateNavbar}">
 			
 			<b:navbarLinks>
 				<b:navLink value="Loja" href="loja.xhtml" active="#{view.viewId == '/loja.xhtml'}" />
@@ -49,7 +49,37 @@
 		    </h:form>
 		</b:navBar>
 		
-		<b:messages for="templateNavbar"/>
+		<b:messages for="templateNavbar" escape="true"/>
+		
+		<b:form binding="#{templateBean.formGrowlSuperiorEsquerdo}">
+			<b:growl for="@parent" placementFrom="top" placement-align="left" show-detail="false" global-only="false" show-summary="true" allow-dismiss="true"
+		         animation-enter="animated bounceInDown" animation-exit="animated flipOutX" escape="true" />
+		</b:form>
+		
+		<b:form binding="#{templateBean.formGrowlSuperiorDireito}">
+			<b:growl for="@parent" placementFrom="top" placementAlign="right" show-detail="false" global-only="false" show-summary="true" allow-dismiss="true"
+		         animation-enter="animated bounceInDown" animation-exit="animated flipOutX" escape="true" />
+		</b:form>
+		
+		<b:form binding="#{templateBean.formGrowlSuperiorCentro}">
+			<b:growl for="@parent" placementFrom="top" placement-align="center" show-detail="false" global-only="false" show-summary="true" allow-dismiss="true"
+		         animation-enter="animated bounceInDown" animation-exit="animated flipOutX" escape="true" />
+		</b:form>
+		
+		<b:form binding="#{templateBean.formGrowlInferiorEsquerdo}">
+			<b:growl for="@parent" placementFrom="top" placement-align="left" show-detail="false" global-only="false" show-summary="true" allow-dismiss="true"
+		         animation-enter="animated bounceInDown" animation-exit="animated flipOutX" escape="true" />
+		</b:form>
+		
+		<b:form binding="#{templateBean.formGrowlInferiorDireito}">
+			<b:growl for="@parent" placementFrom="top" placement-align="right" show-detail="false" global-only="false" show-summary="true" allow-dismiss="true"
+		         animation-enter="animated bounceInDown" animation-exit="animated flipOutX" escape="true" />
+		</b:form>
+		
+		<b:form binding="#{templateBean.formGrowlInferiorCentro}">
+			<b:growl for="@parent" placementFrom="top" placement-align="center" show-detail="false" global-only="false" show-summary="true" allow-dismiss="true"
+		         animation-enter="animated bounceInDown" animation-exit="animated flipOutX" escape="true" />
+		</b:form>
 
 		<ui:insert name="body"></ui:insert>
 	</div>

@@ -13,76 +13,118 @@
 		<f:viewAction action="#{produtoBean.carregarProduto()}" />
 	</f:metadata>
 	
-<ui:composition template="gnr_template.xhtml">
-	<ui:define name="body">
-		<b:container fluid="true">
-			<b:panel collapsible="false" look="info" rendered="#{produtoBean.produtoFoiCarregado()}" large-screen="8">
-				<f:facet name="heading">
-					<b:iconAwesome value="shopping-bag" solid="true" style="padding-right:20px"/>
-					<h:outputLabel value="Detalhes do produto" />
-				</f:facet>
-			
-				<b:row>
-					<b:column large-screen="4">
-						<b:panel collapsible="false" look="#{produtoBean.processarLookPainelImagem()}">
-							<f:facet name="heading">
-								<b:iconAwesome value="image" solid="true" style="padding-right:20px"/>
-								<h:outputLabel value="Produto sem imagem." rendered="#{produtoBean.produto.contemImagem() == false}"/>
-								<h:outputLabel value="Imagem do produto" rendered="#{produtoBean.produto.contemImagem()}"/>
-							</f:facet>
-						
-							<img src="#{request.contextPath}/#{produtoBean.produto.getImagemPotencial().nomeDiretorio}/#{produtoBean.produto.getImagemPotencial().nomeArquivo}"/>
-						</b:panel>
-					</b:column>
-					
-					<b:column large-screen="8">
-						<b:panel>
-							<b:row>
-								<b:column>
-									<h1 style="text-align:center;overflow-wrap:break-word"><h:outputLabel value="#{produtoBean.produto.nome}"/></h1>
-								</b:column>
-							</b:row>
-							
-							<b:row>
-								<b:column>
-									<b:panel look="info">
-										<f:facet name="heading">
-											<b:iconAwesome value="sticky-note" solid="true" style="padding-right:20px"/>
-											<h:outputLabel value="Descrição do produto" />
-										</f:facet>
-										
-										<h:outputText value="#{produtoBean.produto.descricao}" style="overflow-wrap:break-word"/>
-									</b:panel>
-								</b:column>
-							</b:row>
-							
-							<b:row>
-								<b:column>
-									<b:panel look="warning">
-										<f:facet name="heading">
-											<b:iconAwesome value="store" solid="true" style="padding-right:20px"/>
-											<h:outputLabel value="Detalhes da loja" />
-										</f:facet>
-										
-										<h3 style="text-align:center;overflow-wrap:break-word"><h:outputText value="#{produtoBean.produto.lojaDoProduto.nomeFantasia}"/></h3>
-									</b:panel>
-								</b:column>
-							</b:row>
-							
-						</b:panel>
-					</b:column>
-				</b:row>
+	<ui:composition template="gnr_template.xhtml">
+		<ui:define name="body">
+			<b:container fluid="true">
+				<b:panel collapsible="false" look="info" rendered="#{produtoBean.produtoFoiCarregado()}" large-screen="8" >
+					<f:facet name="heading">
+						<b:iconAwesome value="shopping-bag" solid="true" style="padding-right:20px"/>
+						<h:outputLabel value="Detalhes do produto" />
+					</f:facet>
 				
-				<b:row>
-					<b:column>
-						<b:panel>
+					<b:row>
+						<b:column large-screen="4" medium-screen="4" small-screen="4">
+							<b:panel collapsible="false" look="#{produtoBean.processarLookPainelImagem()}">
+								<f:facet name="heading">
+									<b:iconAwesome value="image" solid="true" style="padding-right:20px"/>
+									<h:outputLabel value="Produto sem imagem." rendered="#{produtoBean.produto.contemImagem() == false}"/>
+									<h:outputLabel value="Imagem do produto" rendered="#{produtoBean.produto.contemImagem()}"/>
+								</f:facet>
 							
-						</b:panel>
-					</b:column>
-				</b:row>
-			</b:panel>
-		</b:container>
-	</ui:define>
-</ui:composition>
-
+								<img src="#{request.contextPath}/#{produtoBean.produto.getImagemPotencial().nomeDiretorio}/#{produtoBean.produto.getImagemPotencial().nomeArquivo}"/>
+							</b:panel>
+							
+							<b:panel collapsible="false" look="success">
+								<f:facet name="heading">
+									<b:iconAwesome value="dollar-sign" solid="true" style="padding-right:20px"/>
+									<h:outputLabel value="Comprar produto" />
+								</f:facet>
+								
+								<b:row>
+									<b:column>
+										<h4 style="text-align:center"><h:outputLabel value="R$ #{produtoBean.produto.calcularPrecoFinal()}"/></h4>
+									</b:column>
+								</b:row>
+								
+								<b:row>
+									<b:column>
+										<h6 style="text-align:center"><h:outputLabel value="Preço por item"/></h6>
+									</b:column>
+								</b:row>
+								
+								<b:row>
+									<b:column>
+										<h4 style="text-align:center"><h:outputLabel id="labelPrecoTotal" value="R$ #{produtoBean.calcularPrecoQuantidade()}"/></h4>
+										<h6 style="text-align:center"><h:outputLabel value="Preço pela quantidade"/></h6>
+										
+										<b:form>
+											<b:panelGrid colSpans="5,7">
+												<b:touchSpin  value="#{produtoBean.quantidadeSelecionada}" min="1" max="50" step="1" ajax="true" update="labelPrecoTotal"/>
+												<b:commandButton action="#{produtoBean.adicionarAoCarrinho()}" value="Adicionar ao carrinho" style="width:100%" look="success"/>
+											</b:panelGrid>
+										</b:form>
+									</b:column>
+								</b:row>
+							</b:panel>
+						</b:column>
+						
+						<b:column large-screen="8" medium-screen="8" small-screen="8">
+							<b:panel>
+								<b:row>
+									<b:column>
+										<h1 style="text-align:center;overflow-wrap:break-word"><h:outputLabel value="#{produtoBean.produto.nome}"/></h1>
+										<h6 style="text-align:center;overflow-wrap:break-word"><h:outputLabel value="Este produto foi comprado #{produtoBean.produto.vendas} vezes"/></h6>
+									</b:column>
+								</b:row>
+								
+								<b:row>
+									<b:column>
+										<b:panel look="info">
+											<f:facet name="heading">
+												<b:iconAwesome value="sticky-note" solid="true" style="padding-right:20px"/>
+												<h:outputLabel value="Descrição do produto" />
+											</f:facet>
+											
+											<h:outputText value="#{produtoBean.produto.descricao}" style="overflow-wrap:break-word"/>
+										</b:panel>
+									</b:column>
+								</b:row>
+								
+								<b:row>
+									<b:column>
+										<b:panel look="warning">
+											<f:facet name="heading">
+												<b:iconAwesome value="store" solid="true" style="padding-right:20px"/>
+												<h:outputLabel value="Detalhes da loja" />
+											</f:facet>
+											
+											<b:row>
+												<b:column>
+													<h3 style="text-align:center;overflow-wrap:break-word"><h:outputLabel value="#{produtoBean.produto.lojaDoProduto.nomeFantasia}"/></h3>
+												</b:column>
+											</b:row>
+											
+											<b:row>
+												<b:column large-screen="6" medium-screen="6" small-screen="6">
+													<h4 style="text-align:right" ><h:outputLabel value="Administrado por "/></h4>
+													<br/>
+													<h5 style="text-align:right;overflow-wrap:break-word"><h:outputLabel value="#{produtoBean.produto.lojaDoProduto.dono.nome}" /></h5>
+												</b:column>
+											
+												<b:column large-screen="6" medium-screen="6" small-screen="6">
+													<h4 style="text-align:left"><h:outputLabel value="CNPJ registrado " /></h4>
+													<br/>
+													<h5 style="text-align:left;overflow-wrap:break-word"><h:outputLabel value="#{produtoBean.produto.lojaDoProduto.cnpj}" /></h5>
+												</b:column>
+											</b:row>
+										</b:panel>
+									</b:column>
+								</b:row>
+							</b:panel>
+						</b:column>
+					</b:row>
+				</b:panel>
+			</b:container>
+		</ui:define>
+	</ui:composition>
 </html>

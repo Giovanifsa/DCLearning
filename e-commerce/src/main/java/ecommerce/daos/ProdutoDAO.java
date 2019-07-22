@@ -76,6 +76,13 @@ public class ProdutoDAO implements Serializable {
 	public void removerProduto(Produto produto) {
 		em.remove(produto);
 	}
+	
+	public List<Produto> procurarPorConteudoNome(String nomePesquisa) {
+		TypedQuery<Produto> query = em.createQuery("SELECT p FROM " + Produto.class.getSimpleName() + " p WHERE p.nome LIKE :nomePesquisa", Produto.class);
+		query.setParameter("nomePesquisa", nomePesquisa);
+		
+		return query.getResultList();
+	}
 
 	public Long quantidadeDisponivel(Produto produto) {
 		

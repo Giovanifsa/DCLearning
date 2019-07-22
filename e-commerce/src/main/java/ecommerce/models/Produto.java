@@ -1,10 +1,11 @@
 package ecommerce.models;
 
-import java.math.BigDecimal;
-
-import java.util.Date;
 import ecommerce.models.ArquivoRecurso;
 import ecommerce.models.Loja;
+
+import java.math.BigDecimal;
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -128,9 +129,14 @@ public class Produto {
 		return (precoFinal.multiply(margemDeLucroPorcentual).add(precoFinal));
 	}
 
+	@SuppressWarnings("deprecation")
 	public BigDecimal calcularPrecoFinal() {
-		return (preco.multiply(margemDeLucroPorcentual.divide(new BigDecimal(100))).add(preco));
-
+		return preco.multiply(margemDeLucroPorcentual.divide(new BigDecimal(100))).setScale(2, BigDecimal.ROUND_HALF_UP);
+	}
+	
+	@SuppressWarnings("deprecation")
+	public BigDecimal calcularPrecoFinal(int quantidade) {
+		return preco.multiply(margemDeLucroPorcentual.divide(new BigDecimal(100))).multiply(new BigDecimal(quantidade)).setScale(2, BigDecimal.ROUND_HALF_UP);
 	}
 
 	public void setMargemDeLucroPorcentual(BigDecimal margemDeLucroPorcentual) {
@@ -173,7 +179,6 @@ public class Produto {
 	public void setVendas(int vendas) {
 		this.vendas = vendas;
 	}
-
 
 	public BigDecimal getCusto() {
 		return custo;
