@@ -2,24 +2,18 @@ package ecommerce.beans;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
-import javax.faces.component.FacesComponent;
-import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
-import javax.faces.validator.ValidatorException;
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.validation.ValidationException;
 
 import ecommerce.control.Transactional;
 import ecommerce.daos.ProdutoDAO;
 import ecommerce.models.ItemCarrinho;
 import ecommerce.models.Produto;
-import ecommerce.models.Spinner;
 import ecommerce.tools.MecanismoDeHash;
 
 @SuppressWarnings("serial")
@@ -33,25 +27,40 @@ public class CarrinhoBean implements Serializable {
 	private MecanismoDeHash hashing;
 
 	@Inject
-	Spinner spinner;
+	SpinnerBean spinnerBean;
 	
-	private ArrayList<ItemCarrinho> produtosCarrinho = new ArrayList<>();
+	@Inject
+	DadosSessaoBean dadosSessao;
 	
+	
+	
+	
+		
+	/**
+	 * Calcula o preço final (total) da soma do preço de todos os itens e suas quantidades.
+	 * @return Valor total de compra.
+	 */
 	public BigDecimal calcularPrecoFinal() {
 		BigDecimal price = new BigDecimal(0);
 		
-		for (ItemCarrinho e : produtosCarrinho) {
+		for (ItemCarrinho e : dadosSessao.getProdutosCarrinho()) {
 			price = price.add(e.getProduto().getPreco().multiply(new BigDecimal(e.getQuantidade())));
 		}
 		
 		return price;
 	}
 	
+	/**
+	 * Altera a quantidade de um item no carrinho
+	 * @param p Produto cuja quantidade será alterada.
+	 * @param quantidade Nova quantidade de itens.
+	 */
+	@Deprecated
 	public void setQuantidadeItem(Produto p, int quantidade) {
-		for (ItemCarrinho e : produtosCarrinho) {
+		for (ItemCarrinho e : dadosSessao.getProdutosCarrinho()) {
 			if (e.getProduto().equals(p)) {
 				if (quantidade == 0) {
-					produtosCarrinho.remove(e);
+					dadosSessao.getProdutosCarrinho().remove(e);
 				}
 				
 				else if (quantidade < 0) {
@@ -67,10 +76,15 @@ public class CarrinhoBean implements Serializable {
 		}
 	}
 	
+	/**
+	 * Calcula a quantidade total de itens no carrinho,
+	 * isto é, soma total da quantidade de todos os produtos do carrinho.
+	 * @return Quantidade total dos produtos do carrinho.
+	 */
 	public int getQuantidadeItens() {
-		int quantidade =0;
+		int quantidade = 0;
 		
-		for (ItemCarrinho e : produtosCarrinho) {
+		for (ItemCarrinho e : dadosSessao.getProdutosCarrinho()) {
 			quantidade += e.getQuantidade();
 		}
 		
@@ -99,29 +113,65 @@ public class CarrinhoBean implements Serializable {
 	}
 	
 	public String continuarComprando() {
-		return "novaLoja?faces-redirect=true";	// RETORNAR A HOME
+		return "loja?faces-redirect=true";	// RETORNAR A HOME
 	}
 	
 	public String finalizarCompra() {
 		return "finalizarCompra?faces-redirect=true";
 	}
 
-	public String atualizarQuantidade(Produto produto) {
-//	POR ENQUANTO FAZ UM COUNT NO BANCO, TEM QUE MUDAR PRA COUNT NO ESTOQUE		
-		Long estoque = produtoDao.quantidadeDisponivel(produto);
+	public int qtdeDeUmItemNoCarrinho(Produto produto) {
+			int total = dadosSessao.qtdeDeUmItemNoCarrinho(produto);
+			return total;
+	}
+	
+	public String adicionarViaSpinner(Produto produto) {
 		
-		if(spinner.getValor() > estoque) {
-			FacesContext.getCurrentInstance().addMessage("messages", new FacesMessage("Quantidade indisponível!"));
-//	TESTAR ESSA MENSAGEM QUANDO TIVER A TELA DE PRODUTOS			
+		Long estoque = (Long) produtoDao.getQuantidadeDisponivel(produto);
+		FacesContext facesContext = FacesContext.getCurrentInstance();
+		Integer quantidade = Integer.parseInt(spinnerBean.getValor());
+		
+		if(quantidade > estoque) { // Se não tem disponivel
+			facesContext.getExternalContext().getFlash().setKeepMessages(true);
+			facesContext.addMessage(null, new FacesMessage("Quantidade não disponível em estoque! Spin: " 
+						+ spinnerBean.getValor()));
+			
+			return "carrinhoCompras?faces-redirect=true";
 		}
 		
+		facesContext.getExternalContext().getFlash().setKeepMessages(true);
+		facesContext.addMessage("messages", new FacesMessage("Atualizando ... " + spinnerBean.getValor()));
+		
 		ItemCarrinho item = new ItemCarrinho();
-
 		item.setProduto(produto);
-		item.setQuantidade(spinner.getValor());
-		produtosCarrinho.add(item);
+		item.setQuantidade(quantidade);
+
+		dadosSessao.addUmItemAoCarrinho(item);
+		
+		return "carrinhoCompras?faces-redirect=true";
+	}		
+	
+	
+	public String removerViaSpinner(Produto produto) {
+
+		dadosSessao.removerProduto(produto, Integer.parseInt(spinnerBean.getValor()));
+		
+		FacesContext fc = FacesContext.getCurrentInstance();
+		fc.getExternalContext().getFlash().setKeepMessages(true);
+		fc.addMessage("messages", new FacesMessage("Spinner: " + spinnerBean.getValor()));
 		
 		return "carrinhoCompras?faces-redirect=true";
 	}
 	
+	
+	public int valorSpin(int val) {
+		return val;
+	}
+	
+	public String testarSpinner() {
+		FacesContext fc = FacesContext.getCurrentInstance();
+		fc.getExternalContext().getFlash().setKeepMessages(true);
+		fc.addMessage("messages", new FacesMessage("Spinner: " + spinnerBean.getValor()));
+		return "teste?faces-redirect=true";
+	}
 }

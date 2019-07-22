@@ -78,4 +78,8 @@ public class NovoProdutoBean implements Serializable {
 		this.imagem = imagem;
 	}
 	
+	public Long getQuantidadeDisponivel(Produto produto) {
+		return dao.getQuantidadeDisponivel(produto);
+	}
+	
 }

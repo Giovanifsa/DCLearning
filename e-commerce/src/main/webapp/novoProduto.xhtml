@@ -30,11 +30,11 @@
 
 						<b:message for="nomeField" />
 
-						<h:outputText value="Custo:" />
-						<b:inputText id="custo" value="#{novoProdutoBean.produto.custo}"
+						<h:outputText value="preco:" />
+						<b:inputText id="preco" value="#{novoProdutoBean.produto.preco}"
 							required="true" required-message="Campo necessário." />
 
-						<b:message for="custo" />
+						<b:message for="preco" />
 
 						<h:outputText value="Margem de Lucro:" />
 						<b:inputText id="margemLucro"
@@ -76,7 +76,7 @@
 						<b:dataTableColumn value="#{produto.imagemProduto}" />
 						<b:dataTableColumn value="#{produto.nome}" />
 						<b:dataTableColumn value="#{produto.descricao}" />
-						<b:dataTableColumn value="#{produto.custo}" order="asc" />
+						<b:dataTableColumn value="#{produto.preco}" order="asc" />
 						<b:dataTableColumn label="Margem de Lucro">
 							<b:inputText value="#{produto.margemDeLucroPorcentual}"
 								rendered="#{car.editable}" />
