@@ -27,19 +27,12 @@
 
 						<b:message for="nomeloja" />
 
-
-						<h:outputText value="Despesas totais:" />
-						<b:inputText id="despesastotais"
-							value="#{novaLojaBean.loja.despesasTotais}" required="true"
-							required-message="Campo necessário." />
-						<b:message for="despesastotais" />
-
-
 						<b:column offset-lg="0" large-screen="100">
 							<b:commandButton value="Cadastrar loja" look="primary"
-								style="width:100%" action="#{novaLojaBean.salvarLoja}" process="@form" />
+								style="width:100%" action="#{novaLojaBean.salvarLoja}"
+								process="@form" />
 						</b:column>
-						
+
 					</b:panelGrid>
 				</b:panel>
 			</b:container>
@@ -47,21 +40,32 @@
 
 		<b:form>
 			<b:panel>
-			<b:dataTable value="#{novaLojaBean.listarTodasLojas()}" var="loja"
-				id="listaLoja" emptyMessage="Nenhuma loja cadastrada.">
-				<b:dataTableColumn value="#{loja.nomeFantasia}" />
-				<b:dataTableColumn value="#{loja.cnpj}" />
-				<b:dataTableColumn>
-					<f:facet name="header">Remover</f:facet>
-					<b:commandButton action="#{novaLojaBean.remover(loja)}" value="Remover" process="@this" />
-				</b:dataTableColumn>
-				
-				<b:dataTableColumn>
-					<f:facet name="header">Alterar</f:facet>
-					<b:commandButton action="#{novaLojaBean.carregaloja}" value="Alterar" />
-				</b:dataTableColumn>
-				
-			</b:dataTable>
+				<b:dataTable value="#{novaLojaBean.listarTodasLojas()}" var="loja"
+					id="listaLoja" emptyMessage="Nenhuma loja cadastrada.">
+					<f:facet name="header">
+						<tr>
+							<th>Nome da loja</th>
+							<th>CNPJ</th>
+							<th>Remover</th>
+							<th>Alterar</th>
+						</tr>
+					</f:facet>
+
+					<b:dataTableColumn value="#{loja.nomeFantasia}" />
+					<b:dataTableColumn value="#{loja.cnpj}" />
+					<b:dataTableColumn>
+						<f:facet name="header">Remover</f:facet>
+						<b:commandButton  action="#{novaLojaBean.remover(loja)}"
+							value="Remover" process="@this" />
+					</b:dataTableColumn>
+
+					<b:dataTableColumn>
+						<f:facet name="header">Alterar</f:facet>
+						<b:commandButton action="#{novaLojaBean.carregaloja}"
+							value="Alterar" />
+					</b:dataTableColumn>
+
+				</b:dataTable>
 			</b:panel>
 		</b:form>
 	</ui:define>

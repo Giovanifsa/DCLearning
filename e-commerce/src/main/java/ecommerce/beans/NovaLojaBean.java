@@ -3,6 +3,7 @@ package ecommerce.beans;
 import java.io.Serializable;
 import java.util.List;
 
+import javax.faces.application.FacesMessage;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -19,17 +20,24 @@ public class NovaLojaBean implements Serializable {
 
 	@Inject
 	private LojaDAO dao;
+	
+	@Inject
+	TemplateBean pagTemplate;
 
 	@Transactional
 	public String salvarLoja() {
 		System.out.println("Gravando loja" + loja.getNomeFantasia());
 
-		if (this.loja.getCnpj() == null) {
-			this.dao.adicionarLoja(this.loja);
+		
+		boolean existecnpj = dao.existecpnj(this.loja);
+		if (existecnpj) {
+		
+			pagTemplate.adicionarMensagem(FacesMessage.SEVERITY_INFO, "CNPJ já cadastrado",true);
 		} else {
-			this.dao.atualizarLoja(this.loja);
+			this.dao.adicionarLoja(this.loja);
+			this.loja = new Loja();
 		}
-		this.loja = new Loja();
+
 
 		return "novaLoja?faces-redirect=true";
 	}
