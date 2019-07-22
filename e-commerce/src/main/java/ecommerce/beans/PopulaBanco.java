@@ -89,7 +89,7 @@ public class PopulaBanco {
 		p0.setCodigo(0034534L);
 		p0.setDescricao("Filme da Capitã Marvel");
 		p0.setNome("Capitã Marvel");
-		p0.setPreco(new BigDecimal(2));
+		p0.setPrecoDeVenda(new BigDecimal(2));
 		p0.setImagemProduto(file0);
 		p0.setLojaDoProduto(s0);
 		p0.setMargemDeLucroPorcentual(new BigDecimal(2.20));
@@ -99,7 +99,7 @@ public class PopulaBanco {
 		p1.setCodigo(145342L);
 		p1.setDescricao("Filme do Homem Formiga");
 		p1.setNome("Homem Formiga");
-		p1.setPreco(new BigDecimal(3));
+		p1.setPrecoDeVenda(new BigDecimal(3));
 		p1.setImagemProduto(file1);
 		p1.setLojaDoProduto(s1);
 		p1.setMargemDeLucroPorcentual(new BigDecimal(2.20));
@@ -109,7 +109,7 @@ public class PopulaBanco {
 		p2.setCodigo(2453542223L);
 		p2.setDescricao("Filme dos Guardioes da Galaxia");
 		p2.setNome("Guardioes da Galaxia");
-		p2.setPreco(new BigDecimal(5.9));
+		p2.setPrecoDeVenda(new BigDecimal(5.9));
 		p2.setImagemProduto(file2);
 		p2.setLojaDoProduto(s2);
 		p2.setMargemDeLucroPorcentual(new BigDecimal(2.20));
@@ -119,7 +119,7 @@ public class PopulaBanco {
 		p3.setCodigo(345345334L);
 		p3.setDescricao("Filme do Hulk");
 		p3.setNome("O Incrivel Hulk");
-		p3.setPreco(new BigDecimal(3.9));
+		p3.setPrecoDeVenda(new BigDecimal(3.9));
 		p3.setImagemProduto(file3);
 		p3.setLojaDoProduto(s3);
 		p3.setMargemDeLucroPorcentual(new BigDecimal(2.20));

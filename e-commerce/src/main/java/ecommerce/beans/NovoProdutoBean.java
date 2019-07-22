@@ -1,5 +1,6 @@
 package ecommerce.beans;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,6 +12,7 @@ import javax.servlet.http.Part;
 import ecommerce.control.Transactional;
 import ecommerce.daos.ArquivoDAO;
 import ecommerce.daos.ProdutoDAO;
+import ecommerce.models.ArquivoRecurso;
 import ecommerce.models.Produto;
 
 @Named
@@ -32,9 +34,13 @@ public class NovoProdutoBean implements Serializable {
 	
 	//Esse método salva o novo produto
 	@Transactional
-	public String salvarProduto() {
+	public String salvarProduto() throws IOException {
 	
 		if (this.produto.getId()==0) {
+			dao.salvarImagemProduto(imagem);
+			ArquivoRecurso imagemDoProduto = dao.salvarImagemProduto(imagem);
+			produto.setImagemProduto(imagemDoProduto);
+			
 			dao.adicionarProduto(this.produto);
 			System.out.println("Produto cadastrado com sucesso!");
 		}else {
