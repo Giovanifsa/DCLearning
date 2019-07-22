@@ -2,6 +2,9 @@ package ecommerce.models;
 
 import java.math.BigDecimal;
 
+import java.util.Date;
+import ecommerce.models.ArquivoRecurso;
+import ecommerce.models.Loja;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -10,7 +13,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
@@ -24,6 +26,8 @@ public class Produto {
 	@Transient
 	public static final ArquivoRecurso IMAGEM_NAO_ENCONTRADA = new ArquivoRecurso("resources/images", "nao_encontrado.png");
 	
+	public static int quantidadeProdutoTotal;
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
@@ -36,6 +40,11 @@ public class Produto {
 
 	@Lob
 	private String descricao;
+	private BigDecimal precoFinal;
+	private BigDecimal custo;
+	private int quantidade;
+	private Date data;
+	
 	private BigDecimal preco = new BigDecimal(0);
 	
 	//Valor variando de 0-100 (deve ser dividido por 100 para ter a porcentagem real)
@@ -114,8 +123,14 @@ public class Produto {
 	 * Calcula o preço final para o usuário (com a margem de lucro do vendedor).
 	 * @return Preço final calculado.
 	 */
+
+	public BigDecimal calcularPrecoFinal(Produto produto) {
+		return (precoFinal.multiply(margemDeLucroPorcentual).add(precoFinal));
+	}
+
 	public BigDecimal calcularPrecoFinal() {
 		return (preco.multiply(margemDeLucroPorcentual.divide(new BigDecimal(100))).add(preco));
+
 	}
 
 	public void setMargemDeLucroPorcentual(BigDecimal margemDeLucroPorcentual) {
@@ -158,4 +173,47 @@ public class Produto {
 	public void setVendas(int vendas) {
 		this.vendas = vendas;
 	}
+
+
+	public BigDecimal getCusto() {
+		return custo;
+	}
+
+	public void setCusto(BigDecimal custo) {
+		this.custo = custo;
+	}
+
+	public int getQuantidade() {
+		return quantidade;
+	}
+
+	public void setQuantidade(int quantidade) {
+		this.quantidade = quantidade;
+	}
+
+	public Date getData() {
+		return data;
+	}
+
+	public void setData(Date data) {
+		this.data = data;
+	}
+
+	public static int getQuantidadeProdutoTotal() {
+		return quantidadeProdutoTotal;
+	}
+
+	public static void setQuantidadeProdutoTotal(int quantidadeProdutoTotal) {
+		Produto.quantidadeProdutoTotal = quantidadeProdutoTotal;
+	}
+
+	public BigDecimal getPrecoFinal() {
+		return precoFinal;
+	}
+
+	public void setPrecoFinal(BigDecimal precoFinal) {
+		this.precoFinal = precoFinal;
+	}
+
+
 }

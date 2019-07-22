@@ -10,8 +10,40 @@
 
 <ui:composition template="gnr_template.xhtml">
 	<ui:define name="body">
-s
+		<h:form>
+			<h:panelGrid columns="2" cellpadding="5" styleClass="ui-grid">
+				
+				<h:outputLabel for="idSpinner" value="Algum valor: " />
 
+				<br/>
+				
+				<h:outputLabel value="Escolha: " id="escolha" />
+				
+				<p:outputPanel>
+					<p:spinner id="idSpinner" value="#{carrinhoBean.quantidadeItens}">
+						<p:ajax update="escolha" process="@this" event="click"/>
+					</p:spinner>
+					<h:outputText id="ajaxSpinnerValue" value="#{spinnerView.number5}"
+						style="padding-left: 10px" />
+				</p:outputPanel>
+			
+			</h:panelGrid>
+
+			<br />
+
+			<p:commandButton value="Submit" update="display"
+				oncomplete="PF('dlg').show()" />
+
+			<p:dialog header="Values" widgetVar="dlg" showEffect="fold"
+				hideEffect="fold">
+				<h:panelGrid id="display" columns="2" cellpadding="5">
+					<h:outputText value="Value 1: " />
+					<h:outputText value="#{carrinhoBean.quantidadeItens}" />
+
+
+				</h:panelGrid>
+			</p:dialog>
+		</h:form>
 	</ui:define>
 
 </ui:composition>

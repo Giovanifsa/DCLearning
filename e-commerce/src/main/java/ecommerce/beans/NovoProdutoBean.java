@@ -9,6 +9,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.servlet.http.Part;
 import ecommerce.control.Transactional;
+import ecommerce.daos.ArquivoDAO;
 import ecommerce.daos.ProdutoDAO;
 import ecommerce.models.Produto;
 
@@ -22,6 +23,8 @@ public class NovoProdutoBean implements Serializable {
 
 	@Inject 
 	private ProdutoDAO dao;
+	@Inject
+	private ArquivoDAO arquivoDAO;
 	
 	private Part imagem;
 	
@@ -41,7 +44,15 @@ public class NovoProdutoBean implements Serializable {
 		
 		this.produto = new Produto();
 		
-		return "/NovoProduto?faces-redirect=true";
+		return "/novoProduto?faces-redirect=true";
+	}
+	
+	//Esse métodp atualiza o produto
+	@Transactional
+	public String atualiza(Produto produto) {
+		dao.atualizarProduto(produto);
+		
+		return "/novoProduto?faces-redirect=true";
 	}
 	
 	//Esse método busca todos os produtos cadastrado
@@ -54,10 +65,14 @@ public class NovoProdutoBean implements Serializable {
 	
 	//Esse método deleta o produto
 	@Transactional
-	public String deletaProduto() {
+	public String deletaProduto(Produto produto) {
 		dao.removerProduto(produto);
 		
-		return "/NovoProduto?faces-redirect=true";
+		return "/novoProduto?faces-redirect=true";
+	}
+	
+	public void atualizarProduto(Produto p) {
+		produto = p;
 	}
 
 	//getters and setters
@@ -76,6 +91,14 @@ public class NovoProdutoBean implements Serializable {
 
 	public void setImagem(Part imagem) {
 		this.imagem = imagem;
+	}
+
+	public ArquivoDAO getArquivoDAO() {
+		return arquivoDAO;
+	}
+
+	public void setArquivoDAO(ArquivoDAO arquivoDAO) {
+		this.arquivoDAO = arquivoDAO;
 	}
 	
 }
