@@ -31,7 +31,7 @@
 						col-sm="12" col-md="12" col-lg="12" tiny-screen="half">
 
 						<b:dataTableColumn label="Produto" style="text-align:center">
-							#{tabela.produto.nome}
+							#{tabela.produto.nomeProduto}
 						</b:dataTableColumn>
 
 						<b:dataTableColumn label="Descrição" style="text-align:center">
@@ -44,8 +44,8 @@
 								src="#{request.contextPath}/#{tabela.produto.imagemPotencial.nomeDiretorio}/#{tabela.produto.imagemPotencial.nomeArquivo}"
 								width="50px" align="middle" />
 						</b:dataTableColumn>
-						
-						<b:column width="9%" style="text-align:center" label="Preço">
+
+						<b:column label="Preço" width="9%" style="text-align:center">
 							<br />
 							<h:outputLabel value="R$ #{carrinhoBean.produtoAtualizado}" style="text-align:center" id="idPreco" />
 						</b:column>
@@ -53,14 +53,14 @@
 						<b:column label="Quantidade" orderable="false" width="15%" 
 							style="text-align:center" >
 							<form>
-								<b:touchSpin value="#{tabela.quantidade}" update="idPreco"
+								<b:touchSpin value="#{tabela.quantidade}" update="@form carrinho:container:painel:tabelaProdutos"
 									large-screen="11" min="#{tabela.produto.quantidade}" step="1" ajax="true"
 									size="1000" vertical-buttons="true" small-screen="half"
 									col-xs="12" col-md="12" col-sm="12" col-lg="12"
 									field-size="large"/>
 							</form>
 						</b:column>
-	
+
 						<b:dataTableColumn orderable="false" width="9%" label="Remover"
 							style="text-align:center">
 							<br />

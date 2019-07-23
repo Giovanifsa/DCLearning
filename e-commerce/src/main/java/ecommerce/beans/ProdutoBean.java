@@ -65,13 +65,14 @@ public class ProdutoBean implements Serializable {
 	}
 	
 	public BigDecimal calcularPrecoQuantidade() {
-		return produto.setPrecoDeVenda(quantidadeSelecionada);
+		return produto.setPrecoDeVenda(new BigDecimal(200));
 	}
 	
 	public String adicionarAoCarrinho() {
 		// Verificar se existe no estoque
 		carrinhoBean.adicionarAoCarrinho(produto, quantidadeSelecionada);
-		templateBean.adicionarMensagem(FacesMessage.SEVERITY_INFO, "Produto " + produto.getNome() + "(" + quantidadeSelecionada + ") adicionado ao carrinho!", true);
+		templateBean.adicionarMensagem(FacesMessage.SEVERITY_INFO, "Produto " + produto.getNomeProduto() + "(" + quantidadeSelecionada + ") adicionado ao carrinho!", true);
 		
 		return "produto?faces-redirect=true&produtoId=" + produto.getId();
 	}
+}

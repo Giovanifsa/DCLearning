@@ -67,17 +67,17 @@ public class CarrinhoBean implements Serializable {
 		return price;
 	}
 	
-	public void adicionarAoCarrinho(Produto p, int quantidade) {
+	public void adicionarAoCarrinho(Produto p, BigDecimal quantidade) {
 		//Encontra o mesmo produto no carrinho e soma o total com ele
 		for (ItemCarrinho ic : dadosSessao.getProdutosCarrinho()) {
 			if (ic.getProduto().equals(p)) {
-				ic.setQuantidade(ic.getQuantidade() + quantidade);
+				ic.setQuantidade(ic.getQuantidade() + 5);
 				
 				return;
 			}
 		}
 		
-		dadosSessao.getProdutosCarrinho().add(new ItemCarrinho(p, quantidade));
+		dadosSessao.getProdutosCarrinho().add(new ItemCarrinho(p, 5));
 	}
 	
 	/**
