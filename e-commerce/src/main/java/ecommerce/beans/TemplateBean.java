@@ -27,6 +27,10 @@ import ecommerce.models.LocalGrowl;
 @Named
 @ViewScoped
 public class TemplateBean implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private String navbarTextoPesquisa;
 	private UIComponent templateNavbar;
 	
@@ -101,7 +105,6 @@ public class TemplateBean implements Serializable {
 	 * @param usarEscopoFlash Utilizar ou não o escopo flash para a
 	 *  mensagem (será mostrada no próximo request).
 	 */
-	@SuppressWarnings("unchecked")
 	public void adicionarMensagem(Severity severidade, String mensagem, boolean usarEscopoFlash) {
 		FacesContext.getCurrentInstance().addMessage(templateNavbar.getClientId(), new FacesMessage(severidade, mensagem, null));
 		
@@ -118,7 +121,6 @@ public class TemplateBean implements Serializable {
 	 * @param usarEscopoFlash Utilizar ou não o escopo flash para a
 	 *  mensagem (será mostrada no próximo request).
 	 */
-	@SuppressWarnings("unchecked")
 	public void adicionarMensagemGrowl(LocalGrowl localGrowl, Severity severidade, String mensagem, boolean usarEscopoFlash) {
 		UIForm formGrowl;
 		

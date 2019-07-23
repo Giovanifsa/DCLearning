@@ -45,7 +45,7 @@ public class ArquivoDAO implements Serializable {
 		return str;
 	}
 	
-	@Transactional
+	
 	public ArquivoRecurso salvarArquivo(String nomeArquivo, String nomeDiretorio, byte[] dadosArquivo) throws IOException {
 		File dir = new File(DIRETORIO.getAbsolutePath() + nomeDiretorio + File.separator);
 		dir.mkdirs();

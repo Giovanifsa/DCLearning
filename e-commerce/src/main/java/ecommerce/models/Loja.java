@@ -10,6 +10,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
+
 @SuppressWarnings("serial")
 @Entity
 public class Loja implements Serializable {
@@ -21,10 +22,10 @@ public class Loja implements Serializable {
 	private Usuario dono;
 	
 	private String cnpj;
-	
+
 	private String nomeFantasia;
-	private BigDecimal despesasTotais;
-	private BigDecimal despesaRateada;
+	private BigDecimal despesasTotais = new BigDecimal(0);
+	private BigDecimal despesaRateada = new BigDecimal(10);
 	
 	
 	

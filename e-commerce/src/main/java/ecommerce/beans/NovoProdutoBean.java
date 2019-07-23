@@ -2,10 +2,12 @@ package ecommerce.beans;
 
 import java.io.IOException;
 import java.io.Serializable;
-import java.math.BigDecimal;
+
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -14,6 +16,7 @@ import ecommerce.control.Transactional;
 import ecommerce.daos.ArquivoDAO;
 import ecommerce.daos.ProdutoDAO;
 import ecommerce.models.ArquivoRecurso;
+import ecommerce.models.LocalGrowl;
 import ecommerce.models.Loja;
 import ecommerce.models.Produto;
 
@@ -26,91 +29,95 @@ public class NovoProdutoBean implements Serializable {
 	private Produto produto = new Produto();
 	private Loja lojaDoProduto = new Loja();
 
-	@Inject 
+	@Inject
 	private ProdutoDAO dao;
 	@Inject
 	private ArquivoDAO arquivoDAO;
-	
-	
-	
+	@Inject
+	TemplateBean template;
+
 	private Part imagem;
-	
+
 	private List<Produto> produtos = new ArrayList<>();
-	
-	//Esse método salva o novo produto
+
+	// Esse método salva o novo produto
 	@Transactional
 	public String salvarProduto() throws IOException {
 	
-		if (this.produto.getId()==0) {
-	
-			/**
-			 * Esse método salva a imagem no banco.
-			 */
-			ArquivoRecurso imagemDoProduto = dao.salvarImagemProduto(imagem);
-			produto.setImagemProduto(imagemDoProduto);
-		
-			/**
-			 * Esse método calcula o preço de venda
-			 */			
-			produto.calcularPrecoDeVenda(produto, lojaDoProduto);
+			if (produto.equals(this.produto)==true) {
+				template.adicionarMensagemGrowl(LocalGrowl.SUPERIOR_CENTRO, FacesMessage.SEVERITY_ERROR, "Código já cadastrado!", true);
+						      
+		      }else if (produto.getId()==0)  {
+		    	  if (produto.getCusto().signum() < 0){
+						
+						template.adicionarMensagemGrowl(LocalGrowl.SUPERIOR_CENTRO, FacesMessage.SEVERITY_ERROR, "O custo não pode ser menor que zero!", true);}
+		    	  
+		    	  /**
+					 * Esse método salva a imagem no banco.
+					 */
+					ArquivoRecurso imagemDoProduto = dao.salvarImagemProduto(imagem);
+					produto.setImagemProduto(imagemDoProduto);
+				
+					/**
+					 * Esse método calcula o preço de venda
+					 */			
+					produto.calcularPrecoDeVenda(produto, lojaDoProduto);
+					
+					/**
+					 * Esse salva o produto no banco
+					 */
+					
+					dao.adicionarProduto(this.produto);
+					System.out.println("Produto cadastrado com sucesso!");
+					this.produto = new Produto();
+		    	  
+		      }else{
+				
+				/**
+				 * Aqui atualiza o produto caso o mesmo já possui registro no banco.
+				 */
+				produto.calcularPrecoDeVenda(produto, lojaDoProduto);
+				dao.atualizarProduto(this.produto);
+				System.out.println("Produto atualizado com sucesso!");
+			}
 			
-			/**
-			 * Esse salva o produto no banco
-			 */
+			this.produto = new Produto();
 			
-			dao.adicionarProduto(this.produto);
-			System.out.println("Produto cadastrado com sucesso!");
+			return "/novoProduto?faces-redirect=true";
+				
+	}	
 			
-		}else {
-			/**
-			 * Aqui atualiza o produto caso o mesmo já possui registro no banco.
-			 */
-			produto.calcularPrecoDeVenda(produto, lojaDoProduto);
-			dao.atualizarProduto(this.produto);
-			System.out.println("Produto atualizado com sucesso!");
-		}
-		
-		this.produto = new Produto();
-		
-		return "/novoProduto?faces-redirect=true";
-	}
 
-	
-	
-	
-	
-	//Esse métodp atualiza o produto
+	// Esse métodp atualiza o produto
 	@Transactional
 	public String atualiza(Produto produto) {
 		dao.atualizarProduto(produto);
-		
+
 		return "/novoProduto?faces-redirect=true";
 	}
-	
-	//Esse método busca todos os produtos cadastrado
-	public List<Produto> getProdutos(){
-		
+
+	// Esse método busca todos os produtos cadastrado
+	public List<Produto> getProdutos() {
+
 		this.produtos = dao.listarProdutos();
-		
+
 		return produtos;
 	}
-	
-	//Esse método deleta o produto
+
+	// Esse método deleta o produto
 	@Transactional
 	public String deletaProduto(Produto produto) {
 		dao.removerProduto(produto);
-		
+
 		return "/novoProduto?faces-redirect=true";
 	}
-	
+
 	public void atualizarProduto(Produto p) {
 		produto = p;
 	}
-	
-	
 
-	//getters and setters
-	
+	// getters and setters
+
 	public Produto getProduto() {
 		return produto;
 	}
@@ -134,5 +141,5 @@ public class NovoProdutoBean implements Serializable {
 	public void setArquivoDAO(ArquivoDAO arquivoDAO) {
 		this.arquivoDAO = arquivoDAO;
 	}
-	
+
 }
