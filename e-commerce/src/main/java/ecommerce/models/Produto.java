@@ -37,7 +37,7 @@ public class Produto {
 	private long codigo;
 
 	@NotNull
-	private String nome;
+	private String nomeProduto;
 
 	@Lob
 	private String descricao;
@@ -89,11 +89,11 @@ public class Produto {
 	}
 
 	public String getNome() {
-		return nome;
+		return nomeProduto;
 	}
 
-	public void setNome(String nome) {
-		this.nome = nome;
+	public void setNome(String nomeProduto) {
+		this.nomeProduto = nomeProduto;
 	}
 
 	public String getDescricao() {

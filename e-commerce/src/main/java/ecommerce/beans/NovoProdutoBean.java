@@ -11,6 +11,7 @@ import javax.servlet.http.Part;
 import ecommerce.control.Transactional;
 import ecommerce.daos.ArquivoDAO;
 import ecommerce.daos.ProdutoDAO;
+import ecommerce.models.ItemCarrinho;
 import ecommerce.models.Produto;
 
 @Named
@@ -102,7 +103,11 @@ public class NovoProdutoBean implements Serializable {
 	}
 	
 	public Long getQuantidadeDisponivel(Produto produto) {
-		return dao.getQuantidadeDisponivel(produto);
+		String jpql = "select count(p) from Produto p where p.id = " + produto.getId();
+
+		Query query = em.createQuery(jpql, Produto.class);
+		Long total = (Long) query.getSingleResult();
+		return total;
 	}
 	
 }

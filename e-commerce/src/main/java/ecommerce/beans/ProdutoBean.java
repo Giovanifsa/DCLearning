@@ -69,6 +69,7 @@ public class ProdutoBean implements Serializable {
 	}
 	
 	public String adicionarAoCarrinho() {
+		// Verificar se existe no estoque
 		carrinhoBean.adicionarAoCarrinho(produto, quantidadeSelecionada);
 		templateBean.adicionarMensagem(FacesMessage.SEVERITY_INFO, "Produto " + produto.getNome() + "(" + quantidadeSelecionada + ") adicionado ao carrinho!", true);
 		

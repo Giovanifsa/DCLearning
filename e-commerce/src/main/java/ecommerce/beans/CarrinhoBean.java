@@ -27,16 +27,37 @@ public class CarrinhoBean implements Serializable {
 	private MecanismoDeHash hashing;
 
 	@Inject
-	SpinnerBean spinnerBean;
-	
-	@Inject
 	DadosSessaoBean dadosSessao;
 	
+	@Inject
+	TemplateBean templeteBean;
 	
+	@Inject
+	LoginBean loginBean;
+	
+	private int spinner = 1;
+	private int max = 50;
+	private Produto produto;	
+
 	/**
 	 * Calcula o preço final (total) da soma do preço de todos os itens e suas quantidades.
 	 * @return Valor total de compra.
 	 */
+	
+	public int getSpinner() {
+		return spinner;
+	}
+	
+	public void setSpinner(int spinner) {
+		this.spinner = spinner;
+	}
+	public int getMax() {
+		return max;
+	}
+	public void setMax(int max) {
+		this.max = max;
+	}
+	
 	public BigDecimal calcularPrecoFinal() {
 		BigDecimal price = new BigDecimal(0);
 		
@@ -86,12 +107,12 @@ public class CarrinhoBean implements Serializable {
 		}
 	}
 	
-	/**
-	 * Calcula a quantidade total de itens no carrinho,
-	 * isto é, soma total da quantidade de todos os produtos do carrinho.
-	 * @return Quantidade total dos produtos do carrinho.
-	 */
 	public int getQuantidadeItens() {
+		/**
+		 * Calcula a quantidade total de itens no carrinho,
+		 * isto é, soma total da quantidade de todos os produtos do carrinho.
+		 * @return Quantidade total dos produtos do carrinho.
+		 */
 		int quantidade = 0;
 		
 		for (ItemCarrinho e : dadosSessao.getProdutosCarrinho()) {
@@ -101,15 +122,12 @@ public class CarrinhoBean implements Serializable {
 		return quantidade;
 	}
 	
-	public List<Produto> produtosCarrinho() {
-		return produtoDao.listarProdutos();
+	public List<ItemCarrinho> produtosCarrinho() {
+		return dadosSessao.getProdutosCarrinho();
 	}
 	
-	@Transactional
-	public String removeProduto(Produto produto) {
-		this.produtoDao.removerProduto(produto);
-		
-		return "carrinhoCompras?faces-redirect=true";
+	public void removerProduto(Produto produto) {
+		dadosSessao.removerProduto(produto);
 	}
 
 	public int selecionarQuantidade() {
@@ -118,71 +136,40 @@ public class CarrinhoBean implements Serializable {
 		if(quantidade == 1) {
 			return quantidade;
 		}
-		return 0;
+		return 0;	
 	}
 	
-	public String continuarComprando() {
-		return "loja?faces-redirect=true";	// RETORNAR A HOME
+	public String voltarParaLoja() {
+		return "loja?faces-redirect=true";
 	}
 	
 	public String finalizarCompra() {
-		return "finalizarCompra?faces-redirect=true";
-	}
-
-	public int qtdeDeUmItemNoCarrinho(Produto produto) {
-			int total = dadosSessao.qtdeDeUmItemNoCarrinho(produto);
-			return total;
-	}
-	
-	public String adicionarViaSpinner(Produto produto) {
 		
-		Long estoque = (Long) produtoDao.getQuantidadeDisponivel(produto);
-		FacesContext facesContext = FacesContext.getCurrentInstance();
-		Integer quantidade = Integer.parseInt(spinnerBean.getValor());
-		
-		if(quantidade > estoque) { // Se não tem disponivel
-			facesContext.getExternalContext().getFlash().setKeepMessages(true);
-			facesContext.addMessage(null, new FacesMessage("Quantidade não disponível em estoque! Spin: " 
-						+ spinnerBean.getValor()));
-			
-			return "carrinhoCompras?faces-redirect=true";
+		if(!loginBean.usuarioEstaLogado()) {
+			templeteBean.adicionarMensagem(FacesMessage.SEVERITY_INFO, 
+					"Para finalizar a sua compra, é necessário fazer o Login!", true);
+			return "login?faces-redirect=true";
 		}
-		
-		facesContext.getExternalContext().getFlash().setKeepMessages(true);
-		facesContext.addMessage("messages", new FacesMessage("Atualizando ... " + spinnerBean.getValor()));
-		
-		ItemCarrinho item = new ItemCarrinho();
-		item.setProduto(produto);
-		item.setQuantidade(quantidade);
-
-		dadosSessao.addUmItemAoCarrinho(item);
-		
-		return "carrinhoCompras?faces-redirect=true";
-	}		
+		return "";
+	}
 	
-	
-	public String removerViaSpinner(Produto produto) {
-
-		dadosSessao.removerProduto(produto, Integer.parseInt(spinnerBean.getValor()));
+	public String atualizarProdutoCarrinho(Produto produto) {
 		
-		FacesContext fc = FacesContext.getCurrentInstance();
-		fc.getExternalContext().getFlash().setKeepMessages(true);
-		fc.addMessage("messages", new FacesMessage("Spinner: " + spinnerBean.getValor()));
-//		item.setQuantidade(spinner.getValor());
-//		dadosSessao.getProdutosCarrinho().add(item);
-		
+//		VERIFICAR DISPONIBILIDADE DO ESTOQUE
+		if(spinner > max) {
+			templeteBean.adicionarMensagem(FacesMessage.SEVERITY_INFO, 
+					"A quantidade máxima disponivel desse produto é " + max + "." , true);	
+		} else {
+		adicionarAoCarrinho(produto, spinner);
+		templeteBean.adicionarMensagem(FacesMessage.SEVERITY_INFO, 
+					"Quantidade do produto atualizada!", true);
+		}
 		return "carrinhoCompras?faces-redirect=true";
 	}
 	
-	
-	public int valorSpin(int val) {
-		return val;
-	}
-	
-	public String testarSpinner() {
-		FacesContext fc = FacesContext.getCurrentInstance();
-		fc.getExternalContext().getFlash().setKeepMessages(true);
-		fc.addMessage("messages", new FacesMessage("Spinner: " + spinnerBean.getValor()));
-		return "teste?faces-redirect=true";
+	public void removerViaSpinner(Produto produto) {
+		
+		dadosSessao.removerItemCarrinho(produto, spinner);
+		spinner = 1;
 	}
 }

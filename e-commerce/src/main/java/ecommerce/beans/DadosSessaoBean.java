@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
-import javax.faces.context.FacesContext;
+import javax.inject.Inject;
 import javax.inject.Named;
 
 import ecommerce.models.ItemCarrinho;
@@ -17,6 +17,9 @@ import ecommerce.models.Usuario;
 public class DadosSessaoBean implements Serializable {
 	//Dados do usuário logado
 	private Usuario usuarioLogado = null;
+	
+	@Inject
+	TemplateBean templateBean;
 	
 	//Produtos adicionados ao carrinho
 	private ArrayList<ItemCarrinho> produtosCarrinho = new ArrayList<>();
@@ -42,50 +45,43 @@ public class DadosSessaoBean implements Serializable {
 		this.produtosCarrinho.add(item);
 	}
 	
-	
-	public String removerProduto(Produto produto, int quantidade) {
+	public String removerProduto(Produto produto) {
+		
+		for (ItemCarrinho item : produtosCarrinho) {
+			if(item.getProduto().equals(produto)) {
+				produtosCarrinho.remove(item);
+				if(produtosCarrinho.isEmpty()) {
+					templateBean.adicionarMensagem(FacesMessage.SEVERITY_INFO, "Produto removido!!", true);
+					return "carrinhoCompras?faces-redirect=true";
+				}
+			}
+		}
+		
+		templateBean.adicionarMensagem(FacesMessage.SEVERITY_INFO, "Produto removido!", true);
+		return "carrinhoCompras?faces-redirect=true";
+	}
+	public String removerItemCarrinho(Produto produto, int quantidade) {
 		/**
 		 * Método para remover determinado produto por quantidade
 		 * @param produto
 		 * @param quantidade
 		 */
 
-		FacesContext facesContext = FacesContext.getCurrentInstance();
 		for (ItemCarrinho item : produtosCarrinho) {
 			
-			if(item.getProduto().getId() == produto.getId()) {// JA TEM NO CARRINHO
+			if(item.getProduto().equals(produto)) {		// PEGA O PRODUTO
 				if(quantidade > item.getQuantidade()) {	//	VERIFICA SE PODE REMOVER
-					facesContext.getExternalContext().getFlash().setKeepMessages(true);
-					facesContext.addMessage(null, new FacesMessage("Valor inválido!"));
-					return "carrinhoCompras?faces-redirect=true";
+					templateBean.adicionarMensagem(FacesMessage.SEVERITY_INFO, "Valor inválido!", true);
+
 				} else {
-					int novaQuantidade = item.getQuantidade() - quantidade;
-					item.setQuantidade(novaQuantidade);
+					item.setQuantidade(item.getQuantidade() - quantidade);
+					if(item.getQuantidade() == 0) {	//	SE NÃO TEM MAIS O PRODUTO
+						removerProduto(produto);
+						return "carrinhoCompras?faces-redirect=true";
+					}
 				}
 			}
 		}
 		return "carrinhoCompras?faces-redirect=true";
 	}
-
-	
-	
-	public int qtdeDeUmItemNoCarrinho(Produto produto) {
-		/**
-		 * Retorna a quantidade de determinado item no carrinho
-		 */
-
-		int valor = 0;
-		
-		for (ItemCarrinho item : produtosCarrinho) {
-			if(item.getProduto().getId() == produto.getId()) {
-				FacesContext facesContext = FacesContext.getCurrentInstance();
-				facesContext.getExternalContext().getFlash().setKeepMessages(true);
-				facesContext.addMessage("t", new FacesMessage("Não funcionando: " +
-						item.getQuantidade() ));
-				
-			}
-		}
-		return valor;
-	}
-
 }

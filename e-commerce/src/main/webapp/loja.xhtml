@@ -15,12 +15,16 @@
 <ui:composition template="gnr_template.xhtml">
 	<ui:define name="body">
 		<b:container fluid="true">
-			<b:form style="background-color:grey" >
+			<b:form style="background-color:grey">
 				<b:panel collapsible="true" style="">
 					Breve informação sobre o site, > > > >
 				</b:panel>
-				<b:commandButton value="Ordenar por preço ^ " col-lg="4"
-					offset-lg="9" size="xs" style="width:45%" look="warning" />
+				<b:commandButton value="Cadastrar loja" col-lg="4" offset-lg="9"
+					size="xs" style="width:45%" look="warning"
+					action="novaLojaBean.cadastrarLoja" />
+				<b:commandButton value="Cadastrar produtos" col-lg="4" offset-lg="9"
+					size="xs" style="width:45%" look="warning"
+					action="novaLoja?faces-redirect=true" />
 				<br />
 
 				<h:outputScript library="bsf" name="js/carousel.js" />
@@ -35,8 +39,8 @@
 						<li data-target="#myCarousel" data-slide-to="4"></li>
 					</ol>
 				</div>
-				
-				<br />				
+
+				<br />
 				<b:carousel interval="3000" slide="5" col-lg="10" offset-lg="1">
 					<b:carouselItem>
 						<img src="#{request.contextPath}/resources/images/cocacola.png"
@@ -66,18 +70,20 @@
 				</b:carousel>
 			</b:form>
 
-			<b:form >
-				<b:panel look="danger" collapsible="false" style="width:100%" col-lg="10" offset-lg="1">
+			<b:form>
+				<b:panel look="danger" collapsible="false" style="width:100%"
+					col-lg="10" offset-lg="1">
 					<f:facet name="heading">
 						<b:iconAwesome value="fa-plus-circle" solid="true"
 							style="padding-left:20px" size="3x" />
-						<h:outputLabel value="Produtos disponíveis na nossa loja"  />
+						<h:outputLabel value="Produtos disponíveis na nossa loja" />
 					</f:facet>
 					<ui:repeat var="produto" value="#{carrinhoBean.produtosCarrinho()}">
 						<b:panelGrid columns="3" layout="grid">
 							<b:thumbnail>
-								<img src="#{request.contextPath}/resources/images/#{produto.imagemProduto.nomeArquivo}"
-									alt="Generic placeholder thumbnail" width="20%"/>
+								<img
+									src="#{request.contextPath}/resources/images/#{produto.imagemProduto.nomeArquivo}"
+									alt="Generic placeholder thumbnail" width="20%" />
 								<f:facet name="#{produto.nome}">
 									<h3>#{produto.nome}</h3>
 									<p>#{produto.descricao}</p>

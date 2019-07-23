@@ -3,6 +3,7 @@ package ecommerce.beans;
 import java.io.Serializable;
 import java.util.List;
 
+import javax.faces.application.FacesMessage;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -18,7 +19,13 @@ public class NovaLojaBean implements Serializable {
 	private Loja loja = new Loja();
 	
 	@Inject
-	private LojaDAO dao;
+	LojaDAO dao;
+	
+	@Inject
+	LoginBean loginBean;
+	
+	@Inject
+	TemplateBean templateBean;
 
 	@Transactional
 	public String salvarLoja() {
@@ -50,6 +57,15 @@ public class NovaLojaBean implements Serializable {
 
 	public List<Loja> listarTodasLojas() {
 		return dao.listarLojas();
+	}
+	
+	public String cadastrarLoja() {
+		if(!loginBean.usuarioEstaLogado()) {
+			templateBean.adicionarMensagem(FacesMessage.SEVERITY_INFO, "Inicie uma sessão para cadastrar sua loja.", true);
+			return "login?faces-redirect=true";
+		} else {
+			return "carrinhoCompras?faces-redirect=true";
+		}
 	}
 
 }
