@@ -4,8 +4,7 @@ import ecommerce.models.ArquivoRecurso;
 import ecommerce.models.Loja;
 
 import java.math.BigDecimal;
-import java.util.Date;
-
+import java.util.Calendar;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -15,6 +14,8 @@ import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
@@ -27,7 +28,6 @@ public class Produto {
 	@Transient
 	public static final ArquivoRecurso IMAGEM_NAO_ENCONTRADA = new ArquivoRecurso("resources/images", "nao_encontrado.png");
 	
-	public static int quantidadeProdutoTotal;
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -41,12 +41,12 @@ public class Produto {
 
 	@Lob
 	private String descricao;
-	private BigDecimal precoFinal;
-	private BigDecimal custo;
+	private BigDecimal precoDeVenda = new BigDecimal(0);
+	private BigDecimal custo = new BigDecimal(0);
 	private int quantidade;
-	private Date data;
-	
-	private BigDecimal preco = new BigDecimal(0);
+	@Temporal(TemporalType.DATE)
+	private Calendar data = Calendar.getInstance();
+	private BigDecimal quantidadeProdutoTotal = new BigDecimal(0);
 	
 	//Valor variando de 0-100 (deve ser dividido por 100 para ter a porcentagem real)
 	private BigDecimal margemDeLucroPorcentual = new BigDecimal(0);
@@ -69,6 +69,7 @@ public class Produto {
 	 */
 	@Override
 	public boolean equals(Object obj) {
+		
 		return (obj != null && obj instanceof Produto && ((Produto)obj).codigo == codigo);
 	}
 
@@ -88,12 +89,12 @@ public class Produto {
 		this.codigo = codigo;
 	}
 
-	public String getNome() {
+	public String getNomeProduto() {
 		return nomeProduto;
 	}
 
-	public void setNome(String nomeProduto) {
-		this.nomeProduto = nomeProduto;
+	public void setNomeProduto(String nome) {
+		this.nomeProduto = nome;
 	}
 
 	public String getDescricao() {
@@ -104,20 +105,9 @@ public class Produto {
 		this.descricao = descricao;
 	}
 
-	public BigDecimal getPreco() {
-		return preco;
-	}
-
-	public void setPreco(BigDecimal preco) {
-		this.preco = preco;
-	}
 
 	public BigDecimal getMargemDeLucroPorcentual() {
 		return margemDeLucroPorcentual;
-		/**
-		 * Calcula o preço final para o usuário (com a margem de lucro do vendedor).
-		 * @return Preço final calculado.
-		 */
 	}
 	
 	public boolean contemImagem() {
@@ -129,19 +119,16 @@ public class Produto {
 	 * @return Preço final calculado.
 	 */
 
-	public BigDecimal calcularPrecoFinal(Produto produto) {
-		return (precoFinal.multiply(margemDeLucroPorcentual).add(precoFinal));
+	public BigDecimal calcularPrecoDeVenda(Produto produto, Loja lojaDoProduto) {
+		BigDecimal preco = new BigDecimal(0);
+	preco = produto.getCusto().add(lojaDoProduto.getDespesaRateada()).
+		multiply(new BigDecimal(1).add(produto.getMargemDeLucroPorcentual()).divide(new BigDecimal(100)));
+			
+			this.precoDeVenda = produto.getCusto().add(preco);
+			
+			return this.precoDeVenda;
 	}
 
-	@SuppressWarnings("deprecation")
-	public BigDecimal calcularPrecoFinal() {
-		return preco.multiply(margemDeLucroPorcentual.divide(new BigDecimal(100))).setScale(2, BigDecimal.ROUND_HALF_UP);
-	}
-	
-	@SuppressWarnings("deprecation")
-	public BigDecimal calcularPrecoFinal(int quantidade) {
-		return preco.multiply(margemDeLucroPorcentual.divide(new BigDecimal(100))).multiply(new BigDecimal(quantidade)).setScale(2, BigDecimal.ROUND_HALF_UP);
-	}
 
 	public void setMargemDeLucroPorcentual(BigDecimal margemDeLucroPorcentual) {
 		this.margemDeLucroPorcentual = margemDeLucroPorcentual;
@@ -184,6 +171,7 @@ public class Produto {
 		this.vendas = vendas;
 	}
 
+
 	public BigDecimal getCusto() {
 		return custo;
 	}
@@ -200,28 +188,29 @@ public class Produto {
 		this.quantidade = quantidade;
 	}
 
-	public Date getData() {
+	public Calendar getData() {
 		return data;
 	}
 
-	public void setData(Date data) {
-		this.data = data;
+	public Calendar setData(Calendar data2) {
+		return this.data = data2;
 	}
 
-	public static int getQuantidadeProdutoTotal() {
+
+	public BigDecimal getPrecoDeVenda() {
+		return precoDeVenda;
+	}
+
+	public BigDecimal setPrecoDeVenda(BigDecimal precoFinal) {
+		return this.precoDeVenda = precoFinal;
+	}
+
+	public BigDecimal getQuantidadeProdutoTotal() {
 		return quantidadeProdutoTotal;
 	}
 
-	public static void setQuantidadeProdutoTotal(int quantidadeProdutoTotal) {
-		Produto.quantidadeProdutoTotal = quantidadeProdutoTotal;
-	}
-
-	public BigDecimal getPrecoFinal() {
-		return precoFinal;
-	}
-
-	public void setPrecoFinal(BigDecimal precoFinal) {
-		this.precoFinal = precoFinal;
+	public void setQuantidadeProdutoTotal(BigDecimal quantidadeProdutoTotal) {
+		this.quantidadeProdutoTotal = quantidadeProdutoTotal;
 	}
 
 

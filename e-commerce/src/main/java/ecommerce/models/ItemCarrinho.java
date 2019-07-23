@@ -32,6 +32,7 @@ public class ItemCarrinho {
 	}
 	
 	public BigDecimal precoTotal() {
-		return produto.getPreco().multiply(new BigDecimal(quantidade));
+		
+		return produto.getPrecoDeVenda().multiply(new BigDecimal(quantidade));
 	}
 }

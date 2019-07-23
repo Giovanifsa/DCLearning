@@ -62,7 +62,7 @@ public class CarrinhoBean implements Serializable {
 		BigDecimal price = new BigDecimal(0);
 		
 		for (ItemCarrinho e : dadosSessao.getProdutosCarrinho()) {
-			price = price.add(e.getProduto().calcularPrecoFinal(e.getQuantidade()));
+			price = price.add(e.getProduto().getPrecoDeVenda().multiply(new BigDecimal(e.getQuantidade())));
 		}
 		
 		return price;

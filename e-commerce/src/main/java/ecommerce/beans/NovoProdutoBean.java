@@ -1,6 +1,8 @@
 package ecommerce.beans;
 
+import java.io.IOException;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,6 +13,8 @@ import javax.servlet.http.Part;
 import ecommerce.control.Transactional;
 import ecommerce.daos.ArquivoDAO;
 import ecommerce.daos.ProdutoDAO;
+import ecommerce.models.ArquivoRecurso;
+import ecommerce.models.Loja;
 import ecommerce.models.ItemCarrinho;
 import ecommerce.models.Produto;
 
@@ -21,11 +25,14 @@ public class NovoProdutoBean implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private Produto produto = new Produto();
+	private Loja lojaDoProduto = new Loja();
 
 	@Inject 
 	private ProdutoDAO dao;
 	@Inject
 	private ArquivoDAO arquivoDAO;
+	
+	
 	
 	private Part imagem;
 	
@@ -33,12 +40,33 @@ public class NovoProdutoBean implements Serializable {
 	
 	//Esse método salva o novo produto
 	@Transactional
-	public String salvarProduto() {
+	public String salvarProduto() throws IOException {
 	
 		if (this.produto.getId()==0) {
+	
+			/**
+			 * Esse método salva a imagem no banco.
+			 */
+			ArquivoRecurso imagemDoProduto = dao.salvarImagemProduto(imagem);
+			produto.setImagemProduto(imagemDoProduto);
+		
+			/**
+			 * Esse método calcula o preço de venda
+			 */			
+			produto.calcularPrecoDeVenda(produto, lojaDoProduto);
+			
+			/**
+			 * Esse salva o produto no banco
+			 */
+			
 			dao.adicionarProduto(this.produto);
 			System.out.println("Produto cadastrado com sucesso!");
+			
 		}else {
+			/**
+			 * Aqui atualiza o produto caso o mesmo já possui registro no banco.
+			 */
+			produto.calcularPrecoDeVenda(produto, lojaDoProduto);
 			dao.atualizarProduto(this.produto);
 			System.out.println("Produto atualizado com sucesso!");
 		}
@@ -47,6 +75,10 @@ public class NovoProdutoBean implements Serializable {
 		
 		return "/novoProduto?faces-redirect=true";
 	}
+
+	
+	
+	
 	
 	//Esse métodp atualiza o produto
 	@Transactional
@@ -75,6 +107,8 @@ public class NovoProdutoBean implements Serializable {
 	public void atualizarProduto(Produto p) {
 		produto = p;
 	}
+	
+	
 
 	//getters and setters
 	

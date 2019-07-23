@@ -17,7 +17,7 @@ public class ProdutoBean implements Serializable {
 	private int produtoId;
 	private Produto produto;
 	
-	private int quantidadeSelecionada = 1;
+	private BigDecimal quantidadeSelecionada = new BigDecimal(1);
 	
 	@Inject
 	private ProdutoDAO produtoDao;
@@ -56,16 +56,16 @@ public class ProdutoBean implements Serializable {
 		return produto.contemImagem() ? "success" : "danger";
 	}
 
-	public int getQuantidadeSelecionada() {
+	public BigDecimal getQuantidadeSelecionada() {
 		return quantidadeSelecionada;
 	}
 
-	public void setQuantidadeSelecionada(int quantidadeSelecionada) {
+	public void setQuantidadeSelecionada(BigDecimal quantidadeSelecionada) {
 		this.quantidadeSelecionada = quantidadeSelecionada;
 	}
 	
 	public BigDecimal calcularPrecoQuantidade() {
-		return produto.calcularPrecoFinal(quantidadeSelecionada);
+		return produto.setPrecoDeVenda(quantidadeSelecionada);
 	}
 	
 	public String adicionarAoCarrinho() {
@@ -75,4 +75,3 @@ public class ProdutoBean implements Serializable {
 		
 		return "produto?faces-redirect=true&produtoId=" + produto.getId();
 	}
-}
