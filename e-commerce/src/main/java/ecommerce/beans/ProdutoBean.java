@@ -2,21 +2,27 @@ package ecommerce.beans;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.List;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import ecommerce.daos.LojaDAO;
 import ecommerce.daos.ProdutoDAO;
+import ecommerce.models.Loja;
 import ecommerce.models.Produto;
 
 @Named
 @ViewScoped
 public class ProdutoBean implements Serializable {
+	//Informações da página produto.xhtml
+	//ViewParam
 	private int produtoId;
 	private Produto produto;
 	
+	//Spinner
 	private int quantidadeSelecionada = 1;
 	
 	@Inject
@@ -27,6 +33,18 @@ public class ProdutoBean implements Serializable {
 	
 	@Inject
 	private TemplateBean templateBean;
+	
+	public BigDecimal calcularPrecoProdutoPelaQuantidadeCarregado() {
+		return produto.calcularPrecoPelaQuantidade(quantidadeSelecionada);
+	}
+	
+	public boolean deveMostrarProdutosMaisVendidos() {
+		return !produtoDao.buscarMaisVendidos(1).isEmpty();
+	}
+	
+	public List<Produto> getProdutosMaisVendidos() {
+		return produtoDao.buscarMaisVendidos(10);
+	}
 	
 	public void carregarProduto() {
 		produto = produtoDao.buscarProduto(produtoId);
@@ -62,10 +80,6 @@ public class ProdutoBean implements Serializable {
 
 	public void setQuantidadeSelecionada(int quantidadeSelecionada) {
 		this.quantidadeSelecionada = quantidadeSelecionada;
-	}
-	
-	public BigDecimal calcularPrecoQuantidade() {
-		return produto.calcularPrecoFinal(quantidadeSelecionada);
 	}
 	
 	public String adicionarAoCarrinho() {

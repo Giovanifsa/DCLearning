@@ -14,8 +14,9 @@ public class Usuario {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	
-	@Column(unique = true)
 	private String nome;
+	
+	@Column(unique = true)
 	private String email;
 	private byte[] senhaHasheada;
 	

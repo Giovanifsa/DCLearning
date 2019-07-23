@@ -45,6 +45,7 @@ public class UsuarioDAO implements Serializable {
 	 * @return
 	 * @throws NoSuchAlgorithmException
 	 */
+	@Transactional
 	public Usuario adicionarUsuario(String nome, String email, String senha) throws NoSuchAlgorithmException {
 		Usuario u = new Usuario(nome, email, hasher.aplicarSHA256(senha.getBytes()));
 		em.persist(u);

@@ -22,6 +22,7 @@ public class Loja implements Serializable {
 	
 	private String cnpj;
 	
+	private int quantiaProdutos;
 	private String nomeFantasia;
 	private BigDecimal despesasTotais;
 	
@@ -43,6 +44,14 @@ public class Loja implements Serializable {
 
 	public Usuario getDono() {
 		return dono;
+	}
+
+	public int getQuantiaProdutos() {
+		return quantiaProdutos;
+	}
+
+	public void setQuantiaProdutos(int quantiaProdutos) {
+		this.quantiaProdutos = quantiaProdutos;
 	}
 
 	public void setDono(Usuario dono) {

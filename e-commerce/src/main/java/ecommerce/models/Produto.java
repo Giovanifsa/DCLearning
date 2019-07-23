@@ -19,16 +19,7 @@ import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
 @Entity
-public class Produto {
-	/*
-	 * Variável static utilizada para representar erro 404 de imagem (não encontrado)
-	 * A imagem é utilizada para quando não há imagens adicionadas ao produto.
-	 */
-	@Transient
-	public static final ArquivoRecurso IMAGEM_NAO_ENCONTRADA = new ArquivoRecurso("resources/images", "nao_encontrado.png");
-	
-	public static int quantidadeProdutoTotal;
-	
+public class Produto {	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
@@ -41,15 +32,11 @@ public class Produto {
 
 	@Lob
 	private String descricao;
-	private BigDecimal precoFinal;
-	private BigDecimal custo;
-	private int quantidade;
+	private BigDecimal custoCompra = new BigDecimal(0);
 	private Date data;
 	
-	private BigDecimal preco = new BigDecimal(0);
-	
 	//Valor variando de 0-100 (deve ser dividido por 100 para ter a porcentagem real)
-	private BigDecimal margemDeLucroPorcentual = new BigDecimal(0);
+	private BigDecimal porcentualMargemLucro = new BigDecimal(0);
 	
 	@OneToOne(fetch = FetchType.EAGER)
 	private ArquivoRecurso imagemProduto;
@@ -103,61 +90,33 @@ public class Produto {
 	public void setDescricao(String descricao) {
 		this.descricao = descricao;
 	}
-
-	public BigDecimal getPreco() {
-		return preco;
-	}
-
-	public void setPreco(BigDecimal preco) {
-		this.preco = preco;
-	}
-
-	public BigDecimal getMargemDeLucroPorcentual() {
-		return margemDeLucroPorcentual;
-	}
 	
 	public boolean contemImagem() {
 		return imagemProduto != null;
 	}
-	
-	/**
-	 * Calcula o preço final para o usuário (com a margem de lucro do vendedor).
-	 * @return Preço final calculado.
-	 */
 
-	public BigDecimal calcularPrecoFinal(Produto produto) {
-		return (precoFinal.multiply(margemDeLucroPorcentual).add(precoFinal));
+	public BigDecimal getCustoCompra() {
+		return custoCompra;
 	}
 
-	@SuppressWarnings("deprecation")
-	public BigDecimal calcularPrecoFinal() {
-		return preco.multiply(margemDeLucroPorcentual.divide(new BigDecimal(100))).setScale(2, BigDecimal.ROUND_HALF_UP);
+	public void setCustoCompra(BigDecimal custoCompra) {
+		this.custoCompra = custoCompra;
 	}
 	
-	@SuppressWarnings("deprecation")
-	public BigDecimal calcularPrecoFinal(int quantidade) {
-		return preco.multiply(margemDeLucroPorcentual.divide(new BigDecimal(100))).multiply(new BigDecimal(quantidade)).setScale(2, BigDecimal.ROUND_HALF_UP);
+	public BigDecimal getPorcentualMargemLucro() {
+		return porcentualMargemLucro;
 	}
 
-	public void setMargemDeLucroPorcentual(BigDecimal margemDeLucroPorcentual) {
-		this.margemDeLucroPorcentual = margemDeLucroPorcentual;
+	public void setPorcentualMargemLucro(BigDecimal porcentualMargemLucro) {
+		this.porcentualMargemLucro = porcentualMargemLucro;
 	}
-	
-	/**
-	 * Retorna a imagem do produto caso exista, ou retorna uma imagem padrão
-	 * de arquivo não encontrado.
-	 * @return
-	 */
-	public ArquivoRecurso getImagemPotencial() {
+
+	public ArquivoRecurso getImagemProduto() {
 		if (imagemProduto != null) {
 			return imagemProduto;
 		}
 		
-		return IMAGEM_NAO_ENCONTRADA;
-	}
-
-	public ArquivoRecurso getImagemProduto() {
-		return imagemProduto;
+		return new ArquivoRecurso("resources/images", "nao_encontrado.png");
 	}
 
 	public void setImagemProduto(ArquivoRecurso imagemProduto) {
@@ -180,22 +139,6 @@ public class Produto {
 		this.vendas = vendas;
 	}
 
-	public BigDecimal getCusto() {
-		return custo;
-	}
-
-	public void setCusto(BigDecimal custo) {
-		this.custo = custo;
-	}
-
-	public int getQuantidade() {
-		return quantidade;
-	}
-
-	public void setQuantidade(int quantidade) {
-		this.quantidade = quantidade;
-	}
-
 	public Date getData() {
 		return data;
 	}
@@ -204,21 +147,14 @@ public class Produto {
 		this.data = data;
 	}
 
-	public static int getQuantidadeProdutoTotal() {
-		return quantidadeProdutoTotal;
+	public BigDecimal calcularPreco() {
+				//(CustoCompra		+ DespesasRateadas=(DespesasTotais / Quantia de produtos da loja))
+		return	(custoCompra.add(lojaDoProduto.getDespesasTotais().divide(new BigDecimal(lojaDoProduto.getQuantiaProdutos()))))
+				//*						(1 + (MargemDeLucro 					/				100))
+				.multiply(new BigDecimal(1).add(porcentualMargemLucro.divide(new BigDecimal(100))));
 	}
-
-	public static void setQuantidadeProdutoTotal(int quantidadeProdutoTotal) {
-		Produto.quantidadeProdutoTotal = quantidadeProdutoTotal;
+	
+	public BigDecimal calcularPrecoPelaQuantidade(int quantidade) {
+		return calcularPreco().multiply(new BigDecimal(quantidade));
 	}
-
-	public BigDecimal getPrecoFinal() {
-		return precoFinal;
-	}
-
-	public void setPrecoFinal(BigDecimal precoFinal) {
-		this.precoFinal = precoFinal;
-	}
-
-
 }

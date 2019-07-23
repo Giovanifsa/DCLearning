@@ -64,16 +64,16 @@ public class ArquivoDAO implements Serializable {
 		}
 		
 		Path arquivoPath;
+		String nomeFinalArquivo;
 		
 		do {
-			arquivoPath = construirCaminho(dir.toString(), gerarNomeAleatorio(32) + "." + extensao);
+			nomeFinalArquivo = gerarNomeAleatorio(32) + extensao;
+			arquivoPath = construirCaminho(dir.toString(), nomeFinalArquivo);
 		} while (Files.exists(arquivoPath));
 			
 		Files.write(arquivoPath, dadosArquivo, StandardOpenOption.CREATE, StandardOpenOption.WRITE);
 		
-		ArquivoRecurso recurso = new ArquivoRecurso();
-		recurso.setNomeArquivo(nomeArquivo);
-		recurso.setNomeDiretorio(nomeDiretorio);
+		ArquivoRecurso recurso = new ArquivoRecurso(nomeDiretorio, nomeFinalArquivo);
 		
 		em.persist(recurso);
 		

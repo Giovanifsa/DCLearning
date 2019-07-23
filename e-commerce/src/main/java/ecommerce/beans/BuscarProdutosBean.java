@@ -18,7 +18,7 @@ public class BuscarProdutosBean implements Serializable {
 	//ViewParam
 	private String b32Buscando;
 	private List<Produto> produtosEncontrados;
-	
+
 	@Inject
 	private TemplateBean pagTemplate;
 	
@@ -27,6 +27,10 @@ public class BuscarProdutosBean implements Serializable {
 
 	public String getB32Buscando() {
 		return b32Buscando;
+	}
+	
+	public List<Produto> getProdutosEncontrados() {
+		return produtosEncontrados;
 	}
 
 	public void setB32Buscando(String b32Buscando) {

@@ -23,6 +23,9 @@ public class ProdutoDAO implements Serializable {
 	@Inject
 	private ArquivoDAO arquivoDao;
 	
+	@Inject
+	private LojaDAO lojaDao;
+	
 	private static Object atualizarProdutoLock = new Object();
 	
 	/**
@@ -67,6 +70,10 @@ public class ProdutoDAO implements Serializable {
 
 	public void adicionarProduto(Produto p) {
 		em.persist(p);
+		
+		//Produto adicionado, devemos atualizar a loja agora
+		//para aumentar o atributo de quantia de produtos dela.
+		lojaDao.somarQuantiaProdutos(p.getLojaDoProduto(), 1);
 	}
 	
 	public Produto buscarProduto(int id) {
@@ -75,6 +82,7 @@ public class ProdutoDAO implements Serializable {
 
 	public void removerProduto(Produto produto) {
 		em.remove(produto);
+		lojaDao.somarQuantiaProdutos(produto.getLojaDoProduto(), -1);
 	}
 	
 	public List<Produto> procurarPorConteudoNome(String nomePesquisa) {
