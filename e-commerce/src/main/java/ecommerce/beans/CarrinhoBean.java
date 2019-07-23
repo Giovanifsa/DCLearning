@@ -10,7 +10,6 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import ecommerce.control.Transactional;
 import ecommerce.daos.ProdutoDAO;
 import ecommerce.models.ItemCarrinho;
 import ecommerce.models.Produto;
@@ -27,13 +26,13 @@ public class CarrinhoBean implements Serializable {
 	private MecanismoDeHash hashing;
 
 	@Inject
-	DadosSessaoBean dadosSessao;
+	private DadosSessaoBean dadosSessao;
 	
 	@Inject
-	TemplateBean templeteBean;
+	private TemplateBean templeteBean;
 	
 	@Inject
-	LoginBean loginBean;
+	private LoginBean loginBean;
 	
 	private int spinner = 1;
 	private int produtoAtualizado;
@@ -61,7 +60,7 @@ public class CarrinhoBean implements Serializable {
 		BigDecimal price = new BigDecimal(0);
 		
 		for (ItemCarrinho e : dadosSessao.getProdutosCarrinho()) {
-			price = price.add(e.getProduto().getPrecoDeVenda().multiply(new BigDecimal(e.getQuantidade())));
+			price = price.add(e.getProduto().calcularPrecoPelaQuantidade((e.getQuantidade())));
 		}
 		
 		return price;
@@ -106,12 +105,12 @@ public class CarrinhoBean implements Serializable {
 		}
 	}
 	
+	/**
+	 * Calcula a quantidade total de itens no carrinho,
+	 * isto é, soma total da quantidade de todos os produtos do carrinho.
+	 * @return Quantidade total dos produtos do carrinho.
+	 */
 	public int getQuantidadeItens() {
-		/**
-		 * Calcula a quantidade total de itens no carrinho,
-		 * isto é, soma total da quantidade de todos os produtos do carrinho.
-		 * @return Quantidade total dos produtos do carrinho.
-		 */
 		int quantidade = 0;
 		
 		for (ItemCarrinho e : dadosSessao.getProdutosCarrinho()) {

@@ -1,10 +1,8 @@
 package ecommerce.models;
 
-import ecommerce.models.ArquivoRecurso;
-import ecommerce.models.Loja;
-
 import java.math.BigDecimal;
-import java.util.Calendar;
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -14,21 +12,9 @@ import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-import javax.persistence.Transient;
-import javax.validation.constraints.NotNull;
 
 @Entity
-public class Produto {
-	/*
-	 * Variável static utilizada para representar erro 404 de imagem (não encontrado)
-	 * A imagem é utilizada para quando não há imagens adicionadas ao produto.
-	 */
-	@Transient
-	public static final ArquivoRecurso IMAGEM_NAO_ENCONTRADA = new ArquivoRecurso("resources/images", "nao_encontrado.png");
-	
-	
+public class Produto {	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
@@ -36,20 +22,15 @@ public class Produto {
 	@Column(unique = true)
 	private long codigo;
 
-	@NotNull
-	private String nomeProduto;
+	private String nome;
 
 	@Lob
 	private String descricao;
-	private BigDecimal precoDeVenda = new BigDecimal(0);
-	private BigDecimal custo = new BigDecimal(0);
-	private int quantidade;
-	@Temporal(TemporalType.DATE)
-	private Calendar data = Calendar.getInstance();
-	private BigDecimal quantidadeProdutoTotal = new BigDecimal(0);
+	private BigDecimal custoCompra;
+	private Date data;
 	
 	//Valor variando de 0-100 (deve ser dividido por 100 para ter a porcentagem real)
-	private BigDecimal margemDeLucroPorcentual = new BigDecimal(0);
+	private BigDecimal porcentualMargemLucro;
 	
 	@OneToOne(fetch = FetchType.EAGER)
 	private ArquivoRecurso imagemProduto;
@@ -69,7 +50,6 @@ public class Produto {
 	 */
 	@Override
 	public boolean equals(Object obj) {
-		
 		return (obj != null && obj instanceof Produto && ((Produto)obj).codigo == codigo);
 	}
 
@@ -89,12 +69,12 @@ public class Produto {
 		this.codigo = codigo;
 	}
 
-	public String getNomeProduto() {
-		return nomeProduto;
+	public String getNome() {
+		return nome;
 	}
 
-	public void setNomeProduto(String nome) {
-		this.nomeProduto = nome;
+	public void setNome(String nome) {
+		this.nome = nome;
 	}
 
 	public String getDescricao() {
@@ -104,51 +84,33 @@ public class Produto {
 	public void setDescricao(String descricao) {
 		this.descricao = descricao;
 	}
-
-
-	public BigDecimal getMargemDeLucroPorcentual() {
-		return margemDeLucroPorcentual;
-	}
 	
 	public boolean contemImagem() {
 		return imagemProduto != null;
 	}
-	
-	/**
-	 * Calcula o preço final para o usuário (com a margem de lucro do vendedor).
-	 * @return Preço final calculado.
-	 */
 
-	public BigDecimal calcularPrecoDeVenda(Produto produto, Loja lojaDoProduto) {
-		BigDecimal preco = new BigDecimal(0);
-	preco = produto.getCusto().add(lojaDoProduto.getDespesaRateada()).
-		multiply(new BigDecimal(1).add(produto.getMargemDeLucroPorcentual()).divide(new BigDecimal(100)));
-			
-			this.precoDeVenda = produto.getCusto().add(preco);
-			
-			return this.precoDeVenda;
+	public BigDecimal getCustoCompra() {
+		return custoCompra;
 	}
 
-
-	public void setMargemDeLucroPorcentual(BigDecimal margemDeLucroPorcentual) {
-		this.margemDeLucroPorcentual = margemDeLucroPorcentual;
+	public void setCustoCompra(BigDecimal custoCompra) {
+		this.custoCompra = custoCompra;
 	}
 	
-	/**
-	 * Retorna a imagem do produto caso exista, ou retorna uma imagem padrão
-	 * de arquivo não encontrado.
-	 * @return
-	 */
-	public ArquivoRecurso getImagemPotencial() {
+	public BigDecimal getPorcentualMargemLucro() {
+		return porcentualMargemLucro;
+	}
+
+	public void setPorcentualMargemLucro(BigDecimal porcentualMargemLucro) {
+		this.porcentualMargemLucro = porcentualMargemLucro;
+	}
+
+	public ArquivoRecurso getImagemProduto() {
 		if (imagemProduto != null) {
 			return imagemProduto;
 		}
 		
-		return IMAGEM_NAO_ENCONTRADA;
-	}
-
-	public ArquivoRecurso getImagemProduto() {
-		return imagemProduto;
+		return new ArquivoRecurso("resources/images", "nao_encontrado.png");
 	}
 
 	public void setImagemProduto(ArquivoRecurso imagemProduto) {
@@ -171,47 +133,20 @@ public class Produto {
 		this.vendas = vendas;
 	}
 
-
-	public BigDecimal getCusto() {
-		return custo;
-	}
-
-	public void setCusto(BigDecimal custo) {
-		this.custo = custo;
-	}
-
-	public int getQuantidade() {
-		return quantidade;
-	}
-
-	public void setQuantidade(int quantidade) {
-		this.quantidade = quantidade;
-	}
-
-	public Calendar getData() {
+	public Date getData() {
 		return data;
 	}
 
-	public Calendar setData(Calendar data2) {
-		return this.data = data2;
+	public void setData(Date data) {
+		this.data = data;
 	}
 
-
-	public BigDecimal getPrecoDeVenda() {
-		return precoDeVenda;
+	public BigDecimal calcularPreco() {
+		return	custoCompra.add(lojaDoProduto.calcularDespesaRateada())
+					.multiply(new BigDecimal(1).add(porcentualMargemLucro.divide(new BigDecimal(100))));
 	}
-
-	public BigDecimal setPrecoDeVenda(BigDecimal precoFinal) {
-		return this.precoDeVenda = precoFinal;
+	
+	public BigDecimal calcularPrecoPelaQuantidade(int quantidade) {
+		return calcularPreco().multiply(new BigDecimal(quantidade));
 	}
-
-	public BigDecimal getQuantidadeProdutoTotal() {
-		return quantidadeProdutoTotal;
-	}
-
-	public void setQuantidadeProdutoTotal(BigDecimal quantidadeProdutoTotal) {
-		this.quantidadeProdutoTotal = quantidadeProdutoTotal;
-	}
-
-
 }

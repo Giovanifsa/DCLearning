@@ -8,7 +8,15 @@
 	xmlns:b="http://bootsfaces.net/ui" 
 	xmlns:p="http://primefaces.org/ui">
 	
+	<f:metadata>
+		<f:viewParam name="redirecionamento" value="#{loginBean.redirecionamento}"></f:viewParam>
+	</f:metadata>
+	
 	<ui:composition template="gnr_template.xhtml">
+		<ui:define name="head">
+			
+		</ui:define>
+	
 		<ui:define name="body">
 			<b:container fluid="true">
 				<b:row>
@@ -16,7 +24,7 @@
 						<b:form>
 							<b:panel look="primary" collapsible="false" >
 								<f:facet name="heading">
-									<b:iconAwesome value="user-circle" solid="true" style="padding-right:20px"/>
+									<b:iconAwesome value="user-circle" solid="true" style="padding-right:20px" addon="true"/>
 									<h:outputLabel value="Iniciar sessão" />
 								</f:facet>
 							
@@ -119,24 +127,27 @@
 					</b:column>
 					
 					<b:column medium-screen="5" large-screen="4" hidden="sm,xs" rendered="true" >
-						<b:panel look="info" collapsible="false">
+						<b:panel look="danger" collapsible="false" >
 							<f:facet name="heading">
 								<b:iconAwesome value="burn" solid="true" style="padding-right:20px"/>
 								<h:outputLabel value="Lançamentos" />
 							</f:facet>
 						
 							<b:carousel interval="3000" disabled="true">
-								<b:carouselItem caption="Filme do homem formiga">
-								    <img src="#{request.contextPath}/resources/images/formiga.png"/>
+								<b:carouselItem caption="Filme do homem formiga" style="height:487px">
+								    <img src="#{request.contextPath}/resources/images/formiga.png" 
+								    	style="width:100%;height:100%" />
 								</b:carouselItem>
 								
-								<b:carouselItem caption="Guardioes">
-								    <img src="#{request.contextPath}/resources/images/guardioes.png"/>
+								<b:carouselItem caption="Guardioes" style="height:487px" >
+								    <img src="#{request.contextPath}/resources/images/guardioes.png" 
+								    	style="width:100%;height:100%" />
 								</b:carouselItem>
 							
 								<ui:repeat var="produto" value="#{loginBean.getProdutosRecentes()}">
-									<b:carouselItem caption="#{produto.nome}">
-								    	<img src="#{request.contextPath}/#{produto.getImagemPotencial().nomeDiretorio}/#{produto.getImagemPotencial().nomeArquivo}" style="object-fit:cover"/>
+									<b:carouselItem caption="#{produto.nome}" style="height:487px">
+								    	<img src="#{request.contextPath}/#{produto.imagemProduto.nomeDiretorio}/#{produto.imagemProduto.nomeArquivo}" 
+								    		 style="width:100%;height:100%" />
 								  	</b:carouselItem>
 								</ui:repeat>
 							</b:carousel>

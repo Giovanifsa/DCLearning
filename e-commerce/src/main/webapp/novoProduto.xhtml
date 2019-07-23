@@ -25,13 +25,13 @@
 						<h:outputText value="Nome:"/>
 
 						<b:inputText id="nomeField"
-							value="#{novoProdutoBean.produto.nomeProduto}" required="true"
+							value="#{novoProdutoBean.produto.nome}" required="true"
 							required-message="Campo necessário." />
 
 						<b:message for="nomeField" />
 
-						<h:outputText value="Custo:" />
-						<b:inputText id="custo" value="#{novoProdutoBean.produto.custo}"
+						<h:outputText value="Custo de compra:" />
+						<b:inputText id="custo" value="#{novoProdutoBean.produto.custoCompra}"
 							required="true" required-message="Campo necessário."
 							placeholder="0.00" />
 
@@ -39,20 +39,13 @@
 
 						<h:outputText value="Margem de Lucro:" />
 						<b:inputText id="margemLucro"
-							value="#{novoProdutoBean.produto.margemDeLucroPorcentual}"
+							value="#{novoProdutoBean.produto.porcentualMargemLucro}"
 							required="true" required-message="Campo necessário."
 							placeholder="0.00%">
 							<f:validateDoubleRange minimum="1.00" />
 						</b:inputText>
 
 						<b:message for="margemLucro" />
-
-						<h:outputText value="Quantidade:" />
-						<b:touchSpin id="quantidade"
-							value="#{novoProdutoBean.produto.quantidade}" required="true"
-							required-message="Campo necessário." />
-
-						<b:message for="quantidade" />
 
 						<h:outputText value="Imagem:" />
 						<h:inputFile id="imagem" value="#{novoProdutoBean.imagem}"
@@ -94,31 +87,24 @@
 								 {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
 								rowsPerPageTemplate="5,10,15">
 								<p:column headerText="Imagem">
-									<img src="#{request.contextPath}/produto.getImagemPotencial().nomeDiretorio/produto.getImagemPotencial().nomeArquivo" />
+									<img src="#{request.contextPath}/#{produto.imagemProduto.nomeDiretorio}/#{produto.imagemProduto.nomeArquivo}" 
+										style="height:50%;width:100%;"/>
 								</p:column>
 
 								<p:column headerText="Nome">
-									<h:outputText value="#{produto.nomeProduto}" />
+									<h:outputText value="#{produto.nome}" />
 								</p:column>
 
 								<p:column headerText="Descrição">
 									<h:outputText value="#{produto.descricao}" />
 								</p:column>
-
-								<p:column headerText="Preço Unit.">
-									<h:outputText value="#{produto.precoDeVenda}" />
-								</p:column>
 								
-								<p:column headerText="Custo">
-									<h:outputText value="#{produto.custo}" />
+								<p:column headerText="Custo de compra">
+									<h:outputText value="#{produto.custoCompra}" />
 								</p:column>
 								
 								<p:column headerText="Margem de Lucro">
-									<h:outputText value="#{produto.margemDeLucroPorcentual}" />
-								</p:column>
-								
-								<p:column headerText="Quantidade">
-									<h:outputText value="#{produto.quantidade}" />
+									<h:outputText value="#{produto.porcentualMargemLucro}" />
 								</p:column>
 								
 								<p:column headerText="Data de Entrada">

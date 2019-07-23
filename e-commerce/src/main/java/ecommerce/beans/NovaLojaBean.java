@@ -19,13 +19,13 @@ public class NovaLojaBean implements Serializable {
 	private Loja loja = new Loja();
 
 	@Inject
-	LojaDAO dao;
+	private LojaDAO dao;
 	
 	@Inject
-	LoginBean loginBean;
-	
+	private LoginBean loginBean;
+
 	@Inject
-	TemplateBean templateBean;
+	private TemplateBean pagTemplate;
 
 	@Transactional
 	public String salvarLoja() {
@@ -72,7 +72,7 @@ public class NovaLojaBean implements Serializable {
 	
 	public String cadastrarLoja() {
 		if(!loginBean.usuarioEstaLogado()) {
-			templateBean.adicionarMensagem(FacesMessage.SEVERITY_INFO, "Inicie uma sessão para cadastrar sua loja.", true);
+			pagTemplate.adicionarMensagem(FacesMessage.SEVERITY_INFO, "Inicie uma sessão para cadastrar sua loja.", true);
 			return "login?faces-redirect=true";
 		} else {
 			return "carrinhoCompras?faces-redirect=true";

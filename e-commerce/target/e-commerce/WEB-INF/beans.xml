@@ -1,5 +1,0 @@
-<beans>
-	<interceptors>
-		<class>ecommerce.control.GerenciadorTransacao</class>
-	</interceptors>
-</beans>

@@ -41,25 +41,23 @@
 						<b:dataTableColumn orderable="false" label="Imagem"
 							style="text-align:center">
 							<img
-								src="#{request.contextPath}/#{tabela.produto.imagemPotencial.nomeDiretorio}/#{tabela.produto.imagemPotencial.nomeArquivo}"
+								src="#{request.contextPath}/#{tabela.produto.imagemProduto.nomeDiretorio}/#{tabela.produto.imagemProduto.nomeArquivo}"
 								width="50px" align="middle" />
 						</b:dataTableColumn>
 
 						<b:column label="Preço" width="9%" style="text-align:center">
 							<br />
-							<h:outputLabel value="R$ #{carrinhoBean.produtoAtualizado}"
-								style="text-align:center" id="idPreco" />
+							<h:outputLabel value="R$ #{tabela.precoTotal()}" style="text-align:center" id="idPreco" />
 						</b:column>
 
 						<b:column label="Quantidade" orderable="false" width="15%"
 							style="text-align:center">
 							<form>
-								<b:touchSpin value="#{tabela.quantidade}"
-									update="@form carrinho:container:painel:tabelaProdutos"
-									large-screen="11" min="#{tabela.produto.quantidade}" step="1"
-									ajax="true" size="1000" vertical-buttons="true"
-									small-screen="half" col-xs="12" col-md="12" col-sm="12"
-									col-lg="12" field-size="large" />
+								<b:touchSpin value="#{tabela.quantidade}" update="idPreco"
+									large-screen="11" min="#{tabela.quantidade}" step="1" ajax="true"
+									size="1000" vertical-buttons="true" small-screen="half"
+									col-xs="12" col-md="12" col-sm="12" col-lg="12"
+									field-size="large"/>
 							</form>
 						</b:column>
 

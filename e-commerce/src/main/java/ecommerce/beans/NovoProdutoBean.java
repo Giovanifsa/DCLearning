@@ -22,7 +22,6 @@ import ecommerce.models.Produto;
 @Named
 @ViewScoped
 public class NovoProdutoBean implements Serializable {
-
 	private static final long serialVersionUID = 1L;
 
 	private Produto produto = new Produto();
@@ -35,8 +34,6 @@ public class NovoProdutoBean implements Serializable {
 	@Inject
 	EntityManager em;
 	
-	
-	
 	private Part imagem;
 	
 	private List<Produto> produtos = new ArrayList<>();
@@ -46,31 +43,19 @@ public class NovoProdutoBean implements Serializable {
 	public String salvarProduto() throws IOException {
 	
 		if (this.produto.getId()==0) {
-	
 			/**
 			 * Esse método salva a imagem no banco.
 			 */
 			ArquivoRecurso imagemDoProduto = dao.salvarImagemProduto(imagem);
 			produto.setImagemProduto(imagemDoProduto);
-		
-			/**
-			 * Esse método calcula o preço de venda
-			 */			
-			produto.calcularPrecoDeVenda(produto, lojaDoProduto);
-			
-			/**
-			 * Esse salva o produto no banco
-			 */
 			
 			dao.adicionarProduto(this.produto);
+			
 			System.out.println("Produto cadastrado com sucesso!");
 			
 		}else {
-			/**
-			 * Aqui atualiza o produto caso o mesmo já possui registro no banco.
-			 */
-			produto.calcularPrecoDeVenda(produto, lojaDoProduto);
 			dao.atualizarProduto(this.produto);
+			
 			System.out.println("Produto atualizado com sucesso!");
 		}
 		
@@ -79,10 +64,6 @@ public class NovoProdutoBean implements Serializable {
 		return "/novoProduto?faces-redirect=true";
 	}
 
-	
-	
-	
-	
 	//Esse métodp atualiza o produto
 	@Transactional
 	public String atualiza(Produto produto) {
@@ -111,10 +92,7 @@ public class NovoProdutoBean implements Serializable {
 		produto = p;
 	}
 	
-	
-
 	//getters and setters
-	
 	public Produto getProduto() {
 		return produto;
 	}

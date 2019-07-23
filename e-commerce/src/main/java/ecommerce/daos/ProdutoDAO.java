@@ -2,20 +2,16 @@ package ecommerce.daos;
 
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
-import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.servlet.http.Part;
 
-import ecommerce.beans.DadosSessaoBean;
 import ecommerce.models.ArquivoRecurso;
-import ecommerce.models.ItemCarrinho;
 import ecommerce.models.Produto;
 import ecommerce.servlets.ServletImagensProduto;
 
@@ -28,7 +24,7 @@ public class ProdutoDAO implements Serializable {
 	private ArquivoDAO arquivoDao;
 	
 	@Inject
-	DadosSessaoBean sessaoBean;
+	private LojaDAO lojaDao;
 	
 	private static Object atualizarProdutoLock = new Object();
 
@@ -49,9 +45,7 @@ public class ProdutoDAO implements Serializable {
 	}
 
 	public List<Produto> listarProdutos() {
-		
-		return em.createQuery("select p for Produto p", Produto.class).getResultList();
-		
+		return em.createQuery("select p from Produto p", Produto.class).getResultList();
 	}
 	
 	public void atualizarProduto(Produto p) {
@@ -74,6 +68,10 @@ public class ProdutoDAO implements Serializable {
 
 	public void adicionarProduto(Produto p) {
 		em.persist(p);
+		
+		//Produto adicionado, devemos atualizar a loja agora
+		//para aumentar o atributo de quantia de produtos dela.
+		lojaDao.somarQuantiaProdutos(p.getLojaDoProduto(), 1);
 	}
 
 	public Produto buscarProduto(int id) {
@@ -82,6 +80,7 @@ public class ProdutoDAO implements Serializable {
 
 	public void removerProduto(Produto produto) {
 		em.remove(produto);
+		lojaDao.somarQuantiaProdutos(produto.getLojaDoProduto(), -1);
 	}
 	
 	public List<Produto> procurarPorConteudoNome(String nomePesquisa) {
