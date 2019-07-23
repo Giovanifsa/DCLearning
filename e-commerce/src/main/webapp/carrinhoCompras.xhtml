@@ -47,17 +47,19 @@
 
 						<b:column label="Preço" width="9%" style="text-align:center">
 							<br />
-							<h:outputLabel value="R$ #{carrinhoBean.produtoAtualizado}" style="text-align:center" id="idPreco" />
+							<h:outputLabel value="R$ #{carrinhoBean.produtoAtualizado}"
+								style="text-align:center" id="idPreco" />
 						</b:column>
-						
-						<b:column label="Quantidade" orderable="false" width="15%" 
-							style="text-align:center" >
+
+						<b:column label="Quantidade" orderable="false" width="15%"
+							style="text-align:center">
 							<form>
-								<b:touchSpin value="#{tabela.quantidade}" update="@form carrinho:container:painel:tabelaProdutos"
-									large-screen="11" min="#{tabela.produto.quantidade}" step="1" ajax="true"
-									size="1000" vertical-buttons="true" small-screen="half"
-									col-xs="12" col-md="12" col-sm="12" col-lg="12"
-									field-size="large"/>
+								<b:touchSpin value="#{tabela.quantidade}"
+									update="@form carrinho:container:painel:tabelaProdutos"
+									large-screen="11" min="#{tabela.produto.quantidade}" step="1"
+									ajax="true" size="1000" vertical-buttons="true"
+									small-screen="half" col-xs="12" col-md="12" col-sm="12"
+									col-lg="12" field-size="large" />
 							</form>
 						</b:column>
 
@@ -89,14 +91,13 @@
 								action="#{carrinhoBean.voltarParaLoja()}" process="@this" />
 
 							<h:form id="idFinal">
-									<b:commandButton value="Finalizar compra" action="#{carrinhoBean.finalizarCompra()}"
-										look="success" onclick="$('.compraFinalizada').modal()"
-										size="md" ajax="false" auto-update="false"
-										class="btn btn-success" small-screen="half"
-										medium-screen="one-fourth" process="@this"
-										large-screen="one-third" col-xs="12" col-ms="6" col-md="4"
-										col-lg="9" offset-md="2" offset-lg="2" autoUpdate="false"
-										/>
+								<b:commandButton value="Finalizar compra"
+									action="#{carrinhoBean.finalizarCompra()}" look="success"
+									onclick="$('.compraFinalizada').modal()" size="md" ajax="false"
+									auto-update="false" class="btn btn-success" small-screen="half"
+									medium-screen="one-fourth" process="@this"
+									large-screen="one-third" col-xs="12" col-ms="6" col-md="4"
+									col-lg="9" offset-md="2" offset-lg="2" autoUpdate="false" />
 								<b:modal id="amodal2" title="Compra finalizada com sucesso!"
 									styleClass="compraFinalizada" closable="false"
 									close-on-escape="true" backdrop="false">
@@ -106,7 +107,7 @@
 										<b:commandButton value="Ok" look="info" dismiss="modal"
 											dir="auto" action="login?faces-redirect=true" />
 									</f:facet>
- 								</b:modal> 
+								</b:modal>
 							</h:form>
 
 						</b:panelGrid>

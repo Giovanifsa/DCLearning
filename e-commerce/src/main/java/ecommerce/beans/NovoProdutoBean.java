@@ -8,6 +8,7 @@ import java.util.List;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import javax.servlet.http.Part;
 
@@ -31,6 +32,8 @@ public class NovoProdutoBean implements Serializable {
 	private ProdutoDAO dao;
 	@Inject
 	private ArquivoDAO arquivoDAO;
+	@Inject
+	EntityManager em;
 	
 	
 	
@@ -143,5 +146,5 @@ public class NovoProdutoBean implements Serializable {
 		Long total = (Long) query.getSingleResult();
 		return total;
 	}
-	
+
 }
