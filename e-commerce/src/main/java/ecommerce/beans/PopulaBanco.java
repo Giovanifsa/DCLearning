@@ -20,6 +20,7 @@ import ecommerce.tools.MecanismoDeHash;
 
 public class PopulaBanco {
 
+
 	@Inject
 	EntityManager em;
 	
@@ -113,6 +114,7 @@ public class PopulaBanco {
 		p0.setVendas(50);
 		p0.setCusto(new BigDecimal(13));
 	
+		Calendar data = Calendar.getInstance();
 		p0.setData(data);
 		
 		Produto p1 = new Produto();
@@ -128,7 +130,7 @@ public class PopulaBanco {
 		p1.setLojaDoProduto(s1);
 		p1.setMargemDeLucroPorcentual(new BigDecimal(2.20));
 		p1.setVendas(40);
-		Calendar data1 = 
+		Calendar data1 = Calendar.getInstance();
 		p1.setData(data1);
 		
 		Produto p2 = new Produto();
@@ -140,7 +142,7 @@ public class PopulaBanco {
 		p2.setLojaDoProduto(s2);
 		p2.setMargemDeLucroPorcentual(new BigDecimal(2.20));
 		p2.setVendas(50);
-		Date data2 = new Date(11/11/2011);
+		Calendar data2 = Calendar.getInstance();
 		p2.setData(data2);
 		
 		Produto p3 = new Produto();
@@ -152,7 +154,7 @@ public class PopulaBanco {
 		p3.setLojaDoProduto(s3);
 		p3.setMargemDeLucroPorcentual(new BigDecimal(2.20));
 		p3.setVendas(50);
-		Date data3 = new Date(11/11/2011);
+		Calendar data3=Calendar.getInstance();
 		p3.setData(data3);
 		
 		em.getTransaction().begin();
