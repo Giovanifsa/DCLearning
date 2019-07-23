@@ -14,7 +14,6 @@ import ecommerce.control.Transactional;
 import ecommerce.daos.ProdutoDAO;
 import ecommerce.models.ItemCarrinho;
 import ecommerce.models.Produto;
-import ecommerce.models.Spinner;
 import ecommerce.tools.MecanismoDeHash;
 
 @SuppressWarnings("serial")
@@ -28,10 +27,11 @@ public class CarrinhoBean implements Serializable {
 	private MecanismoDeHash hashing;
 
 	@Inject
-	Spinner spinner;
+	SpinnerBean spinnerBean;
 	
 	@Inject
-	private DadosSessaoBean dadosSessao;
+	DadosSessaoBean dadosSessao;
+	
 	
 	/**
 	 * Calcula o preço final (total) da soma do preço de todos os itens e suas quantidades.
@@ -122,29 +122,67 @@ public class CarrinhoBean implements Serializable {
 	}
 	
 	public String continuarComprando() {
-		return "novaLoja?faces-redirect=true";	// RETORNAR A HOME
+		return "loja?faces-redirect=true";	// RETORNAR A HOME
 	}
 	
 	public String finalizarCompra() {
 		return "finalizarCompra?faces-redirect=true";
 	}
 
-	public String atualizarQuantidade(Produto produto) {
-		//	POR ENQUANTO FAZ UM COUNT NO BANCO, TEM QUE MUDAR PRA COUNT NO ESTOQUE		
-		Long estoque = produtoDao.quantidadeDisponivel(produto);
+	public int qtdeDeUmItemNoCarrinho(Produto produto) {
+			int total = dadosSessao.qtdeDeUmItemNoCarrinho(produto);
+			return total;
+	}
+	
+	public String adicionarViaSpinner(Produto produto) {
 		
-		if(spinner.getValor() > estoque) {
-			FacesContext.getCurrentInstance().addMessage("messages", new FacesMessage("Quantidade indisponível!"));
-			//	TESTAR ESSA MENSAGEM QUANDO TIVER A TELA DE PRODUTOS			
+		Long estoque = (Long) produtoDao.getQuantidadeDisponivel(produto);
+		FacesContext facesContext = FacesContext.getCurrentInstance();
+		Integer quantidade = Integer.parseInt(spinnerBean.getValor());
+		
+		if(quantidade > estoque) { // Se não tem disponivel
+			facesContext.getExternalContext().getFlash().setKeepMessages(true);
+			facesContext.addMessage(null, new FacesMessage("Quantidade não disponível em estoque! Spin: " 
+						+ spinnerBean.getValor()));
+			
+			return "carrinhoCompras?faces-redirect=true";
 		}
 		
+		facesContext.getExternalContext().getFlash().setKeepMessages(true);
+		facesContext.addMessage("messages", new FacesMessage("Atualizando ... " + spinnerBean.getValor()));
+		
 		ItemCarrinho item = new ItemCarrinho();
-
 		item.setProduto(produto);
-		item.setQuantidade(spinner.getValor());
-		dadosSessao.getProdutosCarrinho().add(item);
+		item.setQuantidade(quantidade);
+
+		dadosSessao.addUmItemAoCarrinho(item);
+		
+		return "carrinhoCompras?faces-redirect=true";
+	}		
+	
+	
+	public String removerViaSpinner(Produto produto) {
+
+		dadosSessao.removerProduto(produto, Integer.parseInt(spinnerBean.getValor()));
+		
+		FacesContext fc = FacesContext.getCurrentInstance();
+		fc.getExternalContext().getFlash().setKeepMessages(true);
+		fc.addMessage("messages", new FacesMessage("Spinner: " + spinnerBean.getValor()));
+//		item.setQuantidade(spinner.getValor());
+//		dadosSessao.getProdutosCarrinho().add(item);
 		
 		return "carrinhoCompras?faces-redirect=true";
 	}
 	
+	
+	public int valorSpin(int val) {
+		return val;
+	}
+	
+	public String testarSpinner() {
+		FacesContext fc = FacesContext.getCurrentInstance();
+		fc.getExternalContext().getFlash().setKeepMessages(true);
+		fc.addMessage("messages", new FacesMessage("Spinner: " + spinnerBean.getValor()));
+		return "teste?faces-redirect=true";
+	}
 }

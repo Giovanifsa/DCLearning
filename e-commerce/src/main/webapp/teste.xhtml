@@ -1,4 +1,4 @@
-
+<!-- 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -10,10 +10,42 @@
 
 <ui:composition template="gnr_template.xhtml">
 	<ui:define name="body">
+<<<<<<< HEAD
+
+		<b:carousel style="width:80px" disabled="true" interval="3000">
+			<b:carouselItem>
+				<img src="#{request.contextPath}/resources/images/formiga.png" />
+			</b:carouselItem>
+			<b:carouselItem>
+				<img src="#{request.contextPath}/resources/images/guardioes.png" />
+			</b:carouselItem>
+			<b:carouselItem>
+				<img src="#{request.contextPath}/resources/images/guardioes.png" />
+			</b:carouselItem>
+
+		</b:carousel>
+		<b:form>
+			<b:formGroup>
+				<b:touchSpin id="spin" value="#{spinnerBean.valor}" large-screen="11"
+					min="1" step="1" ajax="true" size="100" rendered="true"
+					vertical-buttons="true" small-screen="half" col-xs="12" col-md="12"
+					col-sm="12" col-lg="6" field-size="large" />
+	
+				<h:outputLabel value="#{carrinhoBean.valorSpin(spin)}"  />
+				<h:messages id="messages"/>
+	
+				<b:commandButton value="minus" ajax="true "
+					action="#{carrinhoBean.testarSpinner()}" col-lg="6" col-sm="12"
+					col-md="12" size="sm" update="@form" process="@this">
+				</b:commandButton>
+			</b:formGroup>
+		</b:form>
+=======
 		<h:form>
 			<h:panelGrid columns="2" cellpadding="5" styleClass="ui-grid">
 				
 				<h:outputLabel for="idSpinner" value="Algum valor: " />
+>>>>>>> origin/desenvolvimento
 
 				<br/>
 				
@@ -49,3 +81,150 @@
 </ui:composition>
 
 </html>
+ -->
+ 
+ <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui" xmlns:b="http://bootsfaces.net/ui"
+	xmlns:jsf="http://xmlns.jcp.org/jsf/composite">
+
+
+<ui:composition template="gnr_template.xhtml">
+	<ui:define name="body">
+		<b:form id="carrinho">
+			<h:outputLabel />
+
+			<!-- 			<b:carousel style="width:80px" disabled="true" interval="3000"> -->
+			<!-- 				<b:carouselItem> -->
+			<!-- 					<img src="#{request.contextPath}/resources/images/formiga.png" /> -->
+			<!-- 				</b:carouselItem> -->
+			<!-- 				<b:carouselItem> -->
+			<!-- 					<img src="#{request.contextPath}/resources/images/guardioes.png" /> -->
+			<!-- 				</b:carouselItem> -->
+			<!-- 				<b:carouselItem> -->
+			<!-- 					<img src="#{request.contextPath}/resources/images/guardioes.png" /> -->
+			<!-- 				</b:carouselItem> -->
+			<!-- 			</b:carousel> -->
+			<!-- 			<h:outputLabel -->
+			<!-- 				value="Se der tempo, implementar carousel de propagandas." /> -->
+
+			<b:container id="container" align="center" class="">
+				<b:messages id="messages" />
+				<b:panel title="Carrinho de compras" look="primary"
+					collapsible="false" small-screen="12" medium-screen="12"
+					large-screen="12" showCollapseLink="false" tooltip-position="right"
+					rendered="true" id="painel" icon="shopping-cart" icon-align="right"
+					display="inline">
+
+
+					<b:dataTable value="#{carrinhoBean.produtosCarrinho()}"
+						responsive="true" var="produto" id="tabelaProdutos"
+						fixedHeader="true" scroll-horizontally="true"
+						mark-search-results="false" paginated="false" rendered="true"
+						scroll-size="true" selection-info="false" info="false" col-xs="12"
+						col-sm="12" col-md="12" col-lg="12" tiny-screen="half">
+
+						<b:dataTableColumn label="Produto" style="text-align:center">
+							<h:outputText value="#{produto.nome}" />
+						</b:dataTableColumn>
+
+						<b:dataTableColumn label="Descrição" style="text-align:center">
+							<h:outputLabel value="#{produto.descricao}" />
+						</b:dataTableColumn>
+
+						<b:dataTableColumn orderable="false" label="Imagem"
+							style="text-align:center">
+							<img
+								src="#{request.contextPath}/resources/images/#{produto.imagemProduto.nomeArquivo}"
+								width="50px" align="middle" />
+						</b:dataTableColumn>
+
+						<b:dataTableColumn label="Quantidade" width="10%"
+							style="text-align:center">
+							<br />
+							<b:badge value="#{carrinhoBean.qtdeDeUmItemNoCarrinho(produto)}"
+								col-lg="10" col-md="10" col-sm="10" offset-sm="1" col-xs="12" />
+
+						</b:dataTableColumn>
+
+						<b:dataTableColumn orderable="false" width="15%" label="Atualizar"
+							style="text-align:center">
+
+							<p:spinner value="#{spinnerBean.valor}" size="8" stepFactor="2.0">
+								
+							</p:spinner>
+							
+
+							<br />
+							<br />
+
+							<b:commandButton
+								action="#{carrinhoBean.adicionarViaSpinner(produto)}"
+								process="@this" rendered="true" size="sm" col-xs="12"
+								col-sm="12" col-lg="12" col-md="12" value="plus">
+							</b:commandButton>
+
+
+							<b:commandButton value="minus"
+								action="#{carrinhoBean.removerViaSpinner(produto)}" col-xs="12"
+								col-sm="12" col-md="12" size="sm" process="@this">
+								<b:icon value="minus" size="sm" /> -->
+ 							</b:commandButton>
+
+
+						</b:dataTableColumn>
+
+						<b:dataTableColumn width="9%" label="Preço"
+							style="text-align:center">
+							<br />
+							<h:outputLabel value="R$ " style="text-align:center">
+								 #{produto.preco}
+							</h:outputLabel>
+						</b:dataTableColumn>
+
+						<b:dataTableColumn orderable="false" width="9%" label="Remover"
+							style="text-align:center">
+							<br />
+							<b:commandButton action="#{carrinhoBean.removeProduto(produto)}"
+								process="@this" class="btn btn-danger" title="Remover produto"
+								ajax="true" update="@form" col-xs="12" col-sm="12" col-md="12"
+								colLg="40">
+
+								<b:icon value="trash" col-xs="12" col-sm="2" />
+								<br />
+							</b:commandButton>
+						</b:dataTableColumn>
+					</b:dataTable>
+					<b:panel>
+						<b:panelGrid col-spans="6,6" columns="12" rendered="true"
+							col-xs="12" col-sm="12" col-md="12" col-lg="12"
+							small-screen="three-fourths" medium-screen="three-fourths"
+							large-screen="three-fourths">
+							<b:commandButton value="Voltar ao site" rendered="true"
+								title="Voltar ao site" small-screen="half"
+								medium-screen="three-fourths" large-screen="three-fourths"
+								col-xs="12" col-ms="6" col-md="4" col-lg="9" offset-md="1"
+								offset-lg="2" class="btn btn-primary" look="primary"
+								onclick="#{carrinhoBean.continuarComprando()}" process="@this" />
+
+							<b:commandButton value="Finalizar compra" id="botaoFinalizar"
+								title="Finalizar compra" class="btn btn-success" rendered="true"
+								small-screen="half" medium-screen="one-fourth"
+								large-screen="one-third" col-xs="12" col-ms="6" col-md="4"
+								col-lg="9" offset-md="2" offset-lg="2" />
+						</b:panelGrid>
+					</b:panel>
+				</b:panel>
+
+			</b:container>
+
+		</b:form>
+	</ui:define>
+</ui:composition>
+</html>
+ 

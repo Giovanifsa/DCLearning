@@ -7,8 +7,10 @@ import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.management.RuntimeErrorException;
 import javax.persistence.EntityManager;
 import javax.servlet.http.Part;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
 import ecommerce.models.ArquivoRecurso;
@@ -24,25 +26,28 @@ public class ProdutoDAO implements Serializable {
 	private ArquivoDAO arquivoDao;
 	
 	private static Object atualizarProdutoLock = new Object();
-	
+
 	/**
 	 * Obtém os produtos adicionados recentemente ao banco de dados.
+	 * 
 	 * @param quantidadeLimite Quantia limite de produtos à obter.
 	 * @return Lista contendo os produtos recentes (pode ser menor que a quantidade)
 	 */
 	public List<Produto> buscarProdutosRecentes(int quantidadeLimite) {
-		return em.createQuery("SELECT p FROM " + Produto.class.getSimpleName() + " p ORDER BY p.id DESC", Produto.class).setMaxResults(quantidadeLimite).getResultList();
+		return em.createQuery("SELECT p FROM " + Produto.class.getSimpleName() + " p ORDER BY p.id DESC", Produto.class)
+				.setMaxResults(quantidadeLimite).getResultList();
 	}
-	
+
 	public List<Produto> buscarMaisVendidos(int quantidadeLimite) {
-		return em.createQuery("SELECT p FROM " + Produto.class.getSimpleName() + " p ORDER BY p.sells DESC", Produto.class).setMaxResults(quantidadeLimite).getResultList();
+		return em.createQuery("SELECT p FROM " + Produto.class.getSimpleName() + " p ORDER BY p.sells DESC",
+				Produto.class).setMaxResults(quantidadeLimite).getResultList();
 	}
 
 	public List<Produto> listarProdutos() {
 		/**
-		 * Retorna uma lista de todos os produtos na tabela de produtos,
-		 * depois de implementado a tela de vendas, deve retornar os produtos
-		 * adicionados ao carrinho, para preencher a tela do carrinho
+		 * Retorna uma lista de todos os produtos na tabela de produtos, depois de
+		 * implementado a tela de vendas, deve retornar os produtos adicionados ao
+		 * carrinho, para preencher a tela do carrinho
 		 */
 		return em.createQuery("select p from Produto p", Produto.class).getResultList();
 	}
@@ -50,7 +55,7 @@ public class ProdutoDAO implements Serializable {
 	public void atualizarProduto(Produto p) {
 		em.merge(p);
 	}
-	
+
 	/**
 	 * Utilize esse método para atualizar a quantia de vendas de um produto.
 	 * Este método é thread-safe, portanto, ele aumenta as vendas de um produto
@@ -60,7 +65,7 @@ public class ProdutoDAO implements Serializable {
 		synchronized (atualizarProdutoLock) {
 			Produto dbp = em.find(Produto.class, p.getId());
 			dbp.setVendas(dbp.getVendas() + quantia);
-			
+
 			em.merge(dbp);
 		}
 	}
@@ -68,7 +73,7 @@ public class ProdutoDAO implements Serializable {
 	public void adicionarProduto(Produto p) {
 		em.persist(p);
 	}
-	
+
 	public Produto buscarProduto(int id) {
 		return em.find(Produto.class, id);
 	}
@@ -84,20 +89,20 @@ public class ProdutoDAO implements Serializable {
 		return query.getResultList();
 	}
 
-	public Long quantidadeDisponivel(Produto produto) {
-		
+	public Long getQuantidadeDisponivel(Produto produto) {
+
 		/**
-		 * Retorna a quantidade de um produto na tabela produtos.
-		 * No momento propício, deve retornar a quantidade de produtos
-		 * adicionados ao carrinho, através da tela de vendas.
+		 * Esse método retora a quantidade de determinado no estoque.
+		 * 
+		 * @return Long
+		 * @param produto
 		 */
-		
-		String jpql = "select count(p) from Produto p";
-		
-		@SuppressWarnings("unchecked")
-		TypedQuery<Long> query = (TypedQuery<Long>) em.createQuery(jpql);
-		
-		return query.getSingleResult();
+
+		String jpql = "select count(p) from Produto p where p.id = " + produto.getId();
+
+		Query query = em.createQuery(jpql, Produto.class);
+		Long total = (Long) query.getSingleResult();
+		return total;
 	}
 	
 	public ArquivoRecurso salvarImagemProduto(Part imagem) throws IOException {

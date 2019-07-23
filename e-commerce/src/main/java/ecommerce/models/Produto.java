@@ -110,6 +110,10 @@ public class Produto {
 
 	public BigDecimal getMargemDeLucroPorcentual() {
 		return margemDeLucroPorcentual;
+		/**
+		 * Calcula o preço final para o usuário (com a margem de lucro do vendedor).
+		 * @return Preço final calculado.
+		 */
 	}
 	
 	public boolean contemImagem() {

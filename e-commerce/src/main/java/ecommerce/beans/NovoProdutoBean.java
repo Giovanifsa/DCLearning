@@ -107,4 +107,8 @@ public class NovoProdutoBean implements Serializable {
 		this.arquivoDAO = arquivoDAO;
 	}
 	
+	public Long getQuantidadeDisponivel(Produto produto) {
+		return dao.getQuantidadeDisponivel(produto);
+	}
+	
 }

@@ -13,11 +13,12 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
 
+import ecommerce.control.Transactional;
 import ecommerce.models.ArquivoRecurso;
 
 @Named
 public class ArquivoDAO implements Serializable {
-	private static final Path DIRETORIO = Paths.get(System.getProperty("user.home") + File.separator + "ArquivosECommerce");
+	private static final File DIRETORIO = new File(System.getProperty("user.home") + File.separator + "ArquivosECommerce" + File.separator);
 	private final SecureRandom geradorAleatorio;
 	
 	@Inject
@@ -25,6 +26,7 @@ public class ArquivoDAO implements Serializable {
 	
 	public ArquivoDAO() {
 		geradorAleatorio = new SecureRandom();
+		DIRETORIO.mkdirs();
 	}
 	
 	private String gerarNomeAleatorio(int caracteres) {
@@ -43,18 +45,10 @@ public class ArquivoDAO implements Serializable {
 		return str;
 	}
 	
-	/**
-	 * Salva um caminho para um arquivo no disco local no banco de dados, e 
-	 * grava o arquivo na pasta do usuário.
-	 * @param nomeArquivo Nome do arquivo a ser salvo.
-	 * @param nomeDiretorio Diretório que será salvo na pasta do usuário.
-	 * @param dadosArquivo Bytes do arquivo que serão salvos.
-	 * @return ArquivoRecurso denotando o nome gerado para o arquivo e o diretório salvo.
-	 * @throws IOException
-	 */
+	@Transactional
 	public ArquivoRecurso salvarArquivo(String nomeArquivo, String nomeDiretorio, byte[] dadosArquivo) throws IOException {
-		Path dir = construirCaminho(DIRETORIO.toString(), nomeDiretorio);
-		Files.createDirectories(dir);
+		File dir = new File(DIRETORIO.getAbsolutePath() + nomeDiretorio + File.separator);
+		dir.mkdirs();
 		
 		String extensao = "";
 		int indice = nomeArquivo.lastIndexOf(".");
@@ -63,12 +57,8 @@ public class ArquivoDAO implements Serializable {
 			extensao = nomeArquivo.substring(indice);
 		}
 		
-		Path arquivoPath;
-		
-		do {
-			arquivoPath = construirCaminho(dir.toString(), gerarNomeAleatorio(32) + "." + extensao);
-		} while (Files.exists(arquivoPath));
-			
+		String novoNomeArq = gerarNomeAleatorio(32) + "." + extensao;
+		Path arquivoPath = Paths.get(dir.getAbsolutePath() + novoNomeArq);
 		Files.write(arquivoPath, dadosArquivo, StandardOpenOption.CREATE, StandardOpenOption.WRITE);
 		
 		ArquivoRecurso recurso = new ArquivoRecurso();
@@ -78,36 +68,5 @@ public class ArquivoDAO implements Serializable {
 		em.persist(recurso);
 		
 		return recurso;
-	}
-	
-	public byte[] carregarArquivo(ArquivoRecurso recurso) throws IOException {
-		Path diretorioRecurso = construirCaminho(DIRETORIO.toString(), recurso.getNomeDiretorio(), recurso.getNomeArquivo());
-		return Files.readAllBytes(diretorioRecurso);
-	}
-	
-	/**
-	 * Constrói uma referência à um diretório de arquivos a partir de uma lista de strings.
-	 * Caso haja mais que uma string, os diretórios serão construídos dessa forma:
-	 * diretorio1/diretorio2/diretorio3/diretorio.../arquivo.png
-	 * 
-	 * @param caminhos
-	 * @return
-	 */
-	public static Path construirCaminho(String... caminhos) {
-		String pathFinal = "";
-		
-		if (caminhos.length > 1) {
-			pathFinal += caminhos[0];
-			
-			for (int i = 1; i < caminhos.length; i++) {
-				pathFinal += File.separator + caminhos[i];
-			}
-		}
-		
-		else if (caminhos.length > 0) {
-			pathFinal += caminhos[0];
-		}
-		
-		return Paths.get(pathFinal);
 	}
 }
