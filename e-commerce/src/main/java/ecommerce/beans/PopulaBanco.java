@@ -3,6 +3,7 @@ package ecommerce.beans;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.security.NoSuchAlgorithmException;
+import java.util.Calendar;
 import java.util.Date;
 
 import javax.inject.Inject;
@@ -92,48 +93,48 @@ public class PopulaBanco {
 		
 		Produto p0 = new Produto();
 		p0.setCodigo(0034534L);
-<<<<<<< HEAD
+
 		p0.setDescricao("Filme da Capitã Marvel");
-		p0.setNome("Capitã Marvel");
+		p0.setNomeProduto("Capitã Marvel");
 		p0.setPrecoDeVenda(new BigDecimal(2));
-=======
+
 		p0.setDescricao("Na década de 1960, a NASA planeja realizar uma das missões "
 				+ "mais arriscadas de todos os tempos: fazer o homem pisar na Lua pela "
 				+ "primeira vez. Durante a preparação, o astronauta Neil Armstrong "
 				+ "enfrenta falhas e tragédias pessoais, o que torna sua jornada histórica "
 				+ "até a Lua ainda mais desafiadora. Vencedor do Oscar de Melhores Efeitos "
 				+ "Visuais.");
-		p0.setNome("O Primeiro homem");
-		p0.setPreco(new BigDecimal(30.0));
->>>>>>> origin/desenvolvimento
+		p0.setNomeProduto("O Primeiro homem");
+		p0.setPrecoDeVenda(new BigDecimal(30.0));
+
 		p0.setImagemProduto(file0);
 		p0.setLojaDoProduto(s0);
 		p0.setMargemDeLucroPorcentual(new BigDecimal(2.20));
 		p0.setVendas(50);
 		p0.setCusto(new BigDecimal(13));
-		Date data = new Date(11/11/2011);
+	
 		p0.setData(data);
 		
 		Produto p1 = new Produto();
 		p1.setCodigo(145342L);
 		p1.setDescricao("Filme do Homem Formiga");
-		p1.setNome("Homem Formiga");
-<<<<<<< HEAD
+		p1.setNomeProduto("Homem Formiga");
+
 		p1.setPrecoDeVenda(new BigDecimal(3));
-=======
-		p1.setPreco(new BigDecimal(20));
->>>>>>> origin/desenvolvimento
+
+		p1.setPrecoDeVenda(new BigDecimal(20));
+
 		p1.setImagemProduto(file1);
 		p1.setLojaDoProduto(s1);
 		p1.setMargemDeLucroPorcentual(new BigDecimal(2.20));
 		p1.setVendas(40);
-		Date data1 = new Date(11/11/2011);
+		Calendar data1 = 
 		p1.setData(data1);
 		
 		Produto p2 = new Produto();
 		p2.setCodigo(2453542223L);
 		p2.setDescricao("Filme dos Guardioes da Galaxia");
-		p2.setNome("Guardioes da Galaxia");
+		p2.setNomeProduto("Guardioes da Galaxia");
 		p2.setPrecoDeVenda(new BigDecimal(5.9));
 		p2.setImagemProduto(file2);
 		p2.setLojaDoProduto(s2);
@@ -145,7 +146,7 @@ public class PopulaBanco {
 		Produto p3 = new Produto();
 		p3.setCodigo(345345334L);
 		p3.setDescricao("Filme do Hulk");
-		p3.setNome("O Incrivel Hulk");
+		p3.setNomeProduto("O Incrivel Hulk");
 		p3.setPrecoDeVenda(new BigDecimal(3.9));
 		p3.setImagemProduto(file3);
 		p3.setLojaDoProduto(s3);

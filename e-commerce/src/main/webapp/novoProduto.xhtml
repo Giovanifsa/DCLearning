@@ -16,13 +16,13 @@
 					<b:panelGrid colSpans="2,8,2">
 						<h:outputText value="Código:" />
 
-						<b:inputText id="codigo" value="#{novoProdutoBean.produto.codigoProduto}"
+						<b:inputText id="codigo" value="#{novoProdutoBean.produto.codigo}"
 							required="true" required-message="Campo necessário."
 							maxlength="6" size="6" />
 
 						<b:message for="codigo" />
 
-						<h:outputText value="Nome:" />
+						<h:outputText value="Nome:"/>
 
 						<b:inputText id="nomeField"
 							value="#{novoProdutoBean.produto.nomeProduto}" required="true"
@@ -31,14 +31,11 @@
 						<b:message for="nomeField" />
 
 						<h:outputText value="Custo:" />
-						<b:inputText id="custo" value="#{novoProdutoBean.produto.custoDeCompra}"
+						<b:inputText id="custo" value="#{novoProdutoBean.produto.custo}"
 							required="true" required-message="Campo necessário."
 							placeholder="0.00" />
-						<h:outputText value="preco:" />
-						<b:inputText id="preco" value="#{novoProdutoBean.produto.preco}"
-							required="true" required-message="Campo necessário." />
 
-						<b:message for="preco" />
+						<b:message for="custo" />
 
 						<h:outputText value="Margem de Lucro:" />
 						<b:inputText id="margemLucro"
@@ -58,13 +55,14 @@
 						<b:message for="quantidade" />
 
 						<h:outputText value="Imagem:" />
-						<h:inputFile id="imagem" value="#{novoProdutoBean.imagemProduto}"
+						<h:inputFile id="imagem" value="#{novoProdutoBean.imagem}"
 							required="true" required-message="Uma imagem é necessária." />
 
 						<b:message for="imagem" />
 
 						<h:outputText value="Data de Entrada:" />
-						<h:outputText value="#{novoProdutoBean.produto.dataDeEntrada}" />
+						<h:outputText value="#{novoProdutoBean.produto.data}" />
+						<f:convertDateTime binding="#{conversorDeCalendario}"/>
 						<br />
 
 						<h:outputText value="Descrição:" />
@@ -96,7 +94,7 @@
 								 {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
 								rowsPerPageTemplate="5,10,15">
 								<p:column headerText="Imagem">
-									<p:graphicImage value="#{produto.imagemProduto}"></p:graphicImage>
+									<img src="#{request.contextPath}/produto.getImagemPotencial().nomeDiretorio/produto.getImagemPotencial().nomeArquivo" />
 								</p:column>
 
 								<p:column headerText="Nome">
@@ -112,7 +110,7 @@
 								</p:column>
 								
 								<p:column headerText="Custo">
-									<h:outputText value="#{produto.custoDeCompra}" />
+									<h:outputText value="#{produto.custo}" />
 								</p:column>
 								
 								<p:column headerText="Margem de Lucro">
@@ -124,11 +122,11 @@
 								</p:column>
 								
 								<p:column headerText="Data de Entrada">
-									<h:outputText value="#{produto.dataDeEntrada}" />
+									<h:outputText value="#{produto.data}" />
 								</p:column>
 								
 								<p:column headerText="Código">
-									<h:outputText value="#{produto.codigoProduto}" />
+									<h:outputText value="#{produto.codigo}" />
 								</p:column>
 								
 								<p:column headerText="Editar">

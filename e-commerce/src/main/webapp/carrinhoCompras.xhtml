@@ -45,7 +45,6 @@
 								src="#{request.contextPath}/resources/images/#{produto.imagemProduto.nomeArquivo}"
 								width="50px" align="middle" />
 						</b:dataTableColumn>
-<<<<<<< HEAD
 
 						<b:dataTableColumn label="Quantidade" width="10%"
 							style="text-align:center" searchable="true">
@@ -58,17 +57,12 @@
 
 						<b:dataTableColumn orderable="false" width="15%" label="Atualizar"
 							style="text-align:center">
-=======
-						
-						<b:dataTableColumn orderable="false" width="15%"
-							label="Quantidade">
->>>>>>> origin/desenvolvimento
 
 							<b:touchSpin id="spin" value="#{spinnerBean.valor}" type="text"
 								large-screen="11" min="1" step="1" delay="true" size="1000"
 								vertical-buttons="true" small-screen="half" col-xs="12"
 								col-md="12" col-sm="12" col-lg="12" field-size="large" />
-
+						</b:dataTableColumn>
 							<br />
 							<br />
 							<b:commandButton col-md="10" process="@this"
@@ -87,18 +81,13 @@
 							</b:commandButton>
 
 
-						</b:dataTableColumn>
+				
 
 						<b:dataTableColumn width="9%" label="Preço"
 							style="text-align:center">
 							<br />
-<<<<<<< HEAD
 							<h:outputLabel value="R$ " id="idPreco" style="text-align:center">
 								 #{produto.precoDeVenda}
-=======
-							<h:outputLabel value="R$ " style="text-align:center">
-								 #{produto.preco}
->>>>>>> origin/desenvolvimento
 							</h:outputLabel>
 						</b:dataTableColumn>
 
@@ -117,13 +106,6 @@
 					</b:dataTable>
 					<b:panel>
 						<b:panelGrid col-spans="6,6" columns="12" rendered="true"
-							col-xs="12" col-sm="12" col-md="12" col-lg="12"
-							small-screen="three-fourths" medium-screen="three-fourths"
-							large-screen="three-fourths">
-							<b:commandButton value="Voltar ao site" rendered="true"
-<<<<<<< HEAD
-								title="Voltar ao site" small-screen="half"
-=======
 								title="Continuar comprando na loja" small-screen="half"
 								medium-screen="three-fourths" large-screen="three-fourths"
 								col-xs="12" col-ms="6" col-md="4" col-lg="9" offset-md="1"
@@ -135,7 +117,6 @@
 								small-screen="half" medium-screen="one-fourth"
 								large-screen="one-third" col-xs="12" col-ms="6" col-md="4"
 								col-lg="9" offset-md="2" offset-lg="2" action="finalizarCompra?faces-redirect=true"/>
-						</b:panelGrid>
 					</b:panel>
 				</b:panel>
 
