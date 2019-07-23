@@ -44,54 +44,23 @@
 								src="#{request.contextPath}/#{tabela.produto.imagemPotencial.nomeDiretorio}/#{tabela.produto.imagemPotencial.nomeArquivo}"
 								width="50px" align="middle" />
 						</b:dataTableColumn>
-
-						<b:dataTableColumn label="Quantidade" width="10%"
-							style="text-align:center" searchable="true">
+						
+						<b:column width="9%" style="text-align:center" label="Preço">
 							<br />
-							<b:badge value="#{tabela.quantidade}" col-lg="10" col-md="10"
-								col-sm="10" offset-sm="1" col-xs="12" />
-
-						</b:dataTableColumn>
-
-						<b:dataTableColumn orderable="false" width="15%" label="Atualizar"
+							<h:outputLabel value="R$ #{carrinhoBean.produtoAtualizado}" style="text-align:center" id="idPreco" />
+						</b:column>
+						
+						<b:column label="Quantidade" orderable="false" width="15%" 
 							style="text-align:center" >
-
-							<b:form>
-								<b:touchSpin id="idSpinner" value="#{carrinhoBean.spinner}"
+							<form>
+								<b:touchSpin value="#{tabela.quantidade}" update="idPreco"
 									large-screen="11" min="#{tabela.produto.quantidade}" step="1" ajax="true"
 									size="1000" vertical-buttons="true" small-screen="half"
 									col-xs="12" col-md="12" col-sm="12" col-lg="12"
 									field-size="large"/>
-
-								<br />
-								<br />
-							<b:formGroup>
-								<b:commandButton
-									action="#{carrinhoBean.atualizarProdutoCarrinho(tabela.produto)}"
-									process="@this" rendered="true" size="sm" col-xs="12"
-									col-sm="12" col-lg="12" col-md="12" look="primary"> 
-									<b:icon value="plus" size="sm" />
-								</b:commandButton>
-
-								<b:commandButton
-									action="#{carrinhoBean.removerViaSpinner(tabela.produto)}"
-									col-xs="12" col-sm="12" col-md="12" size="sm" process="@this"
-									look="warning">
-									<b:icon value="minus" size="sm" />
-								</b:commandButton>
-							</b:formGroup>
-							</b:form>
-
-				
-
-						<b:dataTableColumn width="9%" label="Preço"
-							style="text-align:center">
-							<br />
-							<h:outputLabel value="R$ " style="text-align:center">
-								 #{tabela.produto.preco}
-							</h:outputLabel>
-						</b:dataTableColumn>
-
+							</form>
+						</b:column>
+	
 						<b:dataTableColumn orderable="false" width="9%" label="Remover"
 							style="text-align:center">
 							<br />

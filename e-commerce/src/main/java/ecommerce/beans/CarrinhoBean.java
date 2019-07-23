@@ -36,8 +36,7 @@ public class CarrinhoBean implements Serializable {
 	LoginBean loginBean;
 	
 	private int spinner = 1;
-	private int max = 50;
-	private Produto produto;	
+	private int produtoAtualizado;
 
 	/**
 	 * Calcula o preço final (total) da soma do preço de todos os itens e suas quantidades.
@@ -51,11 +50,11 @@ public class CarrinhoBean implements Serializable {
 	public void setSpinner(int spinner) {
 		this.spinner = spinner;
 	}
-	public int getMax() {
-		return max;
+	public int getProdutoAtualizado() {
+		return produtoAtualizado;
 	}
-	public void setMax(int max) {
-		this.max = max;
+	public void setMax(int produtoAtualizado) {
+		this.produtoAtualizado = produtoAtualizado;
 	}
 	
 	public BigDecimal calcularPrecoFinal() {
@@ -153,23 +152,10 @@ public class CarrinhoBean implements Serializable {
 		return "";
 	}
 	
-	public String atualizarProdutoCarrinho(Produto produto) {
+	public void atualizarProdutoCarrinho(Produto produto) {
 		
-//		VERIFICAR DISPONIBILIDADE DO ESTOQUE
-		if(spinner > max) {
-			templeteBean.adicionarMensagem(FacesMessage.SEVERITY_INFO, 
-					"A quantidade máxima disponivel desse produto é " + max + "." , true);	
-		} else {
-		adicionarAoCarrinho(produto, spinner);
-		templeteBean.adicionarMensagem(FacesMessage.SEVERITY_INFO, 
-					"Quantidade do produto atualizada!", true);
-		}
-		return "carrinhoCompras?faces-redirect=true";
-	}
-	
-	public void removerViaSpinner(Produto produto) {
+//	
 		
-		dadosSessao.removerItemCarrinho(produto, spinner);
-		spinner = 1;
 	}
+
 }

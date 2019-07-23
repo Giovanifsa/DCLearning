@@ -2,20 +2,20 @@ package ecommerce.beans;
 
 import java.io.IOException;
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.persistence.Query;
 import javax.servlet.http.Part;
+
 import ecommerce.control.Transactional;
 import ecommerce.daos.ArquivoDAO;
 import ecommerce.daos.ProdutoDAO;
 import ecommerce.models.ArquivoRecurso;
 import ecommerce.models.Loja;
-import ecommerce.models.ItemCarrinho;
 import ecommerce.models.Produto;
 
 @Named
