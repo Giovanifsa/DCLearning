@@ -22,7 +22,7 @@
 
 						<b:message for="codigo" />
 
-						<h:outputText value="Nome:" />
+						<h:outputText value="Nome:"/>
 
 						<b:inputText id="nomeField"
 							value="#{novoProdutoBean.produto.nome}" required="true"
@@ -30,8 +30,8 @@
 
 						<b:message for="nomeField" />
 
-						<h:outputText value="Custo:" />
-						<b:inputText id="custo" value="#{novoProdutoBean.produto.custo}"
+						<h:outputText value="Custo de compra:" />
+						<b:inputText id="custo" value="#{novoProdutoBean.produto.custoCompra}"
 							required="true" required-message="Campo necessário."
 							placeholder="0.00" />
 
@@ -39,7 +39,7 @@
 
 						<h:outputText value="Margem de Lucro:" />
 						<b:inputText id="margemLucro"
-							value="#{novoProdutoBean.produto.margemDeLucroPorcentual}"
+							value="#{novoProdutoBean.produto.porcentualMargemLucro}"
 							required="true" required-message="Campo necessário."
 							placeholder="0.00%">
 							<f:validateDoubleRange minimum="1.00" />
@@ -47,33 +47,16 @@
 
 						<b:message for="margemLucro" />
 
-						<h:outputText value="Quantidade:" />
-						<b:touchSpin id="quantidade"
-							value="#{novoProdutoBean.produto.quantidade}" required="true"
-							required-message="Campo necessário." />
-
-						<b:message for="quantidade" />
-
 						<h:outputText value="Imagem:" />
 						<h:inputFile id="imagem" value="#{novoProdutoBean.imagem}"
 							required="true" required-message="Uma imagem é necessária." />
 
 						<b:message for="imagem" />
 
-						<h:outputText value="Data:" />
-						<b:datepicker id="data" value="#{novoProdutoBean.produto.data}"
-							mode="popup-icon" showButtonPanel="true" changeMonth="true"
-							changeYear="true" required="true"
-							required-message="Campo necessário.">
-
-							<f:convertDateTime locale="pt_BR" dateStyle="short"
-								pattern="dd/MM/yyyy" timeZone="Amercia/Sao_Paulo">
-							</f:convertDateTime>
-						</b:datepicker>
-
-
-
-						<b:message for="data" />
+						<h:outputText value="Data de Entrada:" />
+						<h:outputText value="#{novoProdutoBean.produto.data}" />
+						<f:convertDateTime binding="#{conversorDeCalendario}"/>
+						<br />
 
 						<h:outputText value="Descrição:" />
 						<b:inputTextarea id="descricao"
@@ -98,53 +81,64 @@
 						collapsible="false" large-screen="10" medium-screen="7">
 
 						<h:form>
-							<b:dataTable id="tabelaProdutos"
-								value="#{novoProdutoBean.produtos}" var="produto"
-								class="tabelaProdutoCadastrado" striped="true" responsive="true">
+							<p:dataTable var="produto" value="#{novoProdutoBean.produtos}" rows="10"
+								paginator="true"
+								paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink}
+								 {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+								rowsPerPageTemplate="5,10,15">
+								<p:column headerText="Imagem">
+									<img src="#{request.contextPath}/#{produto.imagemProduto.nomeDiretorio}/#{produto.imagemProduto.nomeArquivo}" 
+										style="height:50%;width:100%;"/>
+								</p:column>
 
-								<b:dataTableColumn label="Imagem"
-									value="#{produto.imagemProduto}" />
+								<p:column headerText="Nome">
+									<h:outputText value="#{produto.nome}" />
+								</p:column>
 
-								<b:dataTableColumn label="Nome" value="#{produto.nome}"
-									orderable="true" order-by="dom-text" />
-
-								<b:dataTableColumn label="Descrição"
-									value="#{produto.descricao}" order-by="dom-text" />
-
-								<b:dataTableColumn label="Preço" value="#{produto.precoFinal}"
-									order="asc" />
-
-								<b:dataTableColumn label="Custo" value="#{produto.custo}"
-									order="asc" />
-
-								<b:dataTableColumn label="Margem de Lucro"
-									value="#{produto.margemDeLucroPorcentual}" order="asc" />
-
-								<b:dataTableColumn label="Quantidade"
-									value="#{produto.quantidade}" />
-
-								<b:dataTableColumn label="Data de entrada"
-									value="#{produto.data}" />
-
-
-								<b:dataTableColumn label="Código" value="#{produto.codigo}"
-									order="asc" />
-
-								<b:dataTableColumn label="Editar" value="Editar">
-									<b:commandButton value="Editar" icon="edit" ajax="true"
+								<p:column headerText="Descrição">
+									<h:outputText value="#{produto.descricao}" />
+								</p:column>
+								
+								<p:column headerText="Custo de compra">
+									<h:outputText value="#{produto.custoCompra}" />
+								</p:column>
+								
+								<p:column headerText="Margem de Lucro">
+									<h:outputText value="#{produto.porcentualMargemLucro}" />
+								</p:column>
+								
+								<p:column headerText="Data de Entrada">
+									<h:outputText value="#{produto.data}" />
+								</p:column>
+								
+								<p:column headerText="Código">
+									<h:outputText value="#{produto.codigo}" />
+								</p:column>
+								
+								<p:column headerText="Editar">
+									<h:commandButton value="Editar" id="ajax" 
 										update=":formCadastroProduto"
-										action="#{novoProdutoBean.atualizarProduto(produto)}"
-										process="@this">
-
-									</b:commandButton>
-								</b:dataTableColumn>
-								<b:dataTableColumn label="Deletar" value="Deletar">
-									<b:commandButton value="Deletar" iconAwesome="trash"
-										ajax="true" action="#{novoProdutoBean.deletaProduto(produto)}">
+										action="#{novoProdutoBean.atualizarProduto(produto)}" >
 										<f:ajax execute="@this" render="@form" />
-									</b:commandButton>
-								</b:dataTableColumn>
-							</b:dataTable>
+									</h:commandButton>
+									</p:column>
+									<p:column headerText="Deletar">
+										<h:commandButton value="Deletar" 
+											ajax="true"
+											action="#{novoProdutoBean.deletaProduto(produto)}">
+											<f:ajax execute="@this" render="@form" />
+										</h:commandButton>
+									</p:column>
+
+								<f:facet name="paginatorTopLeft">
+									<p:commandButton type="button" icon="pi pi-refresh" />
+								</f:facet>
+
+								<f:facet name="paginatorBottomRight">
+									<p:commandButton type="button" icon="pi pi-cloud-upload" />
+								</f:facet>
+
+							</p:dataTable>
 						</h:form>
 					</b:panel>
 				</b:container>

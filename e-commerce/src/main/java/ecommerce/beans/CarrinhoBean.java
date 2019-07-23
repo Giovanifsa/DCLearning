@@ -10,11 +10,9 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import ecommerce.control.Transactional;
 import ecommerce.daos.ProdutoDAO;
 import ecommerce.models.ItemCarrinho;
 import ecommerce.models.Produto;
-import ecommerce.models.Spinner;
 import ecommerce.tools.MecanismoDeHash;
 
 @SuppressWarnings("serial")
@@ -28,15 +26,36 @@ public class CarrinhoBean implements Serializable {
 	private MecanismoDeHash hashing;
 
 	@Inject
-	Spinner spinner;
-	
-	@Inject
 	private DadosSessaoBean dadosSessao;
 	
+	@Inject
+	private TemplateBean templeteBean;
+	
+	@Inject
+	private LoginBean loginBean;
+	
+	private int spinner = 1;
+	private int produtoAtualizado;
+
 	/**
 	 * Calcula o preço final (total) da soma do preço de todos os itens e suas quantidades.
 	 * @return Valor total de compra.
 	 */
+	
+	public int getSpinner() {
+		return spinner;
+	}
+	
+	public void setSpinner(int spinner) {
+		this.spinner = spinner;
+	}
+	public int getProdutoAtualizado() {
+		return produtoAtualizado;
+	}
+	public void setMax(int produtoAtualizado) {
+		this.produtoAtualizado = produtoAtualizado;
+	}
+	
 	public BigDecimal calcularPrecoFinal() {
 		BigDecimal price = new BigDecimal(0);
 		
@@ -101,15 +120,12 @@ public class CarrinhoBean implements Serializable {
 		return quantidade;
 	}
 	
-	public List<Produto> produtosCarrinho() {
-		return produtoDao.listarProdutos();
+	public List<ItemCarrinho> produtosCarrinho() {
+		return dadosSessao.getProdutosCarrinho();
 	}
 	
-	@Transactional
-	public String removeProduto(Produto produto) {
-		this.produtoDao.removerProduto(produto);
-		
-		return "carrinhoCompras?faces-redirect=true";
+	public void removerProduto(Produto produto) {
+		dadosSessao.removerProduto(produto);
 	}
 
 	public int selecionarQuantidade() {
@@ -118,33 +134,27 @@ public class CarrinhoBean implements Serializable {
 		if(quantidade == 1) {
 			return quantidade;
 		}
-		return 0;
+		return 0;	
 	}
 	
-	public String continuarComprando() {
-		return "novaLoja?faces-redirect=true";	// RETORNAR A HOME
+	public String voltarParaLoja() {
+		return "loja?faces-redirect=true";
 	}
 	
 	public String finalizarCompra() {
-		return "finalizarCompra?faces-redirect=true";
-	}
-
-	public String atualizarQuantidade(Produto produto) {
-		//	POR ENQUANTO FAZ UM COUNT NO BANCO, TEM QUE MUDAR PRA COUNT NO ESTOQUE		
-		Long estoque = produtoDao.quantidadeDisponivel(produto);
 		
-		if(spinner.getValor() > estoque) {
-			FacesContext.getCurrentInstance().addMessage("messages", new FacesMessage("Quantidade indisponível!"));
-			//	TESTAR ESSA MENSAGEM QUANDO TIVER A TELA DE PRODUTOS			
+		if(!loginBean.usuarioEstaLogado()) {
+			templeteBean.adicionarMensagem(FacesMessage.SEVERITY_INFO, 
+					"Para finalizar a sua compra, é necessário fazer o Login!", true);
+			return "login?faces-redirect=true";
 		}
-		
-		ItemCarrinho item = new ItemCarrinho();
-
-		item.setProduto(produto);
-		item.setQuantidade(spinner.getValor());
-		dadosSessao.getProdutosCarrinho().add(item);
-		
-		return "carrinhoCompras?faces-redirect=true";
+		return "";
 	}
 	
+	public void atualizarProdutoCarrinho(Produto produto) {
+		
+//	
+		
+	}
+
 }

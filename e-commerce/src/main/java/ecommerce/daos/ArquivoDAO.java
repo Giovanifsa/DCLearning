@@ -17,7 +17,7 @@ import ecommerce.models.ArquivoRecurso;
 
 @Named
 public class ArquivoDAO implements Serializable {
-	private static final Path DIRETORIO = Paths.get(System.getProperty("user.home") + File.separator + "ArquivosECommerce");
+	private static final File DIRETORIO = new File(System.getProperty("user.home") + File.separator + "ArquivosECommerce" + File.separator);
 	private final SecureRandom geradorAleatorio;
 	
 	@Inject
@@ -45,11 +45,11 @@ public class ArquivoDAO implements Serializable {
 	
 	/**
 	 * Salva um caminho para um arquivo no disco local no banco de dados, e 
-	 * grava o arquivo na pasta do usu√°rio.
+	 * grava o arquivo na pasta do usu·rio.
 	 * @param nomeArquivo Nome do arquivo a ser salvo.
-	 * @param nomeDiretorio Diret√≥rio que ser√° salvo na pasta do usu√°rio.
-	 * @param dadosArquivo Bytes do arquivo que ser√£o salvos.
-	 * @return ArquivoRecurso denotando o nome gerado para o arquivo e o diret√≥rio salvo.
+	 * @param nomeDiretorio DiretÛrio que ser· salvo na pasta do usu·rio.
+	 * @param dadosArquivo Bytes do arquivo que ser„o salvos.
+	 * @return ArquivoRecurso denotando o nome gerado para o arquivo e o diretÛrio salvo.
 	 * @throws IOException
 	 */
 	public ArquivoRecurso salvarArquivo(String nomeArquivo, String nomeDiretorio, byte[] dadosArquivo) throws IOException {
@@ -86,8 +86,8 @@ public class ArquivoDAO implements Serializable {
 	}
 	
 	/**
-	 * Constr√≥i uma refer√™ncia √† um diret√≥rio de arquivos a partir de uma lista de strings.
-	 * Caso haja mais que uma string, os diret√≥rios ser√£o constru√≠dos dessa forma:
+	 * ConstrÛi uma referÍncia ‡ um diretÛrio de arquivos a partir de uma lista de strings.
+	 * Caso haja mais que uma string, os diretÛrios ser„o construÌdos dessa forma:
 	 * diretorio1/diretorio2/diretorio3/diretorio.../arquivo.png
 	 * 
 	 * @param caminhos

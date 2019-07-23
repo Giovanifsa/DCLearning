@@ -9,9 +9,7 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import ecommerce.daos.LojaDAO;
 import ecommerce.daos.ProdutoDAO;
-import ecommerce.models.Loja;
 import ecommerce.models.Produto;
 
 @Named
@@ -83,6 +81,7 @@ public class ProdutoBean implements Serializable {
 	}
 	
 	public String adicionarAoCarrinho() {
+		// Verificar se existe no estoque
 		carrinhoBean.adicionarAoCarrinho(produto, quantidadeSelecionada);
 		templateBean.adicionarMensagem(FacesMessage.SEVERITY_INFO, "Produto " + produto.getNome() + "(" + quantidadeSelecionada + ") adicionado ao carrinho!", true);
 		

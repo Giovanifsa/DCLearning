@@ -1,5 +1,6 @@
 package ecommerce.beans;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -8,18 +9,21 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.servlet.http.Part;
+
 import ecommerce.control.Transactional;
 import ecommerce.daos.ArquivoDAO;
 import ecommerce.daos.ProdutoDAO;
+import ecommerce.models.ArquivoRecurso;
+import ecommerce.models.Loja;
 import ecommerce.models.Produto;
 
 @Named
 @ViewScoped
 public class NovoProdutoBean implements Serializable {
-
 	private static final long serialVersionUID = 1L;
 
 	private Produto produto = new Produto();
+	private Loja lojaDoProduto = new Loja();
 
 	@Inject 
 	private ProdutoDAO dao;
@@ -32,13 +36,22 @@ public class NovoProdutoBean implements Serializable {
 	
 	//Esse método salva o novo produto
 	@Transactional
-	public String salvarProduto() {
+	public String salvarProduto() throws IOException {
 	
 		if (this.produto.getId()==0) {
+			/**
+			 * Esse método salva a imagem no banco.
+			 */
+			ArquivoRecurso imagemDoProduto = dao.salvarImagemProduto(imagem);
+			produto.setImagemProduto(imagemDoProduto);
+			
 			dao.adicionarProduto(this.produto);
+			
 			System.out.println("Produto cadastrado com sucesso!");
+			
 		}else {
 			dao.atualizarProduto(this.produto);
+			
 			System.out.println("Produto atualizado com sucesso!");
 		}
 		
@@ -46,7 +59,7 @@ public class NovoProdutoBean implements Serializable {
 		
 		return "/novoProduto?faces-redirect=true";
 	}
-	
+
 	//Esse métodp atualiza o produto
 	@Transactional
 	public String atualiza(Produto produto) {
@@ -74,9 +87,8 @@ public class NovoProdutoBean implements Serializable {
 	public void atualizarProduto(Produto p) {
 		produto = p;
 	}
-
-	//getters and setters
 	
+	//getters and setters
 	public Produto getProduto() {
 		return produto;
 	}
@@ -100,5 +112,4 @@ public class NovoProdutoBean implements Serializable {
 	public void setArquivoDAO(ArquivoDAO arquivoDAO) {
 		this.arquivoDAO = arquivoDAO;
 	}
-	
 }

@@ -13,89 +13,104 @@
 	<ui:define name="body">
 		<b:form id="carrinho">
 			<h:outputLabel />
-			<h:messages id="messages" />
-			<b:container id="container" align="center" class="">
+
+			<b:container id="container">
 				<b:panel title="Carrinho de compras" look="primary"
-					collapsible="false" large-screen="12" medium-screen="12"
-					showCollapseLink="false" tooltip-position="right" small-screen="12"
-					rendered="true" largeScreen="12" id="painel" icon="shopping-cart"
-					icon-align="right" display="inline-block">
+					collapsible="false" small-screen="12" medium-screen="12"
+					large-screen="12" showCollapseLink="false" tooltip-position="right"
+					rendered="true" id="painel" icon="shopping-cart" icon-align="right"
+					display="inline">
+
+					<h:outputLabel id="t" />
 
 					<b:dataTable value="#{carrinhoBean.produtosCarrinho()}"
-						responsive="true" var="produto" id="tabelaProdutos"
+						responsive="true" var="tabela" id="tabelaProdutos"
 						fixedHeader="true" scroll-horizontally="true"
 						mark-search-results="false" paginated="false" rendered="true"
-						scroll-size="true" selection-info="false" info="false" col-md="12"
-						col-lg="12" col-xs="12">
+						scroll-size="true" selection-info="false" info="false" col-xs="12"
+						col-sm="12" col-md="12" col-lg="12" tiny-screen="half">
 
-						<b:dataTableColumn label="Produto">
-							#{produto.nome}
+						<b:dataTableColumn label="Produto" style="text-align:center">
+							#{tabela.produto.nome}
 						</b:dataTableColumn>
 
-						<b:dataTableColumn label="Descrição">
-							#{produto.descricao}								
+						<b:dataTableColumn label="Descrição" style="text-align:center">
+							#{tabela.produto.descricao}
 						</b:dataTableColumn>
 
-						<b:dataTableColumn orderable="false" label="Imagem">
+						<b:dataTableColumn orderable="false" label="Imagem"
+							style="text-align:center">
 							<img
-								src="#{request.contextPath}/resources/images/#{produto.imagemProduto.nomeArquivo}"
+								src="#{request.contextPath}/#{tabela.produto.imagemProduto.nomeDiretorio}/#{tabela.produto.imagemProduto.nomeArquivo}"
 								width="50px" align="middle" />
 						</b:dataTableColumn>
 						
-						<b:dataTableColumn orderable="false" width="15%"
-							label="Quantidade">
-
-							<b:touchSpin id="spin" col-md="1" value="#{spinner.valor}"
-								large-screen="11" min="1" max="8" step="1" ajax="true"
-								size="1000" rendered="true" vertical-buttons="true" />
-
+						<b:column width="9%" style="text-align:center" label="Preço">
 							<br />
+							<h:outputLabel value="R$ #{tabela.precoTotal()}" style="text-align:center" id="idPreco" />
+						</b:column>
+						
+						<b:column label="Quantidade" orderable="false" width="15%" 
+							style="text-align:center" >
+							<form>
+								<b:touchSpin value="#{tabela.quantidade}" update="idPreco"
+									large-screen="11" min="#{tabela.quantidade}" step="1" ajax="true"
+									size="1000" vertical-buttons="true" small-screen="half"
+									col-xs="12" col-md="12" col-sm="12" col-lg="12"
+									field-size="large"/>
+							</form>
+						</b:column>
+	
+						<b:dataTableColumn orderable="false" width="9%" label="Remover"
+							style="text-align:center">
 							<br />
-							<b:commandButton col-md="10" process="@this"
-								action="#{carrinhoBean.atualizarQuantidade(produto)}"
-								auto-update="true" rendered="true" update="@this" size="sm"
-								large-screen="11" style-class="btn btn-warning"
-								title="Atualizar quantidade no carrinho">
-								<b:icon value="refresh" />
-							</b:commandButton>
-						</b:dataTableColumn>
+							<b:commandButton
+								action="#{carrinhoBean.removerProduto(tabela.produto)}"
+								process="@form carrinho:container:painel:tabelaProdutos"
+								class="btn btn-danger" title="Remover produto" ajax="true"
+								update="@form carrinho:container:painel:tabelaProdutos"
+								col-xs="12" col-sm="12" col-md="12" colLg="40">
 
-						<b:dataTableColumn width="9%" label="Preço">
-							<br />
-							<h:outputLabel value="R$ " id="idPreco" style="text-align:center">
-								 #{produto.preco}
-							</h:outputLabel>
-						</b:dataTableColumn>
-
-						<b:dataTableColumn orderable="false" width="9%" label="Remover">
-							<br />
-							<b:commandButton action="#{carrinhoBean.removeProduto(produto)}"
-								process="@this" class="btn btn-danger" colLg="40"
-								title="Remover produto" ajax="true" update="@form">
-								<b:icon value="trash" />
+								<b:icon value="trash" col-xs="12" col-sm="2" />
 								<br />
 							</b:commandButton>
 						</b:dataTableColumn>
 					</b:dataTable>
-					<b:panel>
+					<b:form>
 						<b:panelGrid col-spans="6,6" columns="12" rendered="true"
 							col-xs="12" col-sm="12" col-md="12" col-lg="12"
 							small-screen="three-fourths" medium-screen="three-fourths"
 							large-screen="three-fourths">
 							<b:commandButton value="Voltar ao site" rendered="true"
-								title="Continuar comprando na loja" small-screen="half"
+								title="Voltar ao site" small-screen="half" ajax="true"
 								medium-screen="three-fourths" large-screen="three-fourths"
-								col-xs="6" col-ms="6" col-md="4" col-lg="9" offset-md="1"
-								offset-lg="2" class="btn btn-primary"
-								onclick="#{carrinhoBean.continuarComprando()}" process="@this" />
+								col-xs="12" col-ms="6" col-md="4" col-lg="9" offset-md="1"
+								offset-lg="2" class="btn btn-primary" look="primary"
+								action="#{carrinhoBean.voltarParaLoja()}" process="@this" />
 
-							<b:commandButton value="Finalizar compra" id="botaoFinalizar"
-								title="Finalizar compra" class="btn btn-success" rendered="true"
-								small-screen="half" medium-screen="one-fourth"
-								large-screen="one-third" col-xs="6" col-ms="6" col-md="4"
-								col-lg="9" offset-md="2" offset-lg="2" />
+							<h:form id="idFinal">
+									<b:commandButton value="Finalizar compra" action="#{carrinhoBean.finalizarCompra()}"
+										look="success" onclick="$('.compraFinalizada').modal()"
+										size="md" ajax="false" auto-update="false"
+										class="btn btn-success" small-screen="half"
+										medium-screen="one-fourth" process="@this"
+										large-screen="one-third" col-xs="12" col-ms="6" col-md="4"
+										col-lg="9" offset-md="2" offset-lg="2" autoUpdate="false"
+										/>
+								<b:modal id="amodal2" title="Compra finalizada com sucesso!"
+									styleClass="compraFinalizada" closable="false"
+									close-on-escape="true" backdrop="false">
+									<p>Valor total: R$ #{carrinhoBean.calcularPrecoFinal()}</p>
+
+									<f:facet name="footer">
+										<b:commandButton value="Ok" look="info" dismiss="modal"
+											dir="auto" action="login?faces-redirect=true" />
+									</f:facet>
+ 								</b:modal> 
+							</h:form>
+
 						</b:panelGrid>
-					</b:panel>
+					</b:form>
 				</b:panel>
 
 			</b:container>

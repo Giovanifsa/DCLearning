@@ -1,10 +1,8 @@
 package ecommerce.beans;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 
 import javax.faces.application.FacesMessage;
-import javax.faces.application.NavigationHandler;
 import javax.faces.application.FacesMessage.Severity;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIForm;

@@ -3,6 +3,7 @@ package ecommerce.beans;
 import java.io.Serializable;
 import java.util.List;
 
+import javax.faces.application.FacesMessage;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -16,30 +17,47 @@ import ecommerce.models.Loja;
 @ViewScoped
 public class NovaLojaBean implements Serializable {
 	private Loja loja = new Loja();
-	
+
 	@Inject
 	private LojaDAO dao;
+	
+	@Inject
+	private LoginBean loginBean;
+
+	@Inject
+	private TemplateBean pagTemplate;
 
 	@Transactional
 	public String salvarLoja() {
 		System.out.println("Gravando loja" + loja.getNomeFantasia());
+
 		
-		if(this.loja.getCnpj() ==  null) {
+		boolean existecnpj = dao.existecpnj(this.loja);
+		if (existecnpj) {
+		
+			pagTemplate.adicionarMensagem(FacesMessage.SEVERITY_INFO, "CNPJ já cadastrado",true);
+		} else {
 			this.dao.adicionarLoja(this.loja);
-		}else {
-			this.dao.atualizarLoja(this.loja);
+			this.loja = new Loja();
 		}
-		this.loja = new Loja();
-		
-		return "/novoProduto?faces-redirect=true";
+
+
+		return "novaLoja?faces-redirect=true";
 	}
 
 	@Transactional
-	public void remover(Loja loja) {
+	public String remover(Loja loja) {
 		System.out.println("Removendo loja" + loja.getNomeFantasia());
 		this.dao.removerLoja(loja);
+
+		return "novaLoja?faces-redirect=true";
 	}
-	
+
+	public void carregaloja(Loja loja) {
+		System.out.println("Carregando loja...");
+		this.loja = loja;
+	}
+
 	public Loja getLoja() {
 		return loja;
 	}
@@ -50,6 +68,15 @@ public class NovaLojaBean implements Serializable {
 
 	public List<Loja> listarTodasLojas() {
 		return dao.listarLojas();
+	}
+	
+	public String cadastrarLoja() {
+		if(!loginBean.usuarioEstaLogado()) {
+			pagTemplate.adicionarMensagem(FacesMessage.SEVERITY_INFO, "Inicie uma sessão para cadastrar sua loja.", true);
+			return "login?faces-redirect=true";
+		} else {
+			return "carrinhoCompras?faces-redirect=true";
+		}
 	}
 
 }

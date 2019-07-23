@@ -1,8 +1,5 @@
 package ecommerce.models;
 
-import ecommerce.models.ArquivoRecurso;
-import ecommerce.models.Loja;
-
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -15,8 +12,6 @@ import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
-import javax.persistence.Transient;
-import javax.validation.constraints.NotNull;
 
 @Entity
 public class Produto {	
@@ -27,16 +22,15 @@ public class Produto {
 	@Column(unique = true)
 	private long codigo;
 
-	@NotNull
 	private String nome;
 
 	@Lob
 	private String descricao;
-	private BigDecimal custoCompra = new BigDecimal(0);
+	private BigDecimal custoCompra;
 	private Date data;
 	
 	//Valor variando de 0-100 (deve ser dividido por 100 para ter a porcentagem real)
-	private BigDecimal porcentualMargemLucro = new BigDecimal(0);
+	private BigDecimal porcentualMargemLucro;
 	
 	@OneToOne(fetch = FetchType.EAGER)
 	private ArquivoRecurso imagemProduto;
@@ -148,10 +142,8 @@ public class Produto {
 	}
 
 	public BigDecimal calcularPreco() {
-				//(CustoCompra		+ DespesasRateadas=(DespesasTotais / Quantia de produtos da loja))
-		return	(custoCompra.add(lojaDoProduto.getDespesasTotais().divide(new BigDecimal(lojaDoProduto.getQuantiaProdutos()))))
-				//*						(1 + (MargemDeLucro 					/				100))
-				.multiply(new BigDecimal(1).add(porcentualMargemLucro.divide(new BigDecimal(100))));
+		return	custoCompra.add(lojaDoProduto.calcularDespesaRateada())
+					.multiply(new BigDecimal(1).add(porcentualMargemLucro.divide(new BigDecimal(100))));
 	}
 	
 	public BigDecimal calcularPrecoPelaQuantidade(int quantidade) {

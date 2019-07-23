@@ -71,11 +71,7 @@ public class LoginBean implements Serializable {
 	@Inject
 	private TemplateBean pagTemplate;
 	
-	/**
-	 * Tenta iniciar a sessão do usuário
-	 * @return
-	 * @throws NoSuchAlgorithmException
-	 */
+	
 	public String iniciarSessao() throws NoSuchAlgorithmException {
 		if (emailLogin == null || emailLogin.isEmpty() ||
 				senhaLogin == null || senhaLogin.isEmpty()) {

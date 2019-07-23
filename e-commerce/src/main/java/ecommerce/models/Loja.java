@@ -26,6 +26,7 @@ public class Loja implements Serializable {
 	private String nomeFantasia;
 	private BigDecimal despesasTotais;
 	
+	
 	public String getCnpj() {
 		return cnpj;
 	}
@@ -72,5 +73,9 @@ public class Loja implements Serializable {
 
 	public void setDespesasTotais(BigDecimal despesasTotais) {
 		this.despesasTotais = despesasTotais;
+	}
+	
+	public BigDecimal calcularDespesaRateada() {
+		return despesasTotais.divide(new BigDecimal(quantiaProdutos));
 	}
 }

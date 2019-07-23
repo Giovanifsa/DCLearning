@@ -5,8 +5,7 @@
 	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
 	xmlns:h="http://xmlns.jcp.org/jsf/html"
 	xmlns:f="http://xmlns.jcp.org/jsf/core"
-	xmlns:b="http://bootsfaces.net/ui" 
-	xmlns:p="http://primefaces.org/ui">
+	xmlns:b="http://bootsfaces.net/ui" xmlns:p="http://primefaces.org/ui">
 
 <ui:composition template="gnr_template.xhtml">
 	<ui:define name="body">
@@ -14,34 +13,61 @@
 			<b:container fluid="true">
 				<b:panel title="Cadastrar loja" look="primary" collapsible="false"
 					large-screen="7" medium-screen="7">
-					<b:panelGrid colSpans="4,8">
+					<b:panelGrid colSpans="3,5,4">
 						<h:outputText value="CNPJ:" />
 						<b:inputText id="cnpj" value="#{novaLojaBean.loja.cnpj}"
-							required="true" requiredMessage="CNPJ é obrigatório"/>
+							required="true" requiredMessage="CNPJ é obrigatório." />
+
+						<b:message for="cnpj" />
 
 						<h:outputText value="Nome:" />
-						<b:inputText id="nomeloja" value="#{novaLojaBean.loja.nomeFantasia}"
-							required="true" required-message="Campo necessário." />
+						<b:inputText id="nomeloja"
+							value="#{novaLojaBean.loja.nomeFantasia}" required="true"
+							required-message="Nome é obrigatorio." />
 
-						<h:outputText value="Despesas totais:" />
-						<b:inputText id="despesastotais"
-							value="#{novaLojaBean.loja.despesasTotais}" required="true"
-							required-message="Campo necessário." />
+						<b:message for="nomeloja" />
 
 						<b:column offset-lg="0" large-screen="100">
 							<b:commandButton value="Cadastrar loja" look="primary"
-								style="width:100%" action="#{novaLojaBean.salvarLoja}" />
+								style="width:100%" action="#{novaLojaBean.salvarLoja}"
+								process="@form" />
 						</b:column>
+
 					</b:panelGrid>
 				</b:panel>
 			</b:container>
 		</b:form>
 
-		<b:dataTable value="#{novaLojaBean.listarTodasLojas()}" var="loja" id="listaLoja" emptyMessage="Nenhuma loja cadastrada.">
-	 		<b:dataTableColumn value="#{loja.nomeFantasia}"/>
-	 		<b:dataTableColumn value="#{loja.cnpj}"/>
+		<b:form>
+			<b:panel>
+				<b:dataTable value="#{novaLojaBean.listarTodasLojas()}" var="loja"
+					id="listaLoja" emptyMessage="Nenhuma loja cadastrada.">
+					<f:facet name="header">
+						<tr>	
+							<th>Nome da loja</th>
+							<th>CNPJ</th>
+							<th>Remover</th>
+							<th>Alterar</th>
+						</tr>
+					</f:facet>
 
-		</b:dataTable>
+					<b:dataTableColumn value="#{loja.nomeFantasia}" />
+					<b:dataTableColumn value="#{loja.cnpj}" />
+					<b:dataTableColumn>
+						<f:facet name="header">Remover</f:facet>
+						<b:commandButton  action="#{novaLojaBean.remover(loja)}"
+							value="Remover" process="@this" />
+					</b:dataTableColumn>
+
+					<b:dataTableColumn>
+						<f:facet name="header">Alterar</f:facet>
+						<b:commandButton action="#{novaLojaBean.carregaloja}"
+							value="Alterar" />
+					</b:dataTableColumn>
+
+				</b:dataTable>
+			</b:panel>
+		</b:form>
 	</ui:define>
 </ui:composition>
 </html>
