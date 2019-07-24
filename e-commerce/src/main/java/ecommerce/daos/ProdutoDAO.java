@@ -17,6 +17,8 @@ import ecommerce.servlets.ServletImagensProduto;
 
 @Named
 public class ProdutoDAO implements Serializable {
+	private static final long serialVersionUID = 1L;
+
 	@Inject
 	private EntityManager em;
 	

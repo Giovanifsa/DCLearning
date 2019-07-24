@@ -13,32 +13,38 @@
 </f:metadata>
 
 <ui:composition template="gnr_template.xhtml">
+	<ui:define name="head" >
+		<h:outputStylesheet library="css" name="loja.css"/>
+	</ui:define> 
+
 	<ui:define name="body">
 		<b:container fluid="true">
-			<b:panel title="O melhor E-commerce do interior do Paraná"
-				look="primary" offset-lg="1" collapsible="false" small-screen="12"
+			<b:panel look="primary" offset-lg="1" collapsible="false" small-screen="12"
 				medium-screen="7" large-screen="10" showCollapseLink="false"
 				tooltip-position="right" rendered="true" id="painel"
-				icon="shopping-cart" icon-align="right" display="inline">
-				
-						<b:form style="text-align:right" >
-							<b:commandButton value="Cadastre sua loja" style="background-color:yellowGreen"
-								title="Cadastre sua loja" action="#{produtoBean.cadastreSuaLoja}" ajax="true"/>
-						</b:form>
-				<img src="#{request.contextPath}/resources/images/ecommerce.png" height="80px" width="100px" />
-				
+				icon-align="left" display="inline" icon="home" icon-size="2x">
+				<b:form>
+					<img src="#{request.contextPath}/resources/images/ecommerce.png" height="80px" width="100px" />
+							<b:form >
+								<b:commandButton value="Cadastre sua loja" 
+									style="background-color:yellowGreen; width:100px"
+									title="Cadastre sua loja" action="#{lojabean.cadastreSuaLoja()}" ajax="true"/>
+							</b:form>
+				</b:form>
 				<b:panel style="background-color:darkCyan">
-					<ui:repeat value="#{produtoBean.listarProdutos()}" var="tabela">
-
-						<b:thumbnail col-lg="4" style="width:15pc">
+					<ui:repeat value="#{lojabean.listarProdutos()}" var="produto">
+						<b:thumbnail col-lg="4" style="height:20pc;width:15pc">
 							<img src="#{request.contextPath}/resources/images/home00.jpg"
-								alt="#{tabela.nome}" />
+								alt="#{produto.nome}" />
 							<f:facet name="caption">
-								<h4>#{tabela.nome}</h4>
-								<p>#{tabela.descricao}</p>
+								<h4 style="overflow-wrap:truncate">
+								#{produto.nome}</h4>
+								<p class="descricao-css" >
+								#{produto.descricao}</p>
 								<b:form>
 									<b:commandButton value="Detalhes" look="primary" col-lg="6" ajax="true"
-										action="#{produtoBean.detalheSobreProduto(tabela)}">
+										action="#{lojabean.detalheSobreProduto(produto)}" size="md" 
+										title="Detalhes sobre o produto">
 									</b:commandButton>
 									<br/>
 									<br/>

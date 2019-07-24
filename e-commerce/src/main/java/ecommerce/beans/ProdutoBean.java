@@ -15,6 +15,7 @@ import ecommerce.models.Produto;
 @Named
 @ViewScoped
 public class ProdutoBean implements Serializable {
+	private static final long serialVersionUID = 1L;
 	//Informações da página produto.xhtml
 	//ViewParam
 	private int produtoId;
@@ -31,9 +32,6 @@ public class ProdutoBean implements Serializable {
 
 	@Inject
 	private TemplateBean templateBean;
-	
-	@Inject
-	private LoginBean loginBean;
 	
 	public BigDecimal calcularPrecoProdutoPelaQuantidadeCarregado() {
 		return produto.calcularPrecoPelaQuantidade(quantidadeSelecionada);
@@ -93,20 +91,4 @@ public class ProdutoBean implements Serializable {
 		return "produto?faces-redirect=true&produtoId=" + produto.getId();
 	}
 	
-	public List<Produto> listarProdutos(){
-		return produtoDao.listarProdutos();
-	}
-	
-	public String detalheSobreProduto(Produto produto) {
-		return "produto.xhtml?faces-redirect=true&produtoId=" + produto.getId();
-	}
-	
-	public String cadastreSuaLoja() {
-		if(!loginBean.usuarioEstaLogado()) {
-			templateBean.adicionarMensagem(FacesMessage.SEVERITY_INFO, "Inicie uma sssão para cadastrar sua loja.", true);
-			return "login?faces-redirect=true&redirecionamento=novaLoja";
-		} else {
-			return "novaLoja?faces-redirect=true";
-		}
-	}
 }
