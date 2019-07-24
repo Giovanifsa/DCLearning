@@ -13,6 +13,7 @@ import javax.servlet.http.Part;
 
 import ecommerce.models.ArquivoRecurso;
 import ecommerce.models.Produto;
+import ecommerce.models.Usuario;
 import ecommerce.servlets.ServletImagensProduto;
 
 @Named
@@ -47,7 +48,13 @@ public class ProdutoDAO implements Serializable {
 	}
 
 	public List<Produto> listarProdutos() {
-		return em.createQuery("select p from Produto p", Produto.class).getResultList();
+		return em.createQuery("select p from " + Produto.class.getSimpleName() + " p", Produto.class).getResultList();
+	}
+	
+	public List<Produto> listarProdutosUsuario(Usuario usuario) {
+		return em.createQuery("SELECT p FROM " + Produto.class.getSimpleName() + " p WHERE p.lojaDoProduto.dono.id = :idDono", Produto.class)
+				.setParameter("idDono", usuario)
+				.getResultList();
 	}
 	
 	public void atualizarProduto(Produto p) {

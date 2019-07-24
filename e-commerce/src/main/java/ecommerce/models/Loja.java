@@ -27,7 +27,20 @@ public class Loja implements Serializable {
 	
 	private int quantiaProdutos;
 	private String nomeFantasia;
-	private BigDecimal despesasTotais = new BigDecimal(1);
+	private BigDecimal despesasTotais;
+	
+	public Loja() {}
+	
+	public Loja(Usuario dono, String nomeFantasia, String cnpj, BigDecimal despesasTotais) {
+		this(nomeFantasia, cnpj, despesasTotais);
+		this.dono = dono;
+	}
+	
+	public Loja(String nomeFantasia, String cnpj, BigDecimal despesasTotais) {
+		this.nomeFantasia = nomeFantasia;
+		this.cnpj = cnpj;
+		this.despesasTotais = despesasTotais;
+	}
 	
 	public String getCnpj() {
 		return cnpj;
@@ -77,18 +90,11 @@ public class Loja implements Serializable {
 		this.despesasTotais = despesasTotais;
 	}
 	
-	@SuppressWarnings("null")
-	public BigDecimal calcularDespesaTotal() {
-		Produto[] produtos = null;
-		for (Produto produto : produtos) {
-			
-			despesasTotais	= despesasTotais.add(produto.getCustoCompra());
-		}
-		return despesasTotais;
-	}
-	
-	@SuppressWarnings("null")
 	public BigDecimal calcularDespesaRateada() {
+		if (quantiaProdutos <= 0) {
+			return despesasTotais;
+		}
+		
 		return despesasTotais.divide(new BigDecimal(quantiaProdutos));
 	}
 }
