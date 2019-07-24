@@ -22,7 +22,10 @@ public class NovaLojaBean implements Serializable {
 	private LojaDAO dao;
 	
 	@Inject
-	TemplateBean pagTemplate;
+	private LoginBean loginBean;
+
+	@Inject
+	private TemplateBean pagTemplate;
 
 	@Transactional
 	public String salvarLoja() {
@@ -65,6 +68,15 @@ public class NovaLojaBean implements Serializable {
 
 	public List<Loja> listarTodasLojas() {
 		return dao.listarLojas();
+	}
+	
+	public String cadastrarLoja() {
+		if(!loginBean.usuarioEstaLogado()) {
+			pagTemplate.adicionarMensagem(FacesMessage.SEVERITY_INFO, "Inicie uma sessão para cadastrar sua loja.", true);
+			return "login?faces-redirect=true";
+		} else {
+			return "carrinhoCompras?faces-redirect=true";
+		}
 	}
 
 }

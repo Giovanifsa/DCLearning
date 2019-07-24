@@ -7,11 +7,9 @@ import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.management.RuntimeErrorException;
 import javax.persistence.EntityManager;
-import javax.servlet.http.Part;
-import javax.persistence.Query;
 import javax.persistence.TypedQuery;
+import javax.servlet.http.Part;
 
 import ecommerce.models.ArquivoRecurso;
 import ecommerce.models.Produto;
@@ -24,6 +22,9 @@ public class ProdutoDAO implements Serializable {
 	
 	@Inject
 	private ArquivoDAO arquivoDao;
+	
+	@Inject
+	private LojaDAO lojaDao;
 	
 	private static Object atualizarProdutoLock = new Object();
 
@@ -44,11 +45,6 @@ public class ProdutoDAO implements Serializable {
 	}
 
 	public List<Produto> listarProdutos() {
-		/**
-		 * Retorna uma lista de todos os produtos na tabela de produtos, depois de
-		 * implementado a tela de vendas, deve retornar os produtos adicionados ao
-		 * carrinho, para preencher a tela do carrinho
-		 */
 		return em.createQuery("select p from Produto p", Produto.class).getResultList();
 	}
 	
@@ -72,6 +68,10 @@ public class ProdutoDAO implements Serializable {
 
 	public void adicionarProduto(Produto p) {
 		em.persist(p);
+		
+		//Produto adicionado, devemos atualizar a loja agora
+		//para aumentar o atributo de quantia de produtos dela.
+		lojaDao.somarQuantiaProdutos(p.getLojaDoProduto(), 1);
 	}
 
 	public Produto buscarProduto(int id) {
@@ -80,6 +80,7 @@ public class ProdutoDAO implements Serializable {
 
 	public void removerProduto(Produto produto) {
 		em.remove(produto);
+		lojaDao.somarQuantiaProdutos(produto.getLojaDoProduto(), -1);
 	}
 	
 	public List<Produto> procurarPorConteudoNome(String nomePesquisa) {
@@ -89,21 +90,21 @@ public class ProdutoDAO implements Serializable {
 		return query.getResultList();
 	}
 
-	public Long getQuantidadeDisponivel(Produto produto) {
-
-		/**
-		 * Esse método retora a quantidade de determinado no estoque.
-		 * 
-		 * @return Long
-		 * @param produto
-		 */
-
-		String jpql = "select count(p) from Produto p where p.id = " + produto.getId();
-
-		Query query = em.createQuery(jpql, Produto.class);
-		Long total = (Long) query.getSingleResult();
-		return total;
-	}
+//	public Long getQuantidadeDisponivel(Produto produto) {
+//
+//		/**
+//		 * Esse método retora a quantidade de determinado no estoque.
+//		 * 
+//		 * @return Long
+//		 * @param produto
+//		 */
+//
+//		String jpql = "select count(p) from Produto p where p.id = " + produto.getId();
+//
+//		Query query = em.createQuery(jpql, Produto.class);
+//		Long total = (Long) query.getSingleResult();
+//		return total;
+//	}
 	
 	public ArquivoRecurso salvarImagemProduto(Part imagem) throws IOException {
 		//Verifica se o arquivo é realmente uma imagem.

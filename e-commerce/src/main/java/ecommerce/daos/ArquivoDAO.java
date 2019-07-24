@@ -13,7 +13,6 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
 
-import ecommerce.control.Transactional;
 import ecommerce.models.ArquivoRecurso;
 
 @Named
@@ -45,10 +44,22 @@ public class ArquivoDAO implements Serializable {
 		return str;
 	}
 	
+<<<<<<< HEAD
 	
+=======
+	/**
+	 * Salva um caminho para um arquivo no disco local no banco de dados, e 
+	 * grava o arquivo na pasta do usuário.
+	 * @param nomeArquivo Nome do arquivo a ser salvo.
+	 * @param nomeDiretorio Diretório que será salvo na pasta do usuário.
+	 * @param dadosArquivo Bytes do arquivo que serão salvos.
+	 * @return ArquivoRecurso denotando o nome gerado para o arquivo e o diretório salvo.
+	 * @throws IOException
+	 */
+>>>>>>> origin/desenvolvimento
 	public ArquivoRecurso salvarArquivo(String nomeArquivo, String nomeDiretorio, byte[] dadosArquivo) throws IOException {
-		File dir = new File(DIRETORIO.getAbsolutePath() + nomeDiretorio + File.separator);
-		dir.mkdirs();
+		Path dir = construirCaminho(DIRETORIO.toString(), nomeDiretorio);
+		Files.createDirectories(dir);
 		
 		String extensao = "";
 		int indice = nomeArquivo.lastIndexOf(".");
@@ -57,16 +68,51 @@ public class ArquivoDAO implements Serializable {
 			extensao = nomeArquivo.substring(indice);
 		}
 		
-		String novoNomeArq = gerarNomeAleatorio(32) + "." + extensao;
-		Path arquivoPath = Paths.get(dir.getAbsolutePath() + novoNomeArq);
+		Path arquivoPath;
+		String nomeFinalArquivo;
+		
+		do {
+			nomeFinalArquivo = gerarNomeAleatorio(32) + extensao;
+			arquivoPath = construirCaminho(dir.toString(), nomeFinalArquivo);
+		} while (Files.exists(arquivoPath));
+			
 		Files.write(arquivoPath, dadosArquivo, StandardOpenOption.CREATE, StandardOpenOption.WRITE);
 		
-		ArquivoRecurso recurso = new ArquivoRecurso();
-		recurso.setNomeArquivo(nomeArquivo);
-		recurso.setNomeDiretorio(nomeDiretorio);
+		ArquivoRecurso recurso = new ArquivoRecurso(nomeDiretorio, nomeFinalArquivo);
 		
 		em.persist(recurso);
 		
 		return recurso;
+	}
+	
+	public byte[] carregarArquivo(ArquivoRecurso recurso) throws IOException {
+		Path diretorioRecurso = construirCaminho(DIRETORIO.toString(), recurso.getNomeDiretorio(), recurso.getNomeArquivo());
+		return Files.readAllBytes(diretorioRecurso);
+	}
+	
+	/**
+	 * Constrói uma referência à um diretório de arquivos a partir de uma lista de strings.
+	 * Caso haja mais que uma string, os diretórios serão construídos dessa forma:
+	 * diretorio1/diretorio2/diretorio3/diretorio.../arquivo.png
+	 * 
+	 * @param caminhos
+	 * @return
+	 */
+	public static Path construirCaminho(String... caminhos) {
+		String pathFinal = "";
+		
+		if (caminhos.length > 1) {
+			pathFinal += caminhos[0];
+			
+			for (int i = 1; i < caminhos.length; i++) {
+				pathFinal += File.separator + caminhos[i];
+			}
+		}
+		
+		else if (caminhos.length > 0) {
+			pathFinal += caminhos[0];
+		}
+		
+		return Paths.get(pathFinal);
 	}
 }

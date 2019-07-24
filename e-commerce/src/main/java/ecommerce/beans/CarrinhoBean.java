@@ -10,7 +10,6 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import ecommerce.control.Transactional;
 import ecommerce.daos.ProdutoDAO;
 import ecommerce.models.ItemCarrinho;
 import ecommerce.models.Produto;
@@ -27,21 +26,41 @@ public class CarrinhoBean implements Serializable {
 	private MecanismoDeHash hashing;
 
 	@Inject
-	SpinnerBean spinnerBean;
+	private DadosSessaoBean dadosSessao;
 	
 	@Inject
-	DadosSessaoBean dadosSessao;
+	private TemplateBean templeteBean;
 	
+	@Inject
+	private LoginBean loginBean;
 	
+	private int spinner = 1;
+	private int produtoAtualizado;
+
 	/**
 	 * Calcula o preço final (total) da soma do preço de todos os itens e suas quantidades.
 	 * @return Valor total de compra.
 	 */
+	
+	public int getSpinner() {
+		return spinner;
+	}
+	
+	public void setSpinner(int spinner) {
+		this.spinner = spinner;
+	}
+	public int getProdutoAtualizado() {
+		return produtoAtualizado;
+	}
+	public void setMax(int produtoAtualizado) {
+		this.produtoAtualizado = produtoAtualizado;
+	}
+	
 	public BigDecimal calcularPrecoFinal() {
 		BigDecimal price = new BigDecimal(0);
 		
 		for (ItemCarrinho e : dadosSessao.getProdutosCarrinho()) {
-			price = price.add(e.getProduto().getPrecoDeVenda().multiply(new BigDecimal(e.getQuantidade())));
+			price = price.add(e.getProduto().calcularPrecoPelaQuantidade((e.getQuantidade())));
 		}
 		
 		return price;
@@ -101,15 +120,12 @@ public class CarrinhoBean implements Serializable {
 		return quantidade;
 	}
 	
-	public List<Produto> produtosCarrinho() {
-		return produtoDao.listarProdutos();
+	public List<ItemCarrinho> produtosCarrinho() {
+		return dadosSessao.getProdutosCarrinho();
 	}
 	
-	@Transactional
-	public String removeProduto(Produto produto) {
-		this.produtoDao.removerProduto(produto);
-		
-		return "carrinhoCompras?faces-redirect=true";
+	public void removerProduto(Produto produto) {
+		dadosSessao.removerProduto(produto);
 	}
 
 	public int selecionarQuantidade() {
@@ -118,71 +134,27 @@ public class CarrinhoBean implements Serializable {
 		if(quantidade == 1) {
 			return quantidade;
 		}
-		return 0;
+		return 0;	
 	}
 	
-	public String continuarComprando() {
-		return "loja?faces-redirect=true";	// RETORNAR A HOME
+	public String voltarParaLoja() {
+		return "loja?faces-redirect=true";
 	}
 	
 	public String finalizarCompra() {
-		return "finalizarCompra?faces-redirect=true";
-	}
-
-	public int qtdeDeUmItemNoCarrinho(Produto produto) {
-			int total = dadosSessao.qtdeDeUmItemNoCarrinho(produto);
-			return total;
-	}
-	
-	public String adicionarViaSpinner(Produto produto) {
 		
-		Long estoque = (Long) produtoDao.getQuantidadeDisponivel(produto);
-		FacesContext facesContext = FacesContext.getCurrentInstance();
-		Integer quantidade = Integer.parseInt(spinnerBean.getValor());
-		
-		if(quantidade > estoque) { // Se não tem disponivel
-			facesContext.getExternalContext().getFlash().setKeepMessages(true);
-			facesContext.addMessage(null, new FacesMessage("Quantidade não disponível em estoque! Spin: " 
-						+ spinnerBean.getValor()));
-			
-			return "carrinhoCompras?faces-redirect=true";
+		if(!loginBean.usuarioEstaLogado()) {
+			templeteBean.adicionarMensagem(FacesMessage.SEVERITY_INFO, 
+					"Para finalizar a sua compra, é necessário fazer o Login!", true);
+			return "login?faces-redirect=true";
 		}
+		return "";
+	}
+	
+	public void atualizarProdutoCarrinho(Produto produto) {
 		
-		facesContext.getExternalContext().getFlash().setKeepMessages(true);
-		facesContext.addMessage("messages", new FacesMessage("Atualizando ... " + spinnerBean.getValor()));
+//	
 		
-		ItemCarrinho item = new ItemCarrinho();
-		item.setProduto(produto);
-		item.setQuantidade(quantidade);
+	}
 
-		dadosSessao.addUmItemAoCarrinho(item);
-		
-		return "carrinhoCompras?faces-redirect=true";
-	}		
-	
-	
-	public String removerViaSpinner(Produto produto) {
-
-		dadosSessao.removerProduto(produto, Integer.parseInt(spinnerBean.getValor()));
-		
-		FacesContext fc = FacesContext.getCurrentInstance();
-		fc.getExternalContext().getFlash().setKeepMessages(true);
-		fc.addMessage("messages", new FacesMessage("Spinner: " + spinnerBean.getValor()));
-//		item.setQuantidade(spinner.getValor());
-//		dadosSessao.getProdutosCarrinho().add(item);
-		
-		return "carrinhoCompras?faces-redirect=true";
-	}
-	
-	
-	public int valorSpin(int val) {
-		return val;
-	}
-	
-	public String testarSpinner() {
-		FacesContext fc = FacesContext.getCurrentInstance();
-		fc.getExternalContext().getFlash().setKeepMessages(true);
-		fc.addMessage("messages", new FacesMessage("Spinner: " + spinnerBean.getValor()));
-		return "teste?faces-redirect=true";
-	}
 }

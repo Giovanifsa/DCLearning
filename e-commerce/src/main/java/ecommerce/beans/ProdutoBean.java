@@ -2,6 +2,7 @@ package ecommerce.beans;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.List;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.view.ViewScoped;
@@ -14,10 +15,13 @@ import ecommerce.models.Produto;
 @Named
 @ViewScoped
 public class ProdutoBean implements Serializable {
+	//Informações da página produto.xhtml
+	//ViewParam
 	private int produtoId;
 	private Produto produto;
 	
-	private BigDecimal quantidadeSelecionada = new BigDecimal(1);
+	//Spinner
+	private int quantidadeSelecionada = 1;
 	
 	@Inject
 	private ProdutoDAO produtoDao;
@@ -27,6 +31,18 @@ public class ProdutoBean implements Serializable {
 	
 	@Inject
 	private TemplateBean templateBean;
+	
+	public BigDecimal calcularPrecoProdutoPelaQuantidadeCarregado() {
+		return produto.calcularPrecoPelaQuantidade(quantidadeSelecionada);
+	}
+	
+	public boolean deveMostrarProdutosMaisVendidos() {
+		return !produtoDao.buscarMaisVendidos(1).isEmpty();
+	}
+	
+	public List<Produto> getProdutosMaisVendidos() {
+		return produtoDao.buscarMaisVendidos(10);
+	}
 	
 	public void carregarProduto() {
 		produto = produtoDao.buscarProduto(produtoId);
@@ -56,26 +72,19 @@ public class ProdutoBean implements Serializable {
 		return produto.contemImagem() ? "success" : "danger";
 	}
 
-	public BigDecimal getQuantidadeSelecionada() {
+	public int getQuantidadeSelecionada() {
 		return quantidadeSelecionada;
 	}
 
-	public void setQuantidadeSelecionada(BigDecimal quantidadeSelecionada) {
+	public void setQuantidadeSelecionada(int quantidadeSelecionada) {
 		this.quantidadeSelecionada = quantidadeSelecionada;
 	}
 	
-	public BigDecimal calcularPrecoQuantidade() {
-		return produto.setPrecoDeVenda(quantidadeSelecionada);
+	public String adicionarAoCarrinho() {
+		// Verificar se existe no estoque
+		carrinhoBean.adicionarAoCarrinho(produto, quantidadeSelecionada);
+		templateBean.adicionarMensagem(FacesMessage.SEVERITY_INFO, "Produto " + produto.getNome() + "(" + quantidadeSelecionada + ") adicionado ao carrinho!", true);
+		
+		return "produto?faces-redirect=true&produtoId=" + produto.getId();
 	}
-	
-	
-	/*
-	 * public String adicionarAoCarrinho() {
-	 * carrinhoBean.adicionarAoCarrinho(produto, quantidadeSelecionada);
-	 * templateBean.adicionarMensagem(FacesMessage.SEVERITY_INFO, "Produto " +
-	 * produto.getNome() + "(" + quantidadeSelecionada +
-	 * ") adicionado ao carrinho!", true);
-	 * 
-	 * return "produto?faces-redirect=true&produtoId=" + produto.getId(); }
-	 */
 }

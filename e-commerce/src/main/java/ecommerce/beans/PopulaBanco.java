@@ -3,8 +3,6 @@ package ecommerce.beans;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.security.NoSuchAlgorithmException;
-import java.util.Calendar;
-import java.util.Date;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
@@ -20,7 +18,6 @@ import ecommerce.tools.MecanismoDeHash;
 
 public class PopulaBanco {
 
-
 	@Inject
 	EntityManager em;
 	
@@ -35,7 +32,7 @@ public class PopulaBanco {
 		u0.setNome("João");
 		u0.setEmail("teste012@0teste.com");
 		u0.setSenhaHasheada(new MecanismoDeHash().aplicarSHA256("11544532353".getBytes()));
-
+		
 		Usuario u1 = new Usuario();
 		u1.setNome("João");
 		u1.setEmail("teste121@1teste.com");
@@ -77,85 +74,56 @@ public class PopulaBanco {
 		s3.setDespesasTotais(new BigDecimal(160));
 		
 		ArquivoRecurso file0 = new ArquivoRecurso();
-		file0.setNomeArquivo("capitaa_marvel.png");
-		file0.setNomeDiretorio("imagens");
+		file0.setNomeArquivo("capita.png");
 		
 		ArquivoRecurso file1 = new ArquivoRecurso();
-		file1.setNomeArquivo("formiga_man.png");
-		file1.setNomeDiretorio("imagens");
+		file1.setNomeArquivo("formiga.png");
 		
 		ArquivoRecurso file2 = new ArquivoRecurso();
 		file2.setNomeArquivo("guardioes.png");
-		file2.setNomeDiretorio("imagens");
 		
 		ArquivoRecurso file3 = new ArquivoRecurso();
 		file3.setNomeArquivo("hulk.png");
-		file3.setNomeDiretorio("imagens");
 		
 		Produto p0 = new Produto();
 		p0.setCodigo(0034534L);
-
 		p0.setDescricao("Filme da Capitã Marvel");
-		p0.setNomeProduto("Capitã Marvel");
-		p0.setPrecoDeVenda(new BigDecimal(2));
-
-		p0.setDescricao("Na década de 1960, a NASA planeja realizar uma das missões "
-				+ "mais arriscadas de todos os tempos: fazer o homem pisar na Lua pela "
-				+ "primeira vez. Durante a preparação, o astronauta Neil Armstrong "
-				+ "enfrenta falhas e tragédias pessoais, o que torna sua jornada histórica "
-				+ "até a Lua ainda mais desafiadora. Vencedor do Oscar de Melhores Efeitos "
-				+ "Visuais.");
-		p0.setNomeProduto("O Primeiro homem");
-		p0.setPrecoDeVenda(new BigDecimal(30.0));
-
+		p0.setNome("Capitã Marvel");
+		p0.setCustoCompra(new BigDecimal(2));
 		p0.setImagemProduto(file0);
 		p0.setLojaDoProduto(s0);
-		p0.setMargemDeLucroPorcentual(new BigDecimal(2.20));
+		p0.setPorcentualMargemLucro(new BigDecimal(2.20));
 		p0.setVendas(50);
-		p0.setCusto(new BigDecimal(13));
-	
-		Calendar data = Calendar.getInstance();
-		p0.setData(data);
 		
 		Produto p1 = new Produto();
 		p1.setCodigo(145342L);
 		p1.setDescricao("Filme do Homem Formiga");
-		p1.setNomeProduto("Homem Formiga");
-
-		p1.setPrecoDeVenda(new BigDecimal(3));
-
-		p1.setPrecoDeVenda(new BigDecimal(20));
-
+		p1.setNome("Homem Formiga");
+		p1.setCustoCompra(new BigDecimal(3));
 		p1.setImagemProduto(file1);
 		p1.setLojaDoProduto(s1);
-		p1.setMargemDeLucroPorcentual(new BigDecimal(2.20));
+		p1.setPorcentualMargemLucro(new BigDecimal(200));
 		p1.setVendas(40);
-		Calendar data1 = Calendar.getInstance();
-		p1.setData(data1);
 		
 		Produto p2 = new Produto();
 		p2.setCodigo(2453542223L);
 		p2.setDescricao("Filme dos Guardioes da Galaxia");
-		p2.setNomeProduto("Guardioes da Galaxia");
-		p2.setPrecoDeVenda(new BigDecimal(5.9));
+		p2.setNome("Guardioes da Galaxia");
+		p2.setCustoCompra(new BigDecimal(5.9));
 		p2.setImagemProduto(file2);
 		p2.setLojaDoProduto(s2);
-		p2.setMargemDeLucroPorcentual(new BigDecimal(2.20));
+		p2.setPorcentualMargemLucro(new BigDecimal(2.20));
 		p2.setVendas(50);
-		Calendar data2 = Calendar.getInstance();
-		p2.setData(data2);
 		
 		Produto p3 = new Produto();
 		p3.setCodigo(345345334L);
 		p3.setDescricao("Filme do Hulk");
-		p3.setNomeProduto("O Incrivel Hulk");
-		p3.setPrecoDeVenda(new BigDecimal(3.9));
+		p3.setNome("O Incrivel Hulk");
+		p3.setCustoCompra(new BigDecimal(3.9));
 		p3.setImagemProduto(file3);
 		p3.setLojaDoProduto(s3);
-		p3.setMargemDeLucroPorcentual(new BigDecimal(2.20));
+		p3.setPorcentualMargemLucro(new BigDecimal(2.20));
 		p3.setVendas(50);
-		Calendar data3=Calendar.getInstance();
-		p3.setData(data3);
 		
 		em.getTransaction().begin();
 		em.persist(u0);

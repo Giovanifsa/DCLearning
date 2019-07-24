@@ -12,6 +12,7 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.servlet.http.Part;
+
 import ecommerce.control.Transactional;
 import ecommerce.daos.ArquivoDAO;
 import ecommerce.daos.ProdutoDAO;
@@ -23,7 +24,6 @@ import ecommerce.models.Produto;
 @Named
 @ViewScoped
 public class NovoProdutoBean implements Serializable {
-
 	private static final long serialVersionUID = 1L;
 
 	private Produto produto = new Produto();
@@ -33,9 +33,13 @@ public class NovoProdutoBean implements Serializable {
 	private ProdutoDAO dao;
 	@Inject
 	private ArquivoDAO arquivoDAO;
+<<<<<<< HEAD
 	@Inject
 	TemplateBean template;
 
+=======
+	
+>>>>>>> origin/desenvolvimento
 	private Part imagem;
 
 	private List<Produto> produtos = new ArrayList<>();
@@ -44,6 +48,7 @@ public class NovoProdutoBean implements Serializable {
 	@Transactional
 	public String salvarProduto() throws IOException {
 	
+<<<<<<< HEAD
 			if (produto.equals(this.produto)==true) {
 				template.adicionarMensagemGrowl(LocalGrowl.SUPERIOR_CENTRO, FacesMessage.SEVERITY_ERROR, "Código já cadastrado!", true);
 						      
@@ -89,6 +94,31 @@ public class NovoProdutoBean implements Serializable {
 			
 
 	// Esse métodp atualiza o produto
+=======
+		if (this.produto.getId()==0) {
+			/**
+			 * Esse método salva a imagem no banco.
+			 */
+			ArquivoRecurso imagemDoProduto = dao.salvarImagemProduto(imagem);
+			produto.setImagemProduto(imagemDoProduto);
+			
+			dao.adicionarProduto(this.produto);
+			
+			System.out.println("Produto cadastrado com sucesso!");
+			
+		}else {
+			dao.atualizarProduto(this.produto);
+			
+			System.out.println("Produto atualizado com sucesso!");
+		}
+		
+		this.produto = new Produto();
+		
+		return "/novoProduto?faces-redirect=true";
+	}
+
+	//Esse métodp atualiza o produto
+>>>>>>> origin/desenvolvimento
 	@Transactional
 	public String atualiza(Produto produto) {
 		dao.atualizarProduto(produto);
@@ -115,9 +145,14 @@ public class NovoProdutoBean implements Serializable {
 	public void atualizarProduto(Produto p) {
 		produto = p;
 	}
+<<<<<<< HEAD
 
 	// getters and setters
 
+=======
+	
+	//getters and setters
+>>>>>>> origin/desenvolvimento
 	public Produto getProduto() {
 		return produto;
 	}
@@ -141,5 +176,8 @@ public class NovoProdutoBean implements Serializable {
 	public void setArquivoDAO(ArquivoDAO arquivoDAO) {
 		this.arquivoDAO = arquivoDAO;
 	}
+<<<<<<< HEAD
 
+=======
+>>>>>>> origin/desenvolvimento
 }
