@@ -112,13 +112,13 @@
 														<b:column large-screen="6" medium-screen="6" small-screen="6">
 															<h4 style="text-align:right" ><h:outputLabel value="Administrado por "/></h4>
 															<br/>
-															<h5 style="text-align:right;overflow-wrap:break-word"><h:outputLabel value="#{produtoBean.produto.lojaDoProduto.dono.nome}" /></h5>
+															<h5 style="text-align:right;overflow-wrap:break-word"><h:outputText value="#{produtoBean.produto.lojaDoProduto.dono.nome}" /></h5>
 														</b:column>
 													
 														<b:column large-screen="6" medium-screen="6" small-screen="6">
 															<h4 style="text-align:left"><h:outputLabel value="CNPJ registrado " /></h4>
 															<br/>
-															<h5 style="text-align:left;overflow-wrap:break-word"><h:outputLabel value="#{produtoBean.produto.lojaDoProduto.cnpj}" /></h5>
+															<h5 style="text-align:left;overflow-wrap:break-word"><h:outputText value="#{produtoBean.produto.lojaDoProduto.cnpj}" /></h5>
 														</b:column>
 													</b:row>
 												</b:panel>

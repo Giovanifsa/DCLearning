@@ -9,6 +9,7 @@ import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
 
 import ecommerce.models.Loja;
+import ecommerce.models.Usuario;
 
 @SuppressWarnings("serial")
 public class LojaDAO implements Serializable {
@@ -36,6 +37,12 @@ public class LojaDAO implements Serializable {
 		return manager.createQuery("SELECT l FROM " + Loja.class.getSimpleName() + " l", Loja.class).getResultList();
 	}
 	
+	public List<Loja> listarLojasUsuario(Usuario usuario) {
+		return manager.createQuery("SELECT l FROM " + Loja.class.getSimpleName() + " l WHERE l.dono.id = :idUsuario", Loja.class)
+				.setParameter("idUsuario", usuario.getId())
+				.getResultList();
+	}
+	
 	public Loja getLoja(int id) {
 		return manager.find(Loja.class, id);
 	}
@@ -47,7 +54,6 @@ public class LojaDAO implements Serializable {
 	public void atualizarLoja(Loja loja) {
 		manager.merge(loja);
 	}
-
 
 	public void adicionarLoja(Loja loja) {
 		manager.persist(loja);

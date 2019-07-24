@@ -4,9 +4,13 @@ import java.io.Serializable;
 import java.util.List;
 
 import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.persistence.PersistenceException;
+
+import org.hibernate.exception.ConstraintViolationException;
 
 import ecommerce.control.Transactional;
 import ecommerce.daos.LojaDAO;
@@ -26,36 +30,43 @@ public class NovaLojaBean implements Serializable {
 
 	@Inject
 	private TemplateBean pagTemplate;
+	
+	private boolean editando = false;
 
 	@Transactional
 	public String salvarLoja() {
-		System.out.println("Gravando loja" + loja.getNomeFantasia());
-
+		if (!editando) {
+			try {
+				dao.adicionarLoja(loja);
+				this.loja = new Loja();
+			} catch (PersistenceException ex) {
+				//Implementação do hibernate para violação de unique
+				if (ex.getCause() instanceof ConstraintViolationException) {
+					pagTemplate.adicionarMensagem(FacesMessage.SEVERITY_ERROR, "Uma loja com este CNPJ já foi cadastrada.", true);
+				}
+			}
+		}
 		
-		boolean existecnpj = dao.existecpnj(this.loja);
-		if (existecnpj) {
-		
-			pagTemplate.adicionarMensagem(FacesMessage.SEVERITY_INFO, "CNPJ já cadastrado",true);
-		} else {
-			this.dao.adicionarLoja(this.loja);
+		else {
+			dao.atualizarLoja(loja);
+			pagTemplate.adicionarMensagem(FacesMessage.SEVERITY_INFO, "Loja " + loja.getNomeFantasia() + " atualizada com sucesso!", true);
+			
 			this.loja = new Loja();
+			editando = false;
 		}
 
-
 		return "novaLoja?faces-redirect=true";
+	}
+	
+	public void editar(Loja loja) {
+		this.loja = loja;
+		editando = true;
 	}
 
 	@Transactional
 	public String remover(Loja loja) {
-		System.out.println("Removendo loja" + loja.getNomeFantasia());
-		this.dao.removerLoja(loja);
-
+		dao.removerLoja(loja);
 		return "novaLoja?faces-redirect=true";
-	}
-
-	public void carregaloja(Loja loja) {
-		System.out.println("Carregando loja...");
-		this.loja = loja;
 	}
 
 	public Loja getLoja() {
@@ -66,17 +77,8 @@ public class NovaLojaBean implements Serializable {
 		this.loja = loja;
 	}
 
-	public List<Loja> listarTodasLojas() {
-		return dao.listarLojas();
-	}
-	
-	public String cadastrarLoja() {
-		if(!loginBean.usuarioEstaLogado()) {
-			pagTemplate.adicionarMensagem(FacesMessage.SEVERITY_INFO, "Inicie uma sessão para cadastrar sua loja.", true);
-			return "login?faces-redirect=true";
-		} else {
-			return "carrinhoCompras?faces-redirect=true";
-		}
+	public List<Loja> listarLojas() {
+		return dao.listarLojasUsuario(loginBean.getUsuarioLogado());
 	}
 
 }
