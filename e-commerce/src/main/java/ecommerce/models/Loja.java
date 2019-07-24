@@ -3,6 +3,7 @@
 import java.io.Serializable;
 import java.math.BigDecimal;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -20,12 +21,12 @@ public class Loja implements Serializable {
 	@ManyToOne(fetch = FetchType.EAGER)
 	private Usuario dono;
 	
+	@Column(unique = true)
 	private String cnpj;
 	
 	private int quantiaProdutos;
 	private String nomeFantasia;
 	private BigDecimal despesasTotais;
-	
 	
 	public String getCnpj() {
 		return cnpj;

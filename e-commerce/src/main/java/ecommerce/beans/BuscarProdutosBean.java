@@ -41,13 +41,17 @@ public class BuscarProdutosBean implements Serializable {
 	}
 	
 	public void processarBusca() {
-		if (!buscaEstaVazia()) {
+		if (!buscaGerouResultados()) {
 			Base32 base32 = new Base32();
 			produtosEncontrados = produtoDao.procurarPorConteudoNome(new String(base32.decode(b32Buscando)));
 		}
 	}
 	
-	public boolean buscaEstaVazia() {
-		return b32Buscando == null || b32Buscando.isEmpty();
+	public boolean buscaGerouResultados() {
+		return produtosEncontrados != null && !produtosEncontrados.isEmpty();
+	}
+	
+	public String processarLookPainel() {
+		return buscaGerouResultados() ? "info" : "danger";
 	}
 }
