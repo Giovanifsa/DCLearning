@@ -24,7 +24,7 @@ public class Loja implements Serializable {
 	
 	private int quantiaProdutos;
 	private String nomeFantasia;
-	private BigDecimal despesasTotais;
+	private BigDecimal despesasTotais = new BigDecimal(1);
 	
 	
 	public String getCnpj() {

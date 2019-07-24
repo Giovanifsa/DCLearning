@@ -35,7 +35,7 @@ public class NovaLojaBean implements Serializable {
 		boolean existecnpj = dao.existecpnj(this.loja);
 		if (existecnpj) {
 		
-			templateBean.adicionarMensagem(FacesMessage.SEVERITY_INFO, "CNPJ já cadastrado",true);
+			pagTemplate.adicionarMensagem(FacesMessage.SEVERITY_INFO, "CNPJ já cadastrado",true);
 		} else {
 			this.dao.adicionarLoja(this.loja);
 			this.loja = new Loja();
