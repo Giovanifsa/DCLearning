@@ -17,34 +17,33 @@
 						
 						<b:form id="formEditarLoja">
 							<b:panelGrid colSpans="3,5,4">
-								<h:outputText value="Nome:" />
-								<b:inputText id="nomeloja"
-									value="#{novaLojaBean.loja.nomeFantasia}" required="true"
-									required-message="Nome é obrigatorio." />
+								<h:outputText value="Nome fantasia:" />
+								<b:inputText id="nomeLoja"
+									value="#{novaLojaBean.cadastroNomeFantasia}"
+									binding="#{novaLojaBean.campoNomeFantasia}"
+									validator="#{novaLojaBean.validarNomeFantasia}"/>
 									
-								<b:message for="nomeLoja" />
+								<b:message for="nomeLoja" only-most-severe="true"/>
 							
 								<h:outputText value="CNPJ:" />
-								<b:inputText id="cnpj" value="#{novaLojaBean.loja.cnpj}"
-									required="true" requiredMessage="CNPJ é obrigatório." />
+								<b:inputText id="cnpj" value="#{novaLojaBean.cadastroCNPJ}"
+									binding="#{novaLojaBean.campoCNPJ}" validator="#{novaLojaBean.validarCNPJ}"/>
 			
-								<b:message for="cnpj" />
+								<b:message for="cnpj" only-most-severe="true"/>
 								
 								<h:outputText value="Despesas totais:" />
-								<b:inputText id="despTotais" value="#{novaLojaBean.loja.despesasTotais}"
-									required="true" requiredMessage="Despesas totais é um campo obrigatório."
-									validatorMessage="As despesas totais deve ser maior que R$ 0.">
+								<b:inputText id="despTotais" value="#{novaLojaBean.cadastroDespesasTotais}"
+									validator="#{novaLojaBean.validarDespesasTotais}"
+									binding ="#{novaLojaBean.campoDespesasTotais}">
 									
 									<f:facet name="prepend">R$</f:facet>
-									<f:validateDoubleRange minimum="0.00" />
 								</b:inputText>
 			
-								<b:message for="despTotais" />
+								<b:message for="despTotais" only-most-severe="true" />
 			
-								<b:column offset-lg="0" large-screen="100">
+								<b:column >
 									<b:commandButton value="Cadastrar loja" look="primary"
-										style="width:100%" action="#{novaLojaBean.salvarLoja}"
-										process="@form" />
+										style="width:100%" action="#{novaLojaBean.salvarLoja}" />
 								</b:column>
 							</b:panelGrid>
 						</b:form>
@@ -55,7 +54,7 @@
 			<b:row>
 				<b:column>
 					<b:panel>
-						<b:dataTable value="#{novaLojaBean.listarTodasLojas()}" var="loja"
+						<b:dataTable value="#{novaLojaBean.listarLojas()}" var="loja"
 							id="listaLoja" emptyMessage="Nenhuma loja cadastrada.">
 							
 							<b:dataTableColumn width="30%">

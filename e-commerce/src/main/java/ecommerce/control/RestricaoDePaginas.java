@@ -20,23 +20,16 @@ public class RestricaoDePaginas implements PhaseListener {
 	@Override
 	public void afterPhase(PhaseEvent pEvent) {
 		FacesContext context = pEvent.getFacesContext();
-		/* 
-		 * As páginas restritas são:
-		 * finalizarCompra.xhtml -> Caso o usuário não esteja logado ou esteja com o carrinho vazio
-		 * 
-		 */
-		
-		if (context.getViewRoot().getViewId().equals("/finalizarCompra.xhtml")) {
-			NavigationHandler handler = context.getApplication().getNavigationHandler();
-			
-			if (!loginBean.usuarioEstaLogado()) {
-				
-				handler.handleNavigation(context, null, "/login?faces-redirect=true&redirecionamento=finalizarCompra");
+		NavigationHandler handler = context.getApplication().getNavigationHandler();
+
+		if (!loginBean.usuarioEstaLogado()) {
+			if (context.getViewRoot().getViewId().equals("/novaLoja.xhtml")) {
+				handler.handleNavigation(context, null, "/login?faces-redirect=true&redirecionamento=novaLoja");
 				context.renderResponse();
 			}
 			
-			else if (carrinhoBean.getQuantidadeItens() <= 0) {
-				handler.handleNavigation(context, null, "/listarProdutos?faces-redirect=true");
+			else if (context.getViewRoot().getViewId().equals("/novoProduto.xhtml")) {
+				handler.handleNavigation(context, null, "/login?faces-redirect=true&redirecionamento=novoProduto");
 				context.renderResponse();
 			}
 		}
