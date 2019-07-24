@@ -3,6 +3,7 @@ package ecommerce.daos;
 import java.io.Serializable;
 import java.util.List;
 
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -12,9 +13,13 @@ import ecommerce.models.Loja;
 import ecommerce.models.Usuario;
 
 @SuppressWarnings("serial")
+@RequestScoped
 public class LojaDAO implements Serializable {
 	@Inject
 	private EntityManager manager;
+	
+	@Inject
+	private ProdutoDAO produtoDao;
 	
 	private Object quantiaProdutosLock = new Object();
 
@@ -37,6 +42,8 @@ public class LojaDAO implements Serializable {
 	}
 	
 	public void removerLoja(Loja loja){
+		//Para remover a loja, devemos remover seus produtos.
+		produtoDao.removerProdutosDaLoja(loja);
 		manager.remove(loja);
 	}
 	

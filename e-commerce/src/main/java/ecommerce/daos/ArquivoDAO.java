@@ -9,6 +9,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.security.SecureRandom;
 
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
@@ -16,6 +17,7 @@ import javax.persistence.EntityManager;
 import ecommerce.models.ArquivoRecurso;
 
 @Named
+@RequestScoped
 public class ArquivoDAO implements Serializable {
 	private static final File DIRETORIO = new File(System.getProperty("user.home") + File.separator + "ArquivosECommerce" + File.separator);
 	private final SecureRandom geradorAleatorio;
