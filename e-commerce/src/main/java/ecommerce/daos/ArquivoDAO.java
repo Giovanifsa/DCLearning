@@ -44,19 +44,15 @@ public class ArquivoDAO implements Serializable {
 		return str;
 	}
 	
-<<<<<<< HEAD
-	
-=======
 	/**
 	 * Salva um caminho para um arquivo no disco local no banco de dados, e 
-	 * grava o arquivo na pasta do usuário.
+	 * grava o arquivo na pasta do usuï¿½rio.
 	 * @param nomeArquivo Nome do arquivo a ser salvo.
-	 * @param nomeDiretorio Diretório que será salvo na pasta do usuário.
-	 * @param dadosArquivo Bytes do arquivo que serão salvos.
-	 * @return ArquivoRecurso denotando o nome gerado para o arquivo e o diretório salvo.
+	 * @param nomeDiretorio Diretï¿½rio que serï¿½ salvo na pasta do usuï¿½rio.
+	 * @param dadosArquivo Bytes do arquivo que serï¿½o salvos.
+	 * @return ArquivoRecurso denotando o nome gerado para o arquivo e o diretï¿½rio salvo.
 	 * @throws IOException
 	 */
->>>>>>> origin/desenvolvimento
 	public ArquivoRecurso salvarArquivo(String nomeArquivo, String nomeDiretorio, byte[] dadosArquivo) throws IOException {
 		Path dir = construirCaminho(DIRETORIO.toString(), nomeDiretorio);
 		Files.createDirectories(dir);
@@ -91,8 +87,8 @@ public class ArquivoDAO implements Serializable {
 	}
 	
 	/**
-	 * Constrói uma referência à um diretório de arquivos a partir de uma lista de strings.
-	 * Caso haja mais que uma string, os diretórios serão construídos dessa forma:
+	 * Constrï¿½i uma referï¿½ncia ï¿½ um diretï¿½rio de arquivos a partir de uma lista de strings.
+	 * Caso haja mais que uma string, os diretï¿½rios serï¿½o construï¿½dos dessa forma:
 	 * diretorio1/diretorio2/diretorio3/diretorio.../arquivo.png
 	 * 
 	 * @param caminhos

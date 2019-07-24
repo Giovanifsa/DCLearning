@@ -81,7 +81,7 @@ public class Loja implements Serializable {
 		Produto[] produtos = null;
 		for (Produto produto : produtos) {
 			
-			despesasTotais	= despesasTotais.add(produto.getCusto());
+			despesasTotais	= despesasTotais.add(produto.getCustoCompra());
 		}
 		return despesasTotais;
 	}
