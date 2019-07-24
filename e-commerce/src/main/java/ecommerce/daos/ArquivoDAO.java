@@ -25,6 +25,7 @@ public class ArquivoDAO implements Serializable {
 	
 	public ArquivoDAO() {
 		geradorAleatorio = new SecureRandom();
+		DIRETORIO.mkdirs();
 	}
 	
 	private String gerarNomeAleatorio(int caracteres) {
@@ -43,6 +44,9 @@ public class ArquivoDAO implements Serializable {
 		return str;
 	}
 	
+<<<<<<< HEAD
+	
+=======
 	/**
 	 * Salva um caminho para um arquivo no disco local no banco de dados, e 
 	 * grava o arquivo na pasta do usuário.
@@ -52,6 +56,7 @@ public class ArquivoDAO implements Serializable {
 	 * @return ArquivoRecurso denotando o nome gerado para o arquivo e o diretório salvo.
 	 * @throws IOException
 	 */
+>>>>>>> origin/desenvolvimento
 	public ArquivoRecurso salvarArquivo(String nomeArquivo, String nomeDiretorio, byte[] dadosArquivo) throws IOException {
 		Path dir = construirCaminho(DIRETORIO.toString(), nomeDiretorio);
 		Files.createDirectories(dir);

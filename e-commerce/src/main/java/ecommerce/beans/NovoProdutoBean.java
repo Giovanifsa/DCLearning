@@ -2,9 +2,12 @@ package ecommerce.beans;
 
 import java.io.IOException;
 import java.io.Serializable;
+
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -16,6 +19,7 @@ import ecommerce.control.Transactional;
 import ecommerce.daos.ArquivoDAO;
 import ecommerce.daos.ProdutoDAO;
 import ecommerce.models.ArquivoRecurso;
+import ecommerce.models.LocalGrowl;
 import ecommerce.models.Loja;
 import ecommerce.models.Produto;
 
@@ -27,7 +31,7 @@ public class NovoProdutoBean implements Serializable {
 	private Produto produto = new Produto();
 	private Loja lojaDoProduto = new Loja();
 
-	@Inject 
+	@Inject
 	private ProdutoDAO dao;
 	@Inject
 	private ArquivoDAO arquivoDAO;
@@ -35,10 +39,10 @@ public class NovoProdutoBean implements Serializable {
 	EntityManager em;
 	
 	private Part imagem;
-	
+
 	private List<Produto> produtos = new ArrayList<>();
-	
-	//Esse método salva o novo produto
+
+	// Esse método salva o novo produto
 	@Transactional
 	public String salvarProduto() throws IOException {
 	
@@ -68,26 +72,26 @@ public class NovoProdutoBean implements Serializable {
 	@Transactional
 	public String atualiza(Produto produto) {
 		dao.atualizarProduto(produto);
-		
+
 		return "/novoProduto?faces-redirect=true";
 	}
-	
-	//Esse método busca todos os produtos cadastrado
-	public List<Produto> getProdutos(){
-		
+
+	// Esse método busca todos os produtos cadastrado
+	public List<Produto> getProdutos() {
+
 		this.produtos = dao.listarProdutos();
-		
+
 		return produtos;
 	}
-	
-	//Esse método deleta o produto
+
+	// Esse método deleta o produto
 	@Transactional
 	public String deletaProduto(Produto produto) {
 		dao.removerProduto(produto);
-		
+
 		return "/novoProduto?faces-redirect=true";
 	}
-	
+
 	public void atualizarProduto(Produto p) {
 		produto = p;
 	}

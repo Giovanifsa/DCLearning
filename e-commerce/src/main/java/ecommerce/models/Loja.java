@@ -10,6 +10,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
+
 @SuppressWarnings("serial")
 @Entity
 public class Loja implements Serializable {
@@ -75,6 +76,17 @@ public class Loja implements Serializable {
 		this.despesasTotais = despesasTotais;
 	}
 	
+	@SuppressWarnings("null")
+	public BigDecimal calcularDespesaTotal() {
+		Produto[] produtos = null;
+		for (Produto produto : produtos) {
+			
+			despesasTotais	= despesasTotais.add(produto.getCusto());
+		}
+		return despesasTotais;
+	}
+	
+	@SuppressWarnings("null")
 	public BigDecimal calcularDespesaRateada() {
 		return despesasTotais.divide(new BigDecimal(quantiaProdutos));
 	}

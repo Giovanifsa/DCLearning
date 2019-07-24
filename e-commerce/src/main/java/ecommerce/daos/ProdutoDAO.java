@@ -114,4 +114,7 @@ public class ProdutoDAO implements Serializable {
 		
 		return arquivoDao.salvarArquivo(imagem.getSubmittedFileName(), ServletImagensProduto.DIRETORIO_IMAGENS_PRODUTOS, imagem.getInputStream().readAllBytes());
 	}
+	
+	
+	
 }

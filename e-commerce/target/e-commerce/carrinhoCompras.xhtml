@@ -1,0 +1,128 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui" xmlns:b="http://bootsfaces.net/ui"
+	xmlns:jsf="http://xmlns.jcp.org/jsf/composite">
+
+
+<ui:composition template="gnr_template.xhtml">
+	<ui:define name="body">
+		<b:form id="carrinho">
+			<h:outputLabel />
+			<h:messages id="messages" />
+			<b:container id="container" align="center" class="">
+				<b:messages id="messages" />
+				<b:panel title="Carrinho de compras" look="primary"
+					collapsible="false" small-screen="12" medium-screen="12"
+					large-screen="12" showCollapseLink="false" tooltip-position="right"
+					rendered="true" id="painel" icon="shopping-cart" icon-align="right"
+					display="inline">
+					
+					<h:outputLabel id="t"/>
+
+					<b:dataTable value="#{carrinhoBean.produtosCarrinho()}"
+						responsive="true" var="produto" id="tabelaProdutos"
+						fixedHeader="true" scroll-horizontally="true"
+						mark-search-results="false" paginated="false" rendered="true"
+						scroll-size="true" selection-info="false" info="false" col-xs="12"
+						col-sm="12" col-md="12" col-lg="12" tiny-screen="half">
+
+						<b:dataTableColumn label="Produto" style="text-align:center">
+							<h:outputText value="#{produto.nome}" />
+						</b:dataTableColumn>
+
+						<b:dataTableColumn label="Descrição">
+							#{produto.descricao}								
+						</b:dataTableColumn>
+
+						<b:dataTableColumn orderable="false" label="Imagem"
+							style="text-align:center">
+							<img
+								src="#{request.contextPath}/resources/images/#{produto.imagemProduto.nomeArquivo}"
+								width="50px" align="middle" />
+						</b:dataTableColumn>
+
+						<b:dataTableColumn label="Quantidade" width="10%"
+							style="text-align:center" searchable="true">
+							<br />
+							<b:badge value="#{carrinhoBean.qtdeDeUmItemNoCarrinho(produto)}"
+								col-lg="10" col-md="10" col-sm="10" offset-sm="1" col-xs="12"
+								/>
+
+						</b:dataTableColumn>
+
+						<b:dataTableColumn orderable="false" width="15%" label="Atualizar"
+							style="text-align:center">
+
+							<b:touchSpin id="spin" value="#{spinnerBean.valor}" type="text"
+								large-screen="11" min="1" step="1" delay="true" size="1000"
+								vertical-buttons="true" small-screen="half" col-xs="12"
+								col-md="12" col-sm="12" col-lg="12" field-size="large" />
+						</b:dataTableColumn>
+							<br />
+							<br />
+							<b:commandButton col-md="10" process="@this"
+								action="#{carrinhoBean.atualizarQuantidade(produto)}"
+								auto-update="true" rendered="true" update="@this" size="sm"
+								large-screen="11" style-class="btn btn-warning"
+								title="Atualizar quantidade no carrinho">
+								<b:icon value="refresh" />
+							</b:commandButton>
+
+
+							<b:commandButton
+								action="#{carrinhoBean.removerViaSpinner(produto)}" col-xs="12"
+								col-sm="12" col-md="12" size="sm" process="@this" look="warning">
+								<b:icon value="minus" size="sm" />
+							</b:commandButton>
+
+
+				
+
+						<b:dataTableColumn width="9%" label="Preço"
+							style="text-align:center">
+							<br />
+							<h:outputLabel value="R$ " id="idPreco" style="text-align:center">
+								 #{produto.precoDeVenda}
+							</h:outputLabel>
+						</b:dataTableColumn>
+
+						<b:dataTableColumn orderable="false" width="9%" label="Remover"
+							style="text-align:center">
+							<br />
+							<b:commandButton action="#{carrinhoBean.removeProduto(produto)}"
+								process="@this" class="btn btn-danger" title="Remover produto"
+								ajax="true" update="@form" col-xs="12" col-sm="12" col-md="12"
+								colLg="40">
+
+								<b:icon value="trash" col-xs="12" col-sm="2" />
+								<br />
+							</b:commandButton>
+						</b:dataTableColumn>
+					</b:dataTable>
+					<b:panel>
+						<b:panelGrid col-spans="6,6" columns="12" rendered="true"
+								title="Continuar comprando na loja" small-screen="half"
+								medium-screen="three-fourths" large-screen="three-fourths"
+								col-xs="12" col-ms="6" col-md="4" col-lg="9" offset-md="1"
+								offset-lg="2" class="btn btn-primary" look="primary"
+								action="loja?faces-redirect=true" process="@this" />
+
+							<b:commandButton value="Finalizar compra" id="botaoFinalizar"
+								title="Finalizar compra" class="btn btn-success" rendered="true"
+								small-screen="half" medium-screen="one-fourth"
+								large-screen="one-third" col-xs="12" col-ms="6" col-md="4"
+								col-lg="9" offset-md="2" offset-lg="2" action="finalizarCompra?faces-redirect=true"/>
+					</b:panel>
+				</b:panel>
+
+			</b:container>
+
+		</b:form>
+	</ui:define>
+</ui:composition>
+</html>
