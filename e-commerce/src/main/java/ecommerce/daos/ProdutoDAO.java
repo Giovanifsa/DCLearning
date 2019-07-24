@@ -40,7 +40,7 @@ public class ProdutoDAO implements Serializable {
 	}
 
 	public List<Produto> buscarMaisVendidos(int quantidadeLimite) {
-		return em.createQuery("SELECT p FROM " + Produto.class.getSimpleName() + " p ORDER BY p.sells DESC",
+		return em.createQuery("SELECT p FROM " + Produto.class.getSimpleName() + " p ORDER BY p.vendas DESC",
 				Produto.class).setMaxResults(quantidadeLimite).getResultList();
 	}
 
