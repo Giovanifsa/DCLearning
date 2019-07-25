@@ -5,6 +5,7 @@ import java.io.Serializable;
 import java.util.InputMismatchException;
 import java.util.List;
 
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
@@ -12,11 +13,13 @@ import javax.persistence.TypedQuery;
 import javax.servlet.http.Part;
 
 import ecommerce.models.ArquivoRecurso;
+import ecommerce.models.Loja;
 import ecommerce.models.Produto;
 import ecommerce.models.Usuario;
 import ecommerce.servlets.ServletImagensProduto;
 
 @Named
+@RequestScoped
 public class ProdutoDAO implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -90,6 +93,15 @@ public class ProdutoDAO implements Serializable {
 	public void removerProduto(Produto produto) {
 		em.remove(produto);
 		lojaDao.somarQuantiaProdutos(produto.getLojaDoProduto(), -1);
+	}
+	
+	public void removerProdutosDaLoja(Loja loja) {
+		em.createQuery("DELETE " + Produto.class.getSimpleName() + " WHERE lojaDoProduto.id = :idLoja")
+			.setParameter("idLoja", loja.getId())
+			.executeUpdate();
+		
+		loja.setQuantiaProdutos(0);
+		lojaDao.atualizarLoja(loja);
 	}
 	
 	public List<Produto> procurarPorConteudoNome(String nomePesquisa) {

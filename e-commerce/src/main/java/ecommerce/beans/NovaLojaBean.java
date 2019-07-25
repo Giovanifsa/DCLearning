@@ -101,11 +101,19 @@ public class NovaLojaBean implements Serializable {
 	
 	public void editar(Loja loja) {
 		editandoId = loja.getId();
+		cadastroNomeFantasia = loja.getNomeFantasia();
+		cadastroCNPJ = loja.getCnpj();
+		cadastroDespesasTotais = loja.getDespesasTotais().toString();
 	}
 
 	@Transactional
 	public String remover(Loja loja) {
 		dao.removerLoja(loja);
+		
+		if (editandoId == loja.getId()) {
+			editandoId = -1;
+		}
+		
 		return "novaLoja?faces-redirect=true";
 	}
 

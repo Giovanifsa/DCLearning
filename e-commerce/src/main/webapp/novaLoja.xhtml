@@ -55,14 +55,13 @@
 				<b:column>
 					<b:panel>
 						<b:dataTable value="#{novaLojaBean.listarLojas()}" var="loja"
-							id="listaLoja" emptyMessage="Nenhuma loja cadastrada.">
+							id="listaLoja" emptyMessage="Nenhuma loja cadastrada." >
 							
-							<b:dataTableColumn width="30%">
+							<b:dataTableColumn width="30%" >
 								<f:facet name="header">Nome da loja</f:facet>
 								
 								<h:outputText value="#{loja.nomeFantasia}"/>
 							</b:dataTableColumn>
-							
 							
 							<b:dataTableColumn width="30%">
 								<f:facet name="header">CNPJ</f:facet>
@@ -71,9 +70,9 @@
 							</b:dataTableColumn>
 							
 							<b:dataTableColumn>
-								<f:facet name="header">Quantia de produtos</f:facet>
+								<f:facet name="header">Despesas totais</f:facet>
 							
-								<h:outputText value="#{loja.quantiaProdutos}"/>
+								<h:outputText value="R$ #{loja.despesasTotais}"/>
 							</b:dataTableColumn>
 							
 							<b:dataTableColumn>
@@ -85,13 +84,13 @@
 							<b:dataTableColumn>
 								<f:facet name="header">Opções</f:facet>
 								
-								<b:form>
+								<b:form id="formOpcoes">
 									<b:formGroup>
 										<b:commandButton look="warning" ajax="true" action="#{novaLojaBean.editar(loja)}" 
-												value="Editar" update=":formEditarLoja" process="@this" />
+												value="Editar" update=":formEditarLoja" />
 									
 										<b:commandButton look="danger" action="#{novaLojaBean.remover(loja)}" 
-												value="Remover"/>
+												value="Remover" />
 									</b:formGroup>
 								</b:form>
 							</b:dataTableColumn>
