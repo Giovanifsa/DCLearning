@@ -19,17 +19,21 @@
 
 	<ui:define name="body">
 		<b:container fluid="true">
+		
 			<b:panel look="primary" offset-lg="1" collapsible="false" small-screen="12"
 				medium-screen="7" large-screen="10" showCollapseLink="false"
 				tooltip-position="right" rendered="true" id="painel"
 				icon-align="left" display="inline" icon="home" icon-size="2x">
 				<b:form>
 					<img src="#{request.contextPath}/resources/images/ecommerce.png" height="80px" width="100px" />
-							<b:form >
-								<b:commandButton value="Cadastre sua loja" 
-									style="background-color:yellowGreen; width:100px" 
-									title="Cadastre sua loja" action="#{lojabean.cadastreSuaLoja()}" ajax="true"/>
-							</b:form>
+							<b:panel look="danger" style="text-align:right">		
+								<b:commandButton value="Cadastre sua loja" size="sm"
+									style="background-color:yellowGreen; width:250px;height:28px" 
+									title="Cadastrar loja" action="#{lojabean.cadastreSuaLoja()}" ajax="true"/>
+									<p></p>
+								<b:commandButton value="Cadastre seus produtos" action="lojaBean.cadastreSeusProdutos" ajax="true"
+									style="background-color:royalblue;width:250px;height:28p" size="sm" title="Cadastrar produtos"/>
+							</b:panel>
 				</b:form>
 				<b:panel style="background-color:darkCyan">
 					<ui:repeat value="#{lojabean.listarProdutos()}" var="produto">
@@ -39,27 +43,21 @@
 							<f:facet name="caption">
 								<h4 style="overflow-wrap:truncate">
 								#{produto.nome}</h4>
-								<p class="descricao-css" >
-								#{produto.descricao}</p>
+								<p class="descricao-css">
+								#{produto.descricao}
+								</p>
+								<h:outputLabel value="R$ #{produto.calcularPreco()}"/>
 								<b:form>
-									<b:commandButton value="Detalhes" look="primary" col-lg="6" ajax="true"
+									<b:commandButton value="Saiba mais" look="primary" col-lg="6" ajax="true"
 										action="#{lojabean.detalheSobreProduto(produto)}" size="md" 
-										title="Detalhes sobre o produto">
+										title="Detalhes sobre o produto" style="width:200px">
 									</b:commandButton>
 									<br/>
 									<br/>
 								</b:form>
 							</f:facet>
-
 						</b:thumbnail>
 					</ui:repeat>
-
-					<!-- 					<b:form> -->
-					<!-- 						<b:socialShare shares="twitter,linkedin,facebook" showLabel="true" -->
-					<!-- 							show-count="false" -->
-					<!-- 							text="Curta nossa página e conheça nossos produtos.\n" -->
-					<!-- 							url="http://localhost:8080/e-commerce/loja.xhtml" /> -->
-					<!-- 					</b:form> -->
 				</b:panel>
 			</b:panel>
 		</b:container>

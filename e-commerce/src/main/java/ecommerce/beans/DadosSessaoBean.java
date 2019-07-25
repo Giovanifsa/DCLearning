@@ -44,44 +44,4 @@ public class DadosSessaoBean implements Serializable {
 		// TODO Auto-generated method stub
 		this.produtosCarrinho.add(item);
 	}
-	
-	public String removerProduto(Produto produto) {
-		
-		for (ItemCarrinho item : produtosCarrinho) {
-			if(item.getProduto().equals(produto)) {
-				produtosCarrinho.remove(item);
-				if(produtosCarrinho.isEmpty()) {
-					templateBean.adicionarMensagem(FacesMessage.SEVERITY_INFO, "Produto removido!!", true);
-					return "carrinhoCompras?faces-redirect=true";
-				}
-			}
-		}
-		
-		templateBean.adicionarMensagem(FacesMessage.SEVERITY_INFO, "Produto removido!", true);
-		return "carrinhoCompras?faces-redirect=true";
-	}
-	public String removerItemCarrinho(Produto produto, int quantidade) {
-		/**
-		 * Método para remover determinado produto por quantidade
-		 * @param produto
-		 * @param quantidade
-		 */
-
-		for (ItemCarrinho item : produtosCarrinho) {
-			
-			if(item.getProduto().equals(produto)) {		// PEGA O PRODUTO
-				if(quantidade > item.getQuantidade()) {	//	VERIFICA SE PODE REMOVER
-					templateBean.adicionarMensagem(FacesMessage.SEVERITY_INFO, "Valor inválido!", true);
-
-				} else {
-					item.setQuantidade(item.getQuantidade() - quantidade);
-					if(item.getQuantidade() == 0) {	//	SE NÃO TEM MAIS O PRODUTO
-						removerProduto(produto);
-						return "carrinhoCompras?faces-redirect=true";
-					}
-				}
-			}
-		}
-		return "carrinhoCompras?faces-redirect=true";
-	}
 }

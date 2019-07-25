@@ -43,12 +43,13 @@ public class Lojabean{
 		}
 	}
 	
-	public List<String> imagens(){
-		List<Produto> produtos = produtoDao.listarProdutos();
-		List<String> imagens = new ArrayList<>();
-		for (Produto item : produtos) {
-			imagens.add(item.getImagemProduto().getNomeArquivo());
+	public String cadastreSeusProdutos() {
+		if(!loginBean.usuarioEstaLogado()) {
+			templateBean.adicionarMensagem(FacesMessage.SEVERITY_INFO, "Inicie uma sessão para cadastrar seus produtos.", true);
+			return "login?faces-redirect=true&redirecionamento=novoProduto";
+		} else {
+			return "novoProduto?faces-redirect=true";
 		}
-		return imagens;
 	}
+	
 }
