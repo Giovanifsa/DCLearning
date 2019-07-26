@@ -1,25 +1,51 @@
 package ecommerce.models;
 
-import java.sql.Timestamp;
+import java.math.BigDecimal;
 import java.util.List;
 
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
+import org.hibernate.annotations.ValueGenerationType;
+@Entity
 public class Venda {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	
-	@OneToMany
-	private List<ItemCarrinho> itensVendidos;
+	private String timestampVenda;
+	@ManyToOne(fetch = FetchType.EAGER)
+	private Usuario cliente;
+	private BigDecimal valor;
 	
-	@Temporal(TemporalType.TIMESTAMP)
-	private Timestamp timestampVenda;
+	@OneToMany(fetch = FetchType.EAGER)
+	private List<ItemCarrinho> produtosComprados;
+	
+	public String getTimestampVenda() {
+		return timestampVenda;
+	}
+	
+	public List<ItemCarrinho> getProdutosComprados() {
+		return produtosComprados;
+	}
+	public void setProdutosComprados(List<ItemCarrinho> produtosComprados) {
+		this.produtosComprados = produtosComprados;
+	}
+	public void setTimestampVenda(String timestampVenda) {
+		this.timestampVenda = timestampVenda;
+	}
+	
+	public Usuario getCliente() {
+		return cliente;
+	}
+	public void setCliente(Usuario cliente) {
+		this.cliente = cliente;
+	}
 
 	public int getId() {
 		return id;
@@ -28,12 +54,11 @@ public class Venda {
 	public void setId(int id) {
 		this.id = id;
 	}
-
-	public List<ItemCarrinho> getItensVendidos() {
-		return itensVendidos;
+	
+	public BigDecimal getValor() {
+		return valor;
 	}
-
-	public void setItensVendidos(List<ItemCarrinho> itensVendidos) {
-		this.itensVendidos = itensVendidos;
+	 public void setValor(BigDecimal valor) {
+		this.valor = valor;
 	}
 }
