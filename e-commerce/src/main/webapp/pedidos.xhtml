@@ -21,8 +21,8 @@
 						<h:outputLabel value="Listagem de pedidos" />
 					</f:facet>
 
-					<b:dataTable value="#{vendasBean.listarComprasUsuario()}" var="venda" select="true"
-						selection-mode="single" onselect="ajax:vendasBean.pedidoSelecionado(venda);">
+					<b:dataTable value="#{vendasBean.listarComprasUsuario()}" var="venda" selectionInfo="false"
+						selection-mode="single" onselect="ajax:vendasBean.pedidoSelecionado(venda);" select="true">
 							<b:dataTableColumn label="Pedido nº">
 								<h5 style="text-align:center"><h:outputText value="#{venda.id}" /></h5>
 							</b:dataTableColumn>

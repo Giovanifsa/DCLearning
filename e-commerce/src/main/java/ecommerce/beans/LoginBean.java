@@ -86,11 +86,8 @@ public class LoginBean implements Serializable {
 			pagTemplate.adicionarMensagem(FacesMessage.SEVERITY_INFO, "Sessão iniciada para " + dadosSessao.getUsuarioLogado().getEmail() +
 					" - Seja bem vindo(a) novamente " + dadosSessao.getUsuarioLogado().getNome() + "!", true);
 			
-			pagTemplate.adicionarMensagemGrowl(LocalGrowl.SUPERIOR_DIREITO, FacesMessage.SEVERITY_INFO, "Sessão iniciada para " + dadosSessao.getUsuarioLogado().getEmail() +
-					" - Seja bem vindo(a) novamente " + dadosSessao.getUsuarioLogado().getNome() + "!", true);
-			
 			//Redirecione para uma página após logar.
-			return processarRedirecionamento("login?faces-redirect=true");
+			return processarRedirecionamento("loja?faces-redirect=true");
 		}
 		
 		//Erro FacesMessage de usuário não encontrado

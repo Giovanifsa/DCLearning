@@ -43,6 +43,7 @@ public class NovoProdutoBean implements Serializable {
 	private String cadastroCustoCompra;
 	private String cadastroMargemLucro;
 	private Loja cadastroLoja;
+	private int editandoQuantiaVendas;
 
 	@Inject
 	private ProdutoDAO dao;
@@ -61,6 +62,7 @@ public class NovoProdutoBean implements Serializable {
 		
 		try {
 			if (editandoId == -1) {
+				produto.setVendas(editandoQuantiaVendas);
 				produto.setImagemProduto(dao.salvarImagemProduto(imagemProduto));
 				dao.adicionarProduto(produto);
 				
@@ -109,6 +111,7 @@ public class NovoProdutoBean implements Serializable {
 		cadastroMargemLucro = produto.getPorcentualMargemLucro().toString();
 		cadastroLoja = produto.getLojaDoProduto();
 		arquivoRecursoEditando = produto.getImagemProduto();
+		editandoQuantiaVendas = produto.getVendas();
 	}
 
 	/*
@@ -161,6 +164,7 @@ public class NovoProdutoBean implements Serializable {
 		cadastroLoja = null;
 		arquivoRecursoEditando = null;
 		imagemProduto = null;
+		editandoQuantiaVendas = 0;
 	}
 	
 	public boolean estaEditando() {

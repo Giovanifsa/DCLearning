@@ -22,8 +22,6 @@
 					<h:outputLabel value="Produtos em seu carrinho" />
 				</f:facet>
 
-				<h:outputLabel id="t" />
-
 				<b:dataTable value="#{carrinhoBean.produtosCarrinho()}"
 					responsive="true" var="tabela" id="tabelaProdutos"
 					fixedHeader="true" scroll-horizontally="true"
@@ -43,7 +41,7 @@
 							#{tabela.produto.nome}
 						</b:dataTableColumn>
 
-					<b:dataTableColumn label="Descrição" style="text-align:center">
+					<b:dataTableColumn label="Descrição" style="text-align:center;width:50%">
 							#{tabela.produto.descricao}
 						</b:dataTableColumn>
 					
@@ -56,7 +54,7 @@
 							<h:outputLabel id="preco" value="R$ #{tabela.precoTotal()}" />
 
 							<b:touchSpin id="touch" value="#{tabela.quantidade}" ajax="true"
-								update="preco, templateNavbar" vertical-buttons="true" />
+								update="preco, templateNavbar, formBotoesCompra" vertical-buttons="true" min="1" />
 						</b:form>
 					</b:dataTableColumn>
 
@@ -76,7 +74,7 @@
 					</b:dataTableColumn>
 				</b:dataTable>
 
-				<b:form>
+				<b:form id="formBotoesCompra">
 					<b:panelGrid col-spans="6,6" columns="12" rendered="true"
 						col-xs="12" col-sm="12" col-md="12" col-lg="12"
 						small-screen="three-fourths" medium-screen="three-fourths"
@@ -91,7 +89,7 @@
 
 						<b:commandButton value="Finalizar compra - R$ #{carrinhoBean.calcularPrecoFinal()}"
 							action="#{carrinhoBean.finalizarCompra()}"
-							look="success" size="md"
+							look="success" size="md" rendered="#{carrinhoBean.produtosCarrinho().isEmpty() == false}"
 							small-screen="half" medium-screen="one-fourth"
 							large-screen="one-third" col-xs="12" col-ms="6" col-md="4"
 							col-lg="9" offset-md="2" offset-lg="2" />

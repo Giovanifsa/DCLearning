@@ -43,8 +43,8 @@
 				<b:panel style="background-color:darkCyan">
 					<ui:repeat value="#{lojaBean.listarProdutos()}" var="produto">
 						<b:thumbnail col-lg="4" style="height:20pc;width:15pc">
-							<img src="#{request.contextPath}/resources/images/home00.jpg"
-								alt="#{produto.nome}" />
+							<img src="#{request.contextPath}/#{produto.imagemProduto.nomeDiretorio}/#{produto.imagemProduto.nomeArquivo}"
+								alt="#{produto.nome}" style="height: 170px;width: 200px"/>
 							<f:facet name="caption">
 								<h4 style="overflow-wrap: truncate">#{produto.nome}</h4>
 								<p class="descricao-css">#{produto.descricao}</p>

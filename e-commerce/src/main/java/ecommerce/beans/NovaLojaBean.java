@@ -34,6 +34,7 @@ public class NovaLojaBean implements Serializable {
 	private String cadastroNomeFantasia;
 	private String cadastroCNPJ;
 	private String cadastroDespesasTotais;
+	private int editandoQuantiaProdutos;
 
 	@Inject
 	private LojaDAO dao;
@@ -74,24 +75,27 @@ public class NovaLojaBean implements Serializable {
 	public String salvarLoja() {
 		Loja l = new Loja(loginBean.getUsuarioLogado(), cadastroNomeFantasia, cadastroCNPJ, new BigDecimal(cadastroDespesasTotais));
 		
-		if (editandoId != -1) {
-			dao.atualizarLoja(l);
-			pagTemplate.adicionarMensagem(FacesMessage.SEVERITY_INFO, "Loja " + l.getNomeFantasia() + " editada com sucesso!", true);
+		try {
+			if (editandoId != -1) {
+				l.setQuantiaProdutos(editandoQuantiaProdutos);
+				l.setId(editandoId);
+				
+				dao.atualizarLoja(l);
+				pagTemplate.adicionarMensagem(FacesMessage.SEVERITY_INFO, "Loja " + l.getNomeFantasia() + " editada com sucesso!", true);
+				
+				return "novaLoja?faces-redirect=true";
+			}
 			
-			return "novaLoja?faces-redirect=true";
-		}
-		
-		else {
-			try {
+			else {
 				dao.adicionarLoja(l);
 				pagTemplate.adicionarMensagem(FacesMessage.SEVERITY_INFO, "Loja " + l.getNomeFantasia() + " cadastrada com sucesso!", true);
 				
 				return "novaLoja?faces-redirect=true";
-			} catch (PersistenceException ex) {
-				if (ex.getCause() instanceof ConstraintViolationException) {
-					FacesContext.getCurrentInstance().addMessage(campoCNPJ.getClientId(), 
-							new FacesMessage(FacesMessage.SEVERITY_ERROR, "Este CNPJ já está cadastrado!", null));
-				}
+			}
+		} catch (PersistenceException ex) {
+			if (ex.getCause() instanceof ConstraintViolationException) {
+				FacesContext.getCurrentInstance().addMessage(campoCNPJ.getClientId(), 
+						new FacesMessage(FacesMessage.SEVERITY_ERROR, "Este CNPJ já está cadastrado!", null));
 			}
 		}
 		
@@ -100,9 +104,11 @@ public class NovaLojaBean implements Serializable {
 	
 	public void editar(Loja loja) {
 		editandoId = loja.getId();
+		
 		cadastroNomeFantasia = loja.getNomeFantasia();
 		cadastroCNPJ = loja.getCnpj();
 		cadastroDespesasTotais = loja.getDespesasTotais().toString();
+		editandoQuantiaProdutos = loja.getQuantiaProdutos();
 	}
 	
 	public void cancelarEdicao() {
@@ -111,6 +117,7 @@ public class NovaLojaBean implements Serializable {
 		cadastroNomeFantasia = null;
 		cadastroCNPJ = null;
 		cadastroDespesasTotais = null;
+		editandoQuantiaProdutos = 0;
 	}
 	
 	public boolean estaEditando() {
