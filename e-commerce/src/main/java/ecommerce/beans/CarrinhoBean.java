@@ -20,8 +20,6 @@ import ecommerce.models.Usuario;
 @Named
 @ViewScoped
 public class CarrinhoBean implements Serializable {
-	@Inject
-	private UsuarioDAO usuarioDao;
 
 	@Inject
 	private VendasBean vendasBean;
@@ -35,7 +33,6 @@ public class CarrinhoBean implements Serializable {
 	@Inject
 	private LoginBean loginBean;
 
-	private String spinner;
 	private int produtoAtualizado;
 
 	/**
@@ -44,14 +41,6 @@ public class CarrinhoBean implements Serializable {
 	 * 
 	 * @return Valor total de compra.
 	 */
-
-	public String getSpinner() {
-		return spinner;
-	}
-
-	public void setSpinner(String spinner) {
-		this.spinner = spinner;
-	}
 
 	public int getProdutoAtualizado() {
 		return produtoAtualizado;
@@ -126,7 +115,7 @@ public class CarrinhoBean implements Serializable {
 
 		return quantidade;
 	}
-	
+
 	public List<ItemCarrinho> produtosCarrinho() {
 		return dadosSessao.getProdutosCarrinho();
 	}
@@ -142,6 +131,7 @@ public class CarrinhoBean implements Serializable {
 
 	/**
 	 * Esse método retorna o preço total de um produto no carrinho
+	 * 
 	 * @param produto
 	 * @return Double
 	 */
@@ -149,93 +139,46 @@ public class CarrinhoBean implements Serializable {
 		List<ItemCarrinho> itens = dadosSessao.getProdutosCarrinho();
 		BigDecimal valor = new BigDecimal(0);
 		int quantidade = 0;
-		for (ItemCarrinho item :itens) {
-			if(item.getProduto().equals(produto)) {
+		for (ItemCarrinho item : itens) {
+			if (item.getProduto().equals(produto)) {
 				valor = produto.calcularPreco();
-				quantidade = item.getQuantidade();				
+				quantidade = item.getQuantidade();
 			}
 		}
 		return valor.multiply(new BigDecimal(quantidade));
 	}
-	
-	public String addAoCarrinhoPeloCarrinho(Produto produto) {
-			templateBean.adicionarMensagem(FacesMessage.SEVERITY_WARN, "Valor: " + spinner, true);
-			adicionarAoCarrinho(produto, Integer.parseInt(spinner));
-			
-			templateBean.adicionarMensagem(FacesMessage.SEVERITY_INFO, "Quantidade do produto atualizada! SPINNER " + spinner, true);
-			
-			return "carrinhoCompras?faces-redirect=true";
-	}
-	public String removerProdutoPorQuantidade(Produto produto) {
-		List<ItemCarrinho> produtos = dadosSessao.getProdutosCarrinho();
-		templateBean.adicionarMensagem(FacesMessage.SEVERITY_WARN, "Valor: " + spinner, true);
-		
-		for (int i = 0; i < produtos.size(); i++) {	//	PASSA POR TODOS OS PRODUTOS
-			if(produtos.get(i).getProduto().getId() == produto.getId()) {	// VERIFICA SE É O PRODUTO CERTO
 
-				if(produtos.get(i).getQuantidade() < Integer.parseInt(spinner)) {//VERIFICA SE PODE REMOVER
-					
-					templateBean.adicionarMensagem(FacesMessage.SEVERITY_ERROR, "Valor inválido!", true);
-				} else {
-					//DIMINIU QUANTIDADE
-					produtos.get(i).setQuantidade(produtos.get(i).getQuantidade() - Integer.parseInt(spinner));
-					templateBean.adicionarMensagem(FacesMessage.SEVERITY_INFO, "Quantidade do produto atualizada!", true);
-
-					if(produtos.get(i).getQuantidade() == 0) { // VERIFICA SE NÃO TEM MAIS O PRODUTO
-						produtos.remove(i);
-						
-						templateBean.adicionarMensagem(FacesMessage.SEVERITY_INFO, "Produto removido!", true);
-					}
-				}
-			}
-		}
-		return "carrinhoCompras?faces-redirect=true";
-	}
-	
 	public String removerProduto(Produto produto) {
 		ArrayList<ItemCarrinho> produtos = dadosSessao.getProdutosCarrinho();
-		
-		for(int i = 0; i < produtos.size(); i++) {
-			if(produtos.get(i).getProduto().getId() == produto.getId()) {
+
+		for (int i = 0; i < produtos.size(); i++) {
+			if (produtos.get(i).getProduto().equals(produto)) {
 				produtos.remove(i);
 			}
 		}
-		
+
 		templateBean.adicionarMensagem(FacesMessage.SEVERITY_INFO, "Produto removido!", true);
 		return "carrinhoCompras?faces-redirect=true";
 	}
-	
-	public List<Integer> valoresSpinner() {
-		List<Integer> valor = new ArrayList<>();
-		for(int i = 1; i < 51; i++) {
-			valor.add(i);
-		}
-		return valor;
-	}
-	
+
 	public String voltarParaLoja() {
 		return "loja?faces-redirect=true";
 	}
 
-	public String finalizarCompra() {
+	public String finalizarCompra(int id) {
 
 		if (!loginBean.usuarioEstaLogado()) {
 			templateBean.adicionarMensagem(FacesMessage.SEVERITY_INFO,
 					"Para finalizar a sua compra, é necessário fazer o Login!", true);
-			return "login?faces-redirect=true&redirecionamento=loja.xhtml";
+			return "login?faces-redirect=true&redirecionamento=carinhoCompras.xhtml";
 		} else {
-			List<ItemCarrinho> itens =dadosSessao.getProdutosCarrinho();
+			List<ItemCarrinho> itens = dadosSessao.getProdutosCarrinho();
 			Usuario cliente = loginBean.getUsuarioLogado();
 			BigDecimal total = calcularPrecoFinal();
 
-			try {
-				vendasBean.adicionarVenda(itens, cliente, total);
-			} catch (Exception e ) {
-				templateBean.adicionarMensagem(FacesMessage.SEVERITY_INFO,
-						"" + e, true);
-			}
-			templateBean.adicionarMensagem(FacesMessage.SEVERITY_INFO,
-					"Compra realizado com sucesso!", true);
+			vendasBean.adicionarVenda(itens, cliente, total);
+			dadosSessao.setProdutosCarrinho(new ArrayList<ItemCarrinho>());
+			templateBean.adicionarMensagem(FacesMessage.SEVERITY_INFO, "Compra realizado com sucesso!", true);
 			return "pedido?faces-redirect=true";
 		}
 	}

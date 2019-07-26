@@ -15,24 +15,19 @@
 			<h:outputLabel />
 
 			<b:container id="container">
-				<b:panel title="Compra realizada" look="primary"
-					collapsible="false" small-screen="12" medium-screen="12"
-					large-screen="12" showCollapseLink="false" tooltip-position="right"
-					rendered="true" id="painel" icon="shopping-cart" icon-align="right"
+				<b:panel title="Compra realizada" look="primary" collapsible="false"
+					small-screen="12" medium-screen="12" large-screen="12"
+					showCollapseLink="false" tooltip-position="right" rendered="true"
+					id="painel" icon="shopping-cart" icon-align="right"
 					display="inline">
-					
-					<b:panel>
-						<ui:repeat >
-							<b:row>
-								
-								<h:outputLabel value="#{pedido.cliente}" />
-								<br/>
-								<h:outputLabel value="#{pedido.timestampVenda}" />
-								<br />
-								<h:outputLabel value="#{pedido.valor}" />
-							</b:row>
-						</ui:repeat>
-					</b:panel>
+
+					<b:dataTable
+						value="#{vendasBean.gerarPedido(loginBean.getUsuarioLogado().getId())}"
+						var="pedido">
+							#{pedido.cliente}
+							#{pedido.timestampVenda}
+							#{pedido.valor}
+					</b:dataTable>
 				</b:panel>
 			</b:container>
 		</b:form>

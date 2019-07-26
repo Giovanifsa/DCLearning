@@ -3,9 +3,10 @@ package ecommerce.beans;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.security.NoSuchAlgorithmException;
-import java.util.Date;
+import java.sql.Date;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
@@ -17,6 +18,7 @@ import ecommerce.models.Produto;
 import ecommerce.models.Usuario;
 import ecommerce.tools.MecanismoDeHash;
 
+@Named
 public class PopulaBanco {
 
 	@Inject
@@ -24,6 +26,8 @@ public class PopulaBanco {
 	
 	@Inject
 	ProdutoDAO dao;
+	@Inject 
+	VendasBean vendas;
 	
 	public static void main(String args[]) throws NoSuchAlgorithmException, IOException {
 		EntityManagerFactory emFactory = Persistence.createEntityManagerFactory("ecommerce");
@@ -299,6 +303,7 @@ public class PopulaBanco {
 		em.persist(p7);
 		
 		em.getTransaction().commit();
+		
 	}
 }
 

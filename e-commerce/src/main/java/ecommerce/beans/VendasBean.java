@@ -23,10 +23,6 @@ import ecommerce.models.Venda;
 public class VendasBean {
 
 	@Inject
-	TemplateBean templateBean;
-	@Inject
-	ProdutoDAO produtoDao;
-	@Inject
 	DadosSessaoBean dadosSessao;
 	@Inject
 	LoginBean loginBean;
@@ -38,8 +34,9 @@ public class VendasBean {
 	}
 	/**
 	 * Adiciona uma compra ao banco de dados
-	 * @param valor
+	 * @param itens
 	 * @param cliente
+	 * @param total
 	 */
 	@Transactional
 	public void adicionarVenda(List<ItemCarrinho> itens, Usuario cliente, BigDecimal total){
@@ -48,30 +45,17 @@ public class VendasBean {
 		String data = formatador.format(aux_data);
 		
 		Venda venda = new Venda();
-		venda.setId(cliente.getId());
 		venda.setCliente(cliente);
 		venda.setProdutosComprados(itens);
 		venda.setTimestampVenda(data);
 		venda.setValor(total);
-		templateBean.adicionarMensagem(FacesMessage.SEVERITY_INFO, "|Cliente: " + venda.getCliente().getNome() 
-				+ " | " + venda.getCliente().getId() + "\n|Data: " +venda.getTimestampVenda() + "\n|Valor:" + venda.getValor()
-				+ " |Produto: " + venda.getProdutosComprados().get(0) +"\n\n[ " + itens + " | " + cliente + " | " + total +" " + " ]", true);
-		try {
-			
-			vendaDao.adicionarVenda(venda);
-		} catch(Exception e) {
-			templateBean.adicionarMensagem(FacesMessage.SEVERITY_ERROR, "" + e, true);
-		}
-		
-		
-		
+		vendaDao.adicionarItensCarrinho(itens);
+		vendaDao.adicionarVenda(venda);
 	}
-	
-//	public Venda gerarPedido() {
-//		int id = loginBean.getUsuarioLogado().getId();
-//		Venda venda = vendaDao.gerarPedido(id);
-//
-//		return venda;
-//	}
+	@Transactional
+	public Venda gerarPedido(int id) {
+		System.out.println(id);
+		return vendaDao.getVenda(id);
+	}
 
 }

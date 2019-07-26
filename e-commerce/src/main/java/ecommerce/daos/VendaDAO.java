@@ -7,9 +7,11 @@ import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
 
 import ecommerce.beans.TemplateBean;
 import ecommerce.models.ItemCarrinho;
+import ecommerce.models.Produto;
 import ecommerce.models.Usuario;
 import ecommerce.models.Venda;
 
@@ -25,22 +27,13 @@ public class VendaDAO implements Serializable {
 	public void adicionarVenda(Venda v) {
 		em.persist(v);
 	}
+	public void adicionarItensCarrinho(List<ItemCarrinho> itens) {
+		for (ItemCarrinho item : itens) {
+			em.persist(item);
+		}
+	}
 	
-//	public Venda gerarPedido(int id) {
-//		Venda vendas = new Venda();
-//		try {
-//			em.getTransaction().begin();
-//			
-//			CriteriaBuilder criteria = em.getCriteriaBuilder();
-//			CriteriaQuery<Venda> query = criteria.createQuery(Venda.class);
-//			Root<Venda> rota = query.from(Venda.class);
-//			query.orderBy(criteria.desc(rota.get(vendas.getTimestampVenda())));
-//			em.getTransaction().commit();
-//						
-//		} catch (Exception e) {
-//			t.adicionarMensagem(FacesMessage.SEVERITY_ERROR, "" + e, true);
-//		}
-//		return vendas;
-//	}
-	
+	public Venda getVenda(int cliente_id) {
+		return em.find(Venda.class, cliente_id);						
+	}
 }

@@ -122,7 +122,7 @@ public class NovoProdutoBean implements Serializable {
 	}
 	
 	public Long getQuantidadeDisponivel(Produto produto) {
-		String jpql = "select count(p) from Produto p where p.id = " + produto.getId();
+		String jpql = "select count(p) from " + Produto.class.getSimpleName() + " p where p.id = " + produto.getId();
 
 		Query query = em.createQuery(jpql, Produto.class);
 		Long total = (Long) query.getSingleResult();

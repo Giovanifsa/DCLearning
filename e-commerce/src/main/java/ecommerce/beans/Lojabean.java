@@ -1,6 +1,5 @@
 package ecommerce.beans;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.enterprise.context.RequestScoped;
@@ -35,8 +34,7 @@ public class Lojabean{
 
 	public String cadastreSuaLoja() {
 		if (!loginBean.usuarioEstaLogado()) {
-			templateBean.adicionarMensagem(FacesMessage.SEVERITY_INFO, "Inicie uma sessão para cadastrar sua loja.",
-					true);
+			templateBean.adicionarMensagem(FacesMessage.SEVERITY_INFO, "Inicie uma sessão para cadastrar sua loja.", true);
 			return "login?faces-redirect=true&redirecionamento=novaLoja";
 		} else {
 			return "novaLoja?faces-redirect=true";
