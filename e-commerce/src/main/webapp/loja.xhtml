@@ -22,11 +22,11 @@
 
 			<b:panel look="primary" offset-lg="1" collapsible="false"
 				small-screen="12" medium-screen="7" large-screen="10"
-				showCollapseLink="false" tooltip-position="right" rendered="true"
+				showCollapseLink="false" tooltip-position="right" rendered="#{lojaBean.listarProdutos().isEmpty() == false}"
 				id="painel" icon-align="left" display="inline" icon="home"
 				icon-size="2x">
 				<b:form>
-						<h1 align="center" >E-Commerce
+						<h1 align="center" >DCStore
 						</h1>
 					<b:panel look="danger" style="text-align:right">
 					<p><img src="#{request.contextPath}/resources/images/ecommerce.png"
@@ -60,6 +60,31 @@
 						</b:thumbnail>
 					</ui:repeat>
 				</b:panel>
+			</b:panel>
+			
+			<b:panel collapsible="false" look="warning" rendered="#{lojaBean.listarProdutos().isEmpty()}">
+				<f:facet name="heading">
+					<b:iconAwesome value="list-alt" solid="true" style="padding-right:20px"/>
+					<h:outputLabel value="Oops, algo está errado!" rendered="#{buscarProdutosBean.buscaGerouResultados() == false}"/>
+				</f:facet>
+			
+				<b:column>
+					<b:row>
+						<b:column>
+							<h2 style="text-align:center"><h:outputLabel value="Caramba! Não há nada em nossa loja!"/> </h2>
+						</b:column>
+					</b:row>
+					
+					<b:row>
+						<b:column>
+							<h4 style="text-align:center" ><h:outputLabel value="Volte mais tarde quanto estivermos concluídos! Ou..." /></h4>
+						</b:column>
+						
+						<b:column style="text-align:center">
+							<b:button look="warning" value="Cadastre um produto" href="novoProduto.xhtml" icon-awesome="angle-left" size="lg"/>
+						</b:column>
+					</b:row>
+				</b:column>
 			</b:panel>
 		</b:container>
 	</ui:define>
