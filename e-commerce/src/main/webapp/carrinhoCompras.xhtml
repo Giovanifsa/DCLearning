@@ -11,14 +11,16 @@
 
 <ui:composition template="gnr_template.xhtml">
 	<ui:define name="body">
-		<h:outputLabel />
-
 		<b:container id="container">
-			<b:panel title="Carrinho de compras" look="primary"
+			<b:panel look="primary"
 				collapsible="false" small-screen="12" medium-screen="12"
 				large-screen="12" showCollapseLink="false" tooltip-position="right"
-				rendered="true" id="painel" icon="shopping-cart" icon-align="right"
-				display="inline">
+				rendered="true" id="painel" >
+				
+				<f:facet name="heading">
+					<b:iconAwesome value="shopping-cart" solid="true" style="padding-right:20px" addon="true"/>
+					<h:outputLabel value="Produtos em seu carrinho" />
+				</f:facet>
 
 				<h:outputLabel id="t" />
 
@@ -30,6 +32,13 @@
 					col-sm="12" col-md="12" col-lg="12" tiny-screen="half"
 					select="false">
 
+					<b:dataTableColumn label="Imagem" orderable="false"
+						style="text-align:center">
+						<img
+							src="#{request.contextPath}/#{tabela.produto.imagemProduto.nomeDiretorio}/#{tabela.produto.imagemProduto.nomeArquivo}"
+							width="50px" align="middle" />
+					</b:dataTableColumn>
+
 					<b:dataTableColumn label="Produto" style="text-align:center">
 							#{tabela.produto.nome}
 						</b:dataTableColumn>
@@ -37,12 +46,9 @@
 					<b:dataTableColumn label="Descrição" style="text-align:center">
 							#{tabela.produto.descricao}
 						</b:dataTableColumn>
-
-					<b:dataTableColumn label="Imagem" orderable="false"
-						style="text-align:center">
-						<img
-							src="#{request.contextPath}/#{produtoBean.produto.imagemProduto.nomeDiretorio}/#{produtoBean.produto.imagemProduto.nomeArquivo}"
-							width="50px" align="middle" />
+					
+					<b:dataTableColumn label="Preço unitário" width="10px">
+						<h:outputLabel value="R$ #{tabela.produto.calcularPreco()}" />
 					</b:dataTableColumn>
 
 					<b:dataTableColumn label="Quantidade" width="10px">
@@ -76,19 +82,19 @@
 						small-screen="three-fourths" medium-screen="three-fourths"
 						large-screen="three-fourths">
 
-						<b:commandButton value="Voltar ao site" rendered="true"
-							title="Voltar ao site" small-screen="half" ajax="true"
+						<b:commandButton value="Voltar ao site"
+							title="Voltar ao site" small-screen="half"
 							medium-screen="three-fourths" large-screen="three-fourths"
 							col-xs="12" col-ms="6" col-md="4" col-lg="9" offset-md="1"
-							offset-lg="2" class="btn btn-primary" look="primary"
-							action="#{carrinhoBean.voltarParaLoja()}" process="@this" />
+							offset-lg="2" look="primary"
+							action="#{carrinhoBean.voltarParaLoja()}"/>
 
-						<b:commandButton value="Finalizar compra"
-							action="#{carrinhoBean.finalizarCompra(loginBean.usuarioLogado.id)}"
-							look="success" size="md" ajax="true" class="btn btn-success"
-							small-screen="half" medium-screen="one-fourth" process="@this"
+						<b:commandButton value="Finalizar compra - R$ #{carrinhoBean.calcularPrecoFinal()}"
+							action="#{carrinhoBean.finalizarCompra()}"
+							look="success" size="md"
+							small-screen="half" medium-screen="one-fourth"
 							large-screen="one-third" col-xs="12" col-ms="6" col-md="4"
-							col-lg="9" offset-md="2" offset-lg="2" autoUpdate="false" />
+							col-lg="9" offset-md="2" offset-lg="2" />
 					</b:panelGrid>
 				</b:form>
 			</b:panel>

@@ -7,8 +7,6 @@ import java.io.InputStream;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.net.URLConnection;
-import java.nio.file.Files;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.faces.application.FacesMessage;
@@ -18,15 +16,12 @@ import javax.faces.validator.ValidatorException;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.persistence.EntityManager;
 import javax.persistence.PersistenceException;
-import javax.persistence.Query;
 import javax.servlet.http.Part;
 
 import org.hibernate.exception.ConstraintViolationException;
 
 import ecommerce.control.Transactional;
-import ecommerce.daos.ArquivoDAO;
 import ecommerce.daos.LojaDAO;
 import ecommerce.daos.ProdutoDAO;
 import ecommerce.models.ArquivoRecurso;
@@ -116,11 +111,12 @@ public class NovoProdutoBean implements Serializable {
 		arquivoRecursoEditando = produto.getImagemProduto();
 	}
 
+	/*
 	// Esse método deleta o produto
 	@Transactional
 	public void remover(Produto produto) {
 		dao.removerProduto(produto);
-	}
+	}*/
 	
 	public List<Loja> getLojas() {
 		return lojaDao.listarLojasUsuario(loginBean.getUsuarioLogado());

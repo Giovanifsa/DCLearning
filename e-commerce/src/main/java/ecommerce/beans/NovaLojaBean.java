@@ -7,7 +7,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.faces.application.FacesMessage;
-import javax.faces.application.FacesMessage.Severity;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.validator.ValidatorException;
@@ -118,6 +117,7 @@ public class NovaLojaBean implements Serializable {
 		return editandoId != -1;
 	}
 
+	/*
 	@Transactional
 	public String remover(Loja loja) {
 		dao.removerLoja(loja);
@@ -127,7 +127,7 @@ public class NovaLojaBean implements Serializable {
 		}
 		
 		return "novaLoja?faces-redirect=true";
-	}
+	}*/
 
 	public List<Loja> listarLojas() {
 		return dao.listarLojasUsuario(loginBean.getUsuarioLogado());

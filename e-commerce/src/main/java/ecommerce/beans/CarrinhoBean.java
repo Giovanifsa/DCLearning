@@ -11,7 +11,7 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import ecommerce.daos.UsuarioDAO;
+import ecommerce.daos.VendaDAO;
 import ecommerce.models.ItemCarrinho;
 import ecommerce.models.Produto;
 import ecommerce.models.Usuario;
@@ -23,15 +23,14 @@ public class CarrinhoBean implements Serializable {
 
 	@Inject
 	private VendasBean vendasBean;
-
 	@Inject
 	private DadosSessaoBean dadosSessao;
-
 	@Inject
 	private TemplateBean templateBean;
-
 	@Inject
 	private LoginBean loginBean;
+	@Inject
+	private VendaDAO vendaDao;
 
 	private int produtoAtualizado;
 
@@ -165,21 +164,17 @@ public class CarrinhoBean implements Serializable {
 		return "loja?faces-redirect=true";
 	}
 
-	public String finalizarCompra(int id) {
-
+	public String finalizarCompra() {
 		if (!loginBean.usuarioEstaLogado()) {
 			templateBean.adicionarMensagem(FacesMessage.SEVERITY_INFO,
 					"Para finalizar a sua compra, é necessário fazer o Login!", true);
-			return "login?faces-redirect=true&redirecionamento=carinhoCompras.xhtml";
+			return "login?faces-redirect=true&redirecionamento=carrinhoCompras";
 		} else {
-			List<ItemCarrinho> itens = dadosSessao.getProdutosCarrinho();
-			Usuario cliente = loginBean.getUsuarioLogado();
-			BigDecimal total = calcularPrecoFinal();
+			vendasBean.salvarVenda();
+			dadosSessao.getProdutosCarrinho().clear();
 
-			vendasBean.adicionarVenda(itens, cliente, total);
-			dadosSessao.setProdutosCarrinho(new ArrayList<ItemCarrinho>());
 			templateBean.adicionarMensagem(FacesMessage.SEVERITY_INFO, "Compra realizado com sucesso!", true);
-			return "pedido?faces-redirect=true";
+			return "pedidos?faces-redirect=true";
 		}
 	}
 }

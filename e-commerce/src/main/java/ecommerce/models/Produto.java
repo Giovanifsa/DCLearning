@@ -156,7 +156,8 @@ public class Produto {
 
 	public BigDecimal calcularPreco() {
 		return custoCompra.add(lojaDoProduto.calcularDespesaRateada())
-					.multiply(new BigDecimal(1).add(porcentualMargemLucro.divide(new BigDecimal(100))));
+					.multiply(new BigDecimal(1).add(porcentualMargemLucro.divide(new BigDecimal(100))))
+					.setScale(2, BigDecimal.ROUND_HALF_UP);
 	}
 	
 	public BigDecimal calcularPrecoPelaQuantidade(int quantidade) {

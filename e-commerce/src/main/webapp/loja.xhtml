@@ -31,19 +31,17 @@
 					<b:panel look="danger" style="text-align:right">
 					<p><img src="#{request.contextPath}/resources/images/ecommerce.png"
 						height="90px" width="100px" align="left" /></p>
-						<b:commandButton value="Cadastre sua loja" size="sm"
+						<b:button value="Cadastre sua loja" size="sm"
 							style="background-color:yellowGreen; width:250px;height:28px"
-							title="Cadastrar loja" action="#{lojabean.cadastreSuaLoja()}"
-							ajax="true" />
+							title="Cadastrar loja" href="novaLoja.xhtml" />
 						<p></p>
-						<b:commandButton value="Cadastre seus produtos" size="sm"
+						<b:button value="Cadastre seus produtos" size="sm"
 							style="background-color:cyan; width:250px;height:28px"
-							title="Cadastrar produtos" action="#{lojabean.cadastreSeusProdutos()}"
-							ajax="true" />
+							title="Cadastrar produtos" href="novoProduto.xhtml"/>
 					</b:panel>
 				</b:form>
 				<b:panel style="background-color:darkCyan">
-					<ui:repeat value="#{lojabean.listarProdutos()}" var="produto">
+					<ui:repeat value="#{lojaBean.listarProdutos()}" var="produto">
 						<b:thumbnail col-lg="4" style="height:20pc;width:15pc">
 							<img src="#{request.contextPath}/resources/images/home00.jpg"
 								alt="#{produto.nome}" />
@@ -52,10 +50,9 @@
 								<p class="descricao-css">#{produto.descricao}</p>
 								<h:outputLabel value="R$ #{produto.calcularPreco()}" />
 								<b:form>
-									<b:commandButton value="Saiba mais" look="primary" col-lg="6"
-										ajax="true" action="#{lojabean.detalheSobreProduto(produto)}"
-										size="md" title="Detalhes sobre o produto" style="width:200px">
-									</b:commandButton>
+									<b:button value="Saiba mais" look="primary" col-lg="6"
+										ajax="true" href="produto.xhtml?produtoId=#{produto.id}"
+										size="md" title="Detalhes sobre o produto" style="width:200px" />
 									<br />
 									<br />
 								</b:form>

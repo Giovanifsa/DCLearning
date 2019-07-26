@@ -25,10 +25,6 @@ import ecommerce.models.LocalGrowl;
 @Named
 @ViewScoped
 public class TemplateBean implements Serializable {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
 	private String navbarTextoPesquisa;
 	private UIComponent templateNavbar;
 	

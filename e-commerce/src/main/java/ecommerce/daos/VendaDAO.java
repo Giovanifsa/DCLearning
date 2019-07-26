@@ -1,6 +1,7 @@
 package ecommerce.daos;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.enterprise.context.RequestScoped;
@@ -11,6 +12,7 @@ import javax.persistence.Query;
 
 import ecommerce.beans.TemplateBean;
 import ecommerce.models.ItemCarrinho;
+import ecommerce.models.ItemVendido;
 import ecommerce.models.Produto;
 import ecommerce.models.Usuario;
 import ecommerce.models.Venda;
@@ -21,19 +23,24 @@ import ecommerce.models.Venda;
 public class VendaDAO implements Serializable {
 	@Inject
 	private EntityManager em;
-	@Inject 
-	TemplateBean t;
+
+	public List<Venda> listarComprasUsuario(Usuario usuario) {
+		return em.createQuery("SELECT v FROM " + Venda.class.getSimpleName() + " v WHERE v.cliente.id = :idUsuario ORDER BY v.id DESC", Venda.class)
+				.setParameter("idUsuario", usuario.getId())
+				.getResultList();
+	}
 	
 	public void adicionarVenda(Venda v) {
 		em.persist(v);
 	}
+	
 	public void adicionarItensCarrinho(List<ItemCarrinho> itens) {
 		for (ItemCarrinho item : itens) {
 			em.persist(item);
 		}
 	}
 	
-	public Venda getVenda(int cliente_id) {
-		return em.find(Venda.class, cliente_id);						
+	public Venda getVenda(int id) {
+		return em.find(Venda.class, id);						
 	}
 }

@@ -11,7 +11,7 @@
 		<ui:define name="body">
 			<b:container fluid="true">
 				<b:row>
-					<b:column offset-lg="2" large-screen="8">
+					<b:column offset-lg="2" offset-md="2" large-screen="8" medium-screen="8">
 						<b:panel look="primary" collapsible="false">
 							<f:facet name="heading">
 								<b:iconAwesome value="plus" solid="true" style="padding-right:20px" addon="true"/>
@@ -30,7 +30,7 @@
 								</b:row>
 							
 								<b:row>
-									<b:column large-screen="6">
+									<b:column large-screen="6" medium-screen="6">
 										<b:inputText label="Código do produto" value="#{novoProdutoBean.cadastroCodigoProduto}"
 										required="true" required-message="Campo necessário." maxlength="6" size="6" 
 										id="campoCadastroCodigo" validator="#{novoProdutoBean.validarCodigo}" 
@@ -39,16 +39,20 @@
 									<b:message for="campoCadastroCodigo" />
 									</b:column>
 									
-									<b:column large-screen="6">
-										<b:selectOneMenu value="#{novoProdutoBean.cadastroLoja}" label="Selecione uma loja">
+									<b:column large-screen="6" medium-screen="6">
+										<b:selectOneMenu value="#{novoProdutoBean.cadastroLoja}" label="Selecione uma loja" required="true"
+											required-message="Selecione uma loja." id="seletorLoja">
+											
 											<f:selectItems value="#{novoProdutoBean.getLojas()}" var="loja" 
 												itemValue="#{loja}" itemLabel="#{loja.nomeFantasia}"/>
 										</b:selectOneMenu>
+										
+										<b:message for="seletorLoja" />
 									</b:column>
 								</b:row>
 							
 								<b:row>
-									<b:column large-screen="6">
+									<b:column large-screen="6" medium-screen="6">
 										<b:inputText id="campoCustoCompra" value="#{novoProdutoBean.cadastroCustoCompra}"
 											required="true" required-message="Campo necessário."
 											placeholder="0.00" label="Custo de compra" validator="#{novoProdutoBean.validarCustoCompra}"/>
@@ -56,7 +60,7 @@
 										<b:message for="campoCustoCompra" />
 									</b:column>
 									
-									<b:column large-screen="6">
+									<b:column large-screen="6" medium-screen="6">
 										<b:inputText id="campoMargemLucro" label="Margem de lucro" validator="#{novoProdutoBean.validarMargemLucro}"
 											value="#{novoProdutoBean.cadastroMargemLucro}"
 											required="true" required-message="Campo necessário.">
@@ -91,17 +95,17 @@
 								</b:row>
 			
 								<b:row>
-									<b:column large-screen="3" rendered="#{novoProdutoBean.estaEditando() == false}">
+									<b:column large-screen="3" medium-screen="3" rendered="#{novoProdutoBean.estaEditando() == false}">
 										<b:commandButton value="Cadastrar" look="primary"
 											style="width:100%" action="#{novoProdutoBean.salvarProduto()}" />
 									</b:column>
 								
-									<b:column large-screen="3" rendered="#{novoProdutoBean.estaEditando()}">
+									<b:column large-screen="3" medium-screen="3" rendered="#{novoProdutoBean.estaEditando()}">
 										<b:commandButton value="Editar" look="success"
 											style="width:100%" action="#{novoProdutoBean.salvarProduto()}" />
 									</b:column>
 									
-									<b:column large-screen="3" rendered="#{novoProdutoBean.estaEditando()}">
+									<b:column large-screen="3" medium-screen="3" rendered="#{novoProdutoBean.estaEditando()}">
 										<b:commandButton value="Cancelar" look="danger"
 											style="width:100%" action="#{novoProdutoBean.cancelarEdicao()}" ajax="true"
 											update="@form"/>
@@ -158,9 +162,6 @@
 									<b:form>
 										<b:commandButton look="warning" ajax="true" action="#{novoProdutoBean.editar(produto)}" 
 											value="Editar" update=":formCadastroProduto" />
-										
-										<b:commandButton look="danger" action="#{novoProdutoBean.remover(produto)}" 
-											value="Remover" />
 									</b:form>
 								</b:dataTableColumn>
 							</b:dataTable>

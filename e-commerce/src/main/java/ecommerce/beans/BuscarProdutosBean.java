@@ -53,16 +53,12 @@ public class BuscarProdutosBean implements Serializable {
 		return produtosEncontrados != null && !produtosEncontrados.isEmpty();
 	}
 	
-	public String produtoSelecionado(Produto produto) {
+	public void produtoSelecionado(Produto produto) {
 		FacesContext context = FacesContext.getCurrentInstance();
 		NavigationHandler handler = context.getApplication().getNavigationHandler();
 		
 		handler.handleNavigation(context, null, "/produto?faces-redirect=true&produtoId=" + produto.getId());
 		context.renderResponse();
-		
-		System.out.println("Método onSelect chamado");
-		
-		return "produto?faces-redirect=true&produtoId=" + produto.getId();
 	}
 	
 	public String processarLookPainel() {

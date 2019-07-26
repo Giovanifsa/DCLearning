@@ -108,22 +108,6 @@ public class ProdutoDAO implements Serializable {
 		
 		return query.getResultList();
 	}
-
-//	public Long getQuantidadeDisponivel(Produto produto) {
-//
-//		/**
-//		 * Esse método retora a quantidade de determinado no estoque.
-//		 * 
-//		 * @return Long
-//		 * @param produto
-//		 */
-//
-//		String jpql = "select count(p) from Produto p where p.id = " + produto.getId();
-//
-//		Query query = em.createQuery(jpql, Produto.class);
-//		Long total = (Long) query.getSingleResult();
-//		return total;
-//	}
 	
 	public ArquivoRecurso salvarImagemProduto(Part imagem) throws IOException {
 		//Verifica se o arquivo é realmente uma imagem.
@@ -133,7 +117,4 @@ public class ProdutoDAO implements Serializable {
 		
 		return arquivoDao.salvarArquivo(imagem.getSubmittedFileName(), DIRETORIO_IMAGENS_PRODUTOS, imagem.getInputStream().readAllBytes());
 	}
-	
-	
-	
 }
