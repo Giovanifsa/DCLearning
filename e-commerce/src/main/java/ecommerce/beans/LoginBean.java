@@ -295,15 +295,18 @@ public class LoginBean implements Serializable {
 				pagTemplate.adicionarMensagem(FacesMessage.SEVERITY_INFO, "Usuário cadastrado com sucesso! Sessão iniciada automaticamente como " + 
 						dadosSessao.getUsuarioLogado().getEmail() + " - Seja bem vindo(a) " + dadosSessao.getUsuarioLogado().getNome() + "!", true);
 				
-				return processarRedirecionamento("login?faces-redirect=true");
+				return processarRedirecionamento("loja?faces-redirect=true");
 			} catch (PersistenceException ex) {
 				//Implementação do hibernate para violação de unique
 				if (ex.getCause() instanceof ConstraintViolationException) {
 					FacesContext.getCurrentInstance().addMessage(campoCadastroEmail.getClientId(),
 							new FacesMessage(FacesMessage.SEVERITY_ERROR, "Este e-mail já está cadastrado.", null));
+					
+					if (redirecionamento != null) {
+						return "login?redirecionamento=" + redirecionamento;
+					}
 				}
 			}
-			
 		}
 		
 		return null;

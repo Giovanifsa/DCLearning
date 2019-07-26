@@ -44,6 +44,13 @@ public class RestricaoDePaginas implements PhaseListener {
 				context.renderResponse();
 			}
 		}
+		
+		else {
+			if (context.getViewRoot().getViewId().startsWith("/login.xhtml")) {
+				handler.handleNavigation(context, null, "/loja?faces-redirect=true");
+				context.renderResponse();
+			}
+		}
 	} 
 
 	@Override
