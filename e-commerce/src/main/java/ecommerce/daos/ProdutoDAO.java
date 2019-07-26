@@ -21,12 +21,12 @@ import ecommerce.servlets.ServletImagensProduto;
 @Named
 @RequestScoped
 public class ProdutoDAO implements Serializable {
+	public static final String DIRETORIO_IMAGENS_PRODUTOS = "imagensProdutos";
+	
 	@Inject
 	private EntityManager em;
-	
 	@Inject
 	private ArquivoDAO arquivoDao;
-	
 	@Inject
 	private LojaDAO lojaDao;
 	
@@ -54,7 +54,7 @@ public class ProdutoDAO implements Serializable {
 	
 	public List<Produto> listarProdutosUsuario(Usuario usuario) {
 		return em.createQuery("SELECT p FROM " + Produto.class.getSimpleName() + " p WHERE p.lojaDoProduto.dono.id = :idDono", Produto.class)
-				.setParameter("idDono", usuario)
+				.setParameter("idDono", usuario.getId())
 				.getResultList();
 	}
 	
@@ -103,8 +103,8 @@ public class ProdutoDAO implements Serializable {
 	}
 	
 	public List<Produto> procurarPorConteudoNome(String nomePesquisa) {
-		TypedQuery<Produto> query = em.createQuery("SELECT p FROM " + Produto.class.getSimpleName() + " p WHERE p.nome LIKE :nomePesquisa", Produto.class);
-		query.setParameter("nomePesquisa", nomePesquisa);
+		TypedQuery<Produto> query = em.createQuery("SELECT p FROM " + Produto.class.getSimpleName() + " p WHERE LOWER(p.nome) LIKE LOWER(:nomePesquisa)", Produto.class);
+		query.setParameter("nomePesquisa", "%" + nomePesquisa + "%");
 		
 		return query.getResultList();
 	}
@@ -131,7 +131,7 @@ public class ProdutoDAO implements Serializable {
 			throw new InputMismatchException("O arquivo enviado pelo usuário como imagem de produto não é uma imagem!");
 		}
 		
-		return arquivoDao.salvarArquivo(imagem.getSubmittedFileName(), ServletImagensProduto.DIRETORIO_IMAGENS_PRODUTOS, imagem.getInputStream().readAllBytes());
+		return arquivoDao.salvarArquivo(imagem.getSubmittedFileName(), DIRETORIO_IMAGENS_PRODUTOS, imagem.getInputStream().readAllBytes());
 	}
 	
 	

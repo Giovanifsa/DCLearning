@@ -42,6 +42,19 @@ public class Produto {
 	//pela quantia de vendas
 	private int vendas = 0;
 	
+	public Produto(String nome, long codigo, String descricao, BigDecimal custoCompra,
+			BigDecimal porcentualMargemLucro, ArquivoRecurso imagemProduto, Loja lojaDoProduto) {
+		this.nome = nome;
+		this.codigo = codigo;
+		this.descricao = descricao;
+		this.custoCompra = custoCompra;
+		this.porcentualMargemLucro = porcentualMargemLucro;
+		this.imagemProduto = imagemProduto;
+		this.lojaDoProduto = lojaDoProduto;
+	}
+	
+	public Produto() {}
+	
 	/**
 	 * O equals é um método que deve ser preferido ser chamado para verificar se dois objetos
 	 * são iguals. Por padrão, as apis padrões do java que verificam se dois objetos
@@ -142,7 +155,7 @@ public class Produto {
 	}
 
 	public BigDecimal calcularPreco() {
-		return	custoCompra.add(lojaDoProduto.calcularDespesaRateada())
+		return custoCompra.add(lojaDoProduto.calcularDespesaRateada())
 					.multiply(new BigDecimal(1).add(porcentualMargemLucro.divide(new BigDecimal(100))));
 	}
 	

@@ -1,22 +1,23 @@
 body, html {
-  width: 100%;
-  height: 100%;
+	width: 100%;
+	height: 100%;
+	background-color: #06315C;
 }
 .bg {
-  /* Necessário com o uso de NavBar fixo no topo do navegador */
-  /* Desloca a página na parte de cima em 67 pixeis e 20 na parte de baixo */
-  padding-top: 67px;
-  padding-bottom: 20px;	
-
-  /* The image used */
-  background-image: url("#{resource['images:background.jpg']}");
-
-  /* Full height */
-  height: 110%;
-  width: 100%;
+	/* Necessário com o uso de NavBar fixo no topo do navegador */
+	/* Desloca a página na parte de cima em 67 pixeis e 20 na parte de baixo */
+	padding-top: 67px;
+	padding-bottom: 20px;	
 	
-  /* Center and scale the image nicely */
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: 100%;
+	/* The image used */
+	background-image: url("#{resource['images:background.jpg']}");
+	
+	/* Full height */
+	height: 110%;
+	width: 100%;
+	
+	/* Center and scale the image nicely */
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: 100%;
 }

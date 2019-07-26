@@ -28,6 +28,7 @@
 							<b:row>
 								<b:column rendered="#{buscarProdutosBean.buscaGerouResultados()}">
 									<b:dataTable select="true" selection-mode="single" 
+										onselect="ajax:buscarProdutosBean.produtoSelecionado(produto);"
 										value="#{buscarProdutosBean.getProdutosEncontrados()}" var="produto">
 										
 										<b:dataTableColumn label="Imagem do produto">
@@ -70,11 +71,6 @@
 										</b:column>
 									</b:row>
 									
-									<b:row>
-										<b:column>
-										
-										</b:column>
-									</b:row>
 								</b:column>
 							</b:row>
 						</b:panel>

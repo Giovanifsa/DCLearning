@@ -105,6 +105,18 @@ public class NovaLojaBean implements Serializable {
 		cadastroCNPJ = loja.getCnpj();
 		cadastroDespesasTotais = loja.getDespesasTotais().toString();
 	}
+	
+	public void cancelarEdicao() {
+		editandoId = -1;
+		
+		cadastroNomeFantasia = null;
+		cadastroCNPJ = null;
+		cadastroDespesasTotais = null;
+	}
+	
+	public boolean estaEditando() {
+		return editandoId != -1;
+	}
 
 	@Transactional
 	public String remover(Loja loja) {

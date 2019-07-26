@@ -19,7 +19,7 @@ import ecommerce.models.ArquivoRecurso;
 @Named
 @RequestScoped
 public class ArquivoDAO implements Serializable {
-	private static final File DIRETORIO = new File(System.getProperty("user.home") + File.separator + "ArquivosECommerce" + File.separator);
+	public static final Path DIRETORIO = Paths.get(System.getProperty("user.home") + File.separator + "ArquivosECommerce" + File.separator);
 	private final SecureRandom geradorAleatorio;
 	
 	@Inject
@@ -27,7 +27,6 @@ public class ArquivoDAO implements Serializable {
 	
 	public ArquivoDAO() {
 		geradorAleatorio = new SecureRandom();
-		DIRETORIO.mkdirs();
 	}
 	
 	private String gerarNomeAleatorio(int caracteres) {

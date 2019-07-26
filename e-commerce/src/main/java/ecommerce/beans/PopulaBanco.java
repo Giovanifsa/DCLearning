@@ -17,12 +17,11 @@ import ecommerce.models.Produto;
 import ecommerce.models.Usuario;
 
 public class PopulaBanco {
-
 	@Inject
-	EntityManager em;
+	private EntityManager em;
 	
 	@Inject
-	ProdutoDAO dao;
+	private ProdutoDAO dao;
 	
 	public static void main(String args[]) throws NoSuchAlgorithmException, IOException {
 		EntityManagerFactory emFactory = Persistence.createEntityManagerFactory("ecommerce");

@@ -3,6 +3,8 @@ package ecommerce.beans;
 import java.io.Serializable;
 import java.util.List;
 
+import javax.faces.application.NavigationHandler;
+import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -49,6 +51,18 @@ public class BuscarProdutosBean implements Serializable {
 	
 	public boolean buscaGerouResultados() {
 		return produtosEncontrados != null && !produtosEncontrados.isEmpty();
+	}
+	
+	public String produtoSelecionado(Produto produto) {
+		FacesContext context = FacesContext.getCurrentInstance();
+		NavigationHandler handler = context.getApplication().getNavigationHandler();
+		
+		handler.handleNavigation(context, null, "/produto?faces-redirect=true&produtoId=" + produto.getId());
+		context.renderResponse();
+		
+		System.out.println("Método onSelect chamado");
+		
+		return "produto?faces-redirect=true&produtoId=" + produto.getId();
 	}
 	
 	public String processarLookPainel() {

@@ -1,13 +1,24 @@
 package ecommerce.servlets;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.net.URLConnection;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import ecommerce.daos.ArquivoDAO;
+import ecommerce.daos.ProdutoDAO;
+
 import javax.servlet.annotation.WebServlet;
 
 /**
@@ -22,17 +33,32 @@ import javax.servlet.annotation.WebServlet;
  */
 @WebServlet("/imagensProdutos/*")
 public class ServletImagensProduto extends HttpServlet {
-	public static final String DIRETORIO_IMAGENS_PRODUTOS = "imagensProdutos";
-	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-	    String filename = request.getPathInfo().substring(1);
-	    
-	    File file = new File(System.getProperty("user.home") + File.separator + "arquivosWeb" + File.separator, filename);
-	    
-	    response.setHeader("Content-Type", getServletContext().getMimeType(filename));
-	    response.setHeader("Content-Length", String.valueOf(file.length()));
-	    response.setHeader("Content-Disposition", "inline; filename=\"" + filename + "\"");
-	    Files.copy(file.toPath(), response.getOutputStream());
-	    
+		String requestArquivo = request.getPathInfo().substring(1);
+		
+		boolean arquivoValido = false;
+		
+		if (!requestArquivo.contains("\\") && !requestArquivo.contains("/")) {
+			Path diretorio = ArquivoDAO.construirCaminho(ArquivoDAO.DIRETORIO.toString(), ProdutoDAO.DIRETORIO_IMAGENS_PRODUTOS, request.getPathInfo().substring(1));
+			
+			if (Files.exists(diretorio) && !Files.isDirectory(diretorio)) {
+				arquivoValido = true;
+				
+				response.setHeader("Content-Type", Files.probeContentType(diretorio));
+				response.setHeader("Content-Length", String.valueOf(Files.size(diretorio)));
+				response.setHeader("Content-Disposition", "inline; filename=\"" + requestArquivo + "\"");
+				Files.copy(diretorio, response.getOutputStream());
+			}
+		}
+		
+		if (!arquivoValido) {
+			ByteArrayOutputStream outStream = new ByteArrayOutputStream();
+			outStream.write(getClass().getResourceAsStream("nao_encontrado.png").readAllBytes());
+			
+			response.setHeader("Content-Type", URLConnection.guessContentTypeFromStream(new ByteArrayInputStream(outStream.toByteArray())));
+			response.setHeader("Content-Length", "" + outStream.size());
+			response.setHeader("Content-Disposition", "inline; filename=\"" + "nao_encontrado.png" + "\"");
+			response.getOutputStream().write(outStream.toByteArray());
+		}
 	}
 }

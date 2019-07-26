@@ -11,8 +11,6 @@ import javax.persistence.EntityManager;
 @Transactional
 @Interceptor
 public class GerenciadorTransacao implements Serializable {
-	private static final long serialVersionUID = -7211840937318263848L;
-	
 	@Inject
 	private EntityManager em;
 	

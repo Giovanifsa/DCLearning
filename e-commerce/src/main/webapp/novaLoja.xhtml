@@ -9,43 +9,64 @@
 
 <ui:composition template="gnr_template.xhtml">
 	<ui:define name="body">
+	
 		<b:container fluid="true">
 			<b:row>
 				<b:column>
-					<b:panel title="Cadastrar loja" look="primary" collapsible="false"
-						large-screen="7" medium-screen="7">
+					<b:panel look="primary" collapsible="false" offset-lg="2" large-screen="8">
+						<f:facet name="heading">
+							<b:iconAwesome value="plus" solid="true" style="padding-right:20px"/>
+							<h:outputLabel value="Cadastrar nova loja" />
+						</f:facet>
 						
 						<b:form id="formEditarLoja">
-							<b:panelGrid colSpans="3,5,4">
-								<h:outputText value="Nome fantasia:" />
-								<b:inputText id="nomeLoja"
-									value="#{novaLojaBean.cadastroNomeFantasia}"
-									binding="#{novaLojaBean.campoNomeFantasia}"
-									validator="#{novaLojaBean.validarNomeFantasia}"/>
-									
-								<b:message for="nomeLoja" only-most-severe="true"/>
-							
-								<h:outputText value="CNPJ:" />
-								<b:inputText id="cnpj" value="#{novaLojaBean.cadastroCNPJ}"
-									binding="#{novaLojaBean.campoCNPJ}" validator="#{novaLojaBean.validarCNPJ}"/>
-			
-								<b:message for="cnpj" only-most-severe="true"/>
-								
-								<h:outputText value="Despesas totais:" />
-								<b:inputText id="despTotais" value="#{novaLojaBean.cadastroDespesasTotais}"
-									validator="#{novaLojaBean.validarDespesasTotais}"
-									binding ="#{novaLojaBean.campoDespesasTotais}">
-									
-									<f:facet name="prepend">R$</f:facet>
-								</b:inputText>
-			
-								<b:message for="despTotais" only-most-severe="true" />
-			
-								<b:column >
-									<b:commandButton value="Cadastrar loja" look="primary"
-										style="width:100%" action="#{novaLojaBean.salvarLoja}" />
+							<b:row>
+								<b:column>
+									<b:inputText id="nomeLoja" label="Nome fantasia"
+										value="#{novaLojaBean.cadastroNomeFantasia}"
+										binding="#{novaLojaBean.campoNomeFantasia}"
+										validator="#{novaLojaBean.validarNomeFantasia}"/>
+										
+									<b:message for="nomeLoja" only-most-severe="true"/>
 								</b:column>
-							</b:panelGrid>
+							</b:row>
+							
+							<b:row>
+								<b:column large-screen="6">
+									<b:inputText id="cnpj" value="#{novaLojaBean.cadastroCNPJ}" label="CNPJ"
+										binding="#{novaLojaBean.campoCNPJ}" validator="#{novaLojaBean.validarCNPJ}"/>
+								
+									<b:message for="cnpj" only-most-severe="true"/>
+								</b:column>
+								
+								<b:column large-screen="6">
+									<b:inputText id="despTotais" value="#{novaLojaBean.cadastroDespesasTotais}"
+										validator="#{novaLojaBean.validarDespesasTotais}" label="Despesas totais:"
+										binding ="#{novaLojaBean.campoDespesasTotais}">
+										
+										<f:facet name="prepend">R$</f:facet>
+									</b:inputText>
+									
+									<b:message for="despTotais" only-most-severe="true" />
+								</b:column>
+							</b:row>
+							
+							<b:row>
+								<b:column large-screen="3" rendered="#{novaLojaBean.estaEditando() == false}">
+									<b:commandButton value="Cadastrar loja" look="primary"
+										style="width:100%" action="#{novaLojaBean.salvarLoja()}" />								
+								</b:column>
+								
+								<b:column large-screen="3" rendered="#{novaLojaBean.estaEditando()}">
+									<b:commandButton value="Editar loja" look="success"
+										style="width:100%" action="#{novaLojaBean.salvarLoja()}" />								
+								</b:column>
+								
+								<b:column large-screen="3" rendered="#{novaLojaBean.estaEditando()}">
+									<b:commandButton value="Cancelar edição" look="danger"
+										style="width:100%" action="#{novaLojaBean.cancelarEdicao()}" />								
+								</b:column>
+							</b:row>
 						</b:form>
 					</b:panel>
 				</b:column>
@@ -53,9 +74,15 @@
 		
 			<b:row>
 				<b:column>
-					<b:panel>
+					<b:panel look="info">
+						<f:facet name="heading">
+							<b:iconAwesome value="clipboard-list" solid="true" style="padding-right:20px"/>
+							<h:outputLabel value="Suas lojas"/>
+						</f:facet>
+					
 						<b:dataTable value="#{novaLojaBean.listarLojas()}" var="loja"
-							id="listaLoja" emptyMessage="Nenhuma loja cadastrada." >
+							id="listaLoja" emptyMessage="Nenhuma loja cadastrada." 
+							select="false">
 							
 							<b:dataTableColumn width="30%" >
 								<f:facet name="header">Nome da loja</f:facet>
@@ -84,14 +111,12 @@
 							<b:dataTableColumn>
 								<f:facet name="header">Opções</f:facet>
 								
-								<b:form id="formOpcoes">
-									<b:formGroup>
-										<b:commandButton look="warning" ajax="true" action="#{novaLojaBean.editar(loja)}" 
-												value="Editar" update=":formEditarLoja" />
+								<b:form>
+									<b:commandButton look="warning" ajax="true" action="#{novaLojaBean.editar(loja)}" 
+										value="Editar" update=":formEditarLoja" />
 									
-										<b:commandButton look="danger" action="#{novaLojaBean.remover(loja)}" 
-												value="Remover" />
-									</b:formGroup>
+									<b:commandButton look="danger" action="#{novaLojaBean.remover(loja)}" 
+										value="Remover" />
 								</b:form>
 							</b:dataTableColumn>
 						</b:dataTable>
@@ -99,6 +124,7 @@
 				</b:column>
 			</b:row>
 		</b:container>
+		
 	</ui:define>
 </ui:composition>
 </html>

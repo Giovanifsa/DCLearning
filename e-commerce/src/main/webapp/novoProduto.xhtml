@@ -7,143 +7,167 @@
 	xmlns:f="http://xmlns.jcp.org/jsf/core"
 	xmlns:p="http://primefaces.org/ui" xmlns:b="http://bootsfaces.net/ui">
 
-<ui:composition template="gnr_template.xhtml">
-	<ui:define name="body">
-		<b:form id="formCadastroProduto" enctype="multipart/form-data">
+	<ui:composition template="gnr_template.xhtml">
+		<ui:define name="body">
 			<b:container fluid="true">
-				<b:panel offset-lg="1" title="Cadastro Produto" look="primary"
-					collapsible="false" large-screen="10" medium-screen="7">
-					<b:panelGrid colSpans="2,8,2">
-						<h:outputText value="Código:" />
-
-						<b:inputText id="codigo" value="#{novoProdutoBean.produto.codigo}"
-							required="true" required-message="Campo necessário."
-							maxlength="6" size="6" />
-
-						<b:message for="codigo" />
-
-						<h:outputText value="Nome:"/>
-
-						<b:inputText id="nomeField"
-							value="#{novoProdutoBean.produto.nome}" required="true"
-							required-message="Campo necessário." />
-
-						<b:message for="nomeField" />
-
-						<h:outputText value="Custo de compra:" />
-						<b:inputText id="custo" value="#{novoProdutoBean.produto.custoCompra}"
-							required="true" required-message="Campo necessário."
-							placeholder="0.00" />
-
-						<b:message for="custo" />
-
-						<h:outputText value="Margem de Lucro:" />
-						<b:inputText id="margemLucro"
-							value="#{novoProdutoBean.produto.porcentualMargemLucro}"
-							required="true" required-message="Campo necessário."
-							placeholder="0.00%">
-							<f:validateDoubleRange minimum="1.00" />
-						</b:inputText>
-
-						<b:message for="margemLucro" />
-
-						<h:outputText value="Imagem:" />
-						<h:inputFile id="imagem" value="#{novoProdutoBean.imagem}"
-							required="true" required-message="Uma imagem é necessária." />
-
-						<b:message for="imagem" />
-
-						<h:outputText value="Data de Entrada:" />
-						<h:outputText value="#{novoProdutoBean.produto.data}" />
-						<f:convertDateTime binding="#{conversorDeCalendario}"/>
-						<br />
-
-						<h:outputText value="Descrição:" />
-						<b:inputTextarea id="descricao"
-							value="#{novoProdutoBean.produto.descricao}" required="true"
-							required-message="Campo necessário." />
-
-						<b:message for="descricao" />
-					</b:panelGrid>
-
-					<b:row>
-						<b:column offset-lg="5" large-screen="2">
-							<b:commandButton value="Cadastrar" look="primary"
-								style="width:100%" action="#{novoProdutoBean.salvarProduto()}" />
-						</b:column>
-					</b:row>
-				</b:panel>
-			</b:container>
-
-			<h:form>
-				<b:container fluid="true">
-					<b:panel offset-lg="1" title="Tabela de Produtos" look="primary"
-						collapsible="false" large-screen="10" medium-screen="7">
-
-						<h:form>
-							<p:dataTable var="produto" value="#{novoProdutoBean.produtos}" rows="10"
-								paginator="true"
-								paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink}
-								 {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-								rowsPerPageTemplate="5,10,15">
-								<p:column headerText="Imagem">
+				<b:row>
+					<b:column offset-lg="2" large-screen="8">
+						<b:panel look="primary" collapsible="false">
+							<f:facet name="heading">
+								<b:iconAwesome value="plus" solid="true" style="padding-right:20px" addon="true"/>
+								<h:outputLabel value="Cadastrar novo produto" />
+							</f:facet>
+						
+							<b:form id="formCadastroProduto" enctype="multipart/form-data">
+								<b:row>
+									<b:column>
+										<b:inputText id="campoCadastroNome" label="Nome do produto"
+										value="#{novoProdutoBean.cadastroNomeProduto}" required="true"
+										required-message="Campo necessário." />
+										
+										<b:message for="campoCadastroNome" />
+									</b:column>
+								</b:row>
+							
+								<b:row>
+									<b:column large-screen="6">
+										<b:inputText label="Código do produto" value="#{novoProdutoBean.cadastroCodigoProduto}"
+										required="true" required-message="Campo necessário." maxlength="6" size="6" 
+										id="campoCadastroCodigo" validator="#{novoProdutoBean.validarCodigo}" 
+										binding="#{novoProdutoBean.campoCodigo}"/>
+			
+									<b:message for="campoCadastroCodigo" />
+									</b:column>
+									
+									<b:column large-screen="6">
+										<b:selectOneMenu value="#{novoProdutoBean.cadastroLoja}" label="Selecione uma loja">
+											<f:selectItems value="#{novoProdutoBean.getLojas()}" var="loja" 
+												itemValue="#{loja}" itemLabel="#{loja.nomeFantasia}"/>
+										</b:selectOneMenu>
+									</b:column>
+								</b:row>
+							
+								<b:row>
+									<b:column large-screen="6">
+										<b:inputText id="campoCustoCompra" value="#{novoProdutoBean.cadastroCustoCompra}"
+											required="true" required-message="Campo necessário."
+											placeholder="0.00" label="Custo de compra" validator="#{novoProdutoBean.validarCustoCompra}"/>
+											
+										<b:message for="campoCustoCompra" />
+									</b:column>
+									
+									<b:column large-screen="6">
+										<b:inputText id="campoMargemLucro" label="Margem de lucro" validator="#{novoProdutoBean.validarMargemLucro}"
+											value="#{novoProdutoBean.cadastroMargemLucro}"
+											required="true" required-message="Campo necessário.">
+												<f:facet name="append">
+													<b:iconAwesome value="percentage" solid="true"/>
+												</f:facet>
+										</b:inputText>
+										
+										<b:message for="campoMargemLucro" />
+									</b:column>
+								</b:row>
+								
+								<b:row>
+									<b:column>
+										<h:outputLabel value="Selecionar imagem*"/>
+										
+										<h:inputFile id="carregarImagem" value="#{novoProdutoBean.imagemProduto}"
+											validator="#{novoProdutoBean.validarImagem}"/>
+											
+											<b:message for="carregarImagem" />
+									</b:column>
+								</b:row>
+								
+								<b:row>
+									<b:column>
+										<b:inputTextarea id="campoDescricao"
+											value="#{novoProdutoBean.cadastroDescricaoProduto}" required="true"
+											required-message="Campo necessário." label="Descrição do produto"/>
+				
+										<b:message for="campoDescricao" />
+									</b:column>
+								</b:row>
+			
+								<b:row>
+									<b:column large-screen="3" rendered="#{novoProdutoBean.estaEditando() == false}">
+										<b:commandButton value="Cadastrar" look="primary"
+											style="width:100%" action="#{novoProdutoBean.salvarProduto()}" />
+									</b:column>
+								
+									<b:column large-screen="3" rendered="#{novoProdutoBean.estaEditando()}">
+										<b:commandButton value="Editar" look="success"
+											style="width:100%" action="#{novoProdutoBean.salvarProduto()}" />
+									</b:column>
+									
+									<b:column large-screen="3" rendered="#{novoProdutoBean.estaEditando()}">
+										<b:commandButton value="Cancelar" look="danger"
+											style="width:100%" action="#{novoProdutoBean.cancelarEdicao()}" ajax="true"
+											update="@form"/>
+									</b:column>
+								</b:row>
+							</b:form>
+						</b:panel>
+					</b:column>
+				</b:row>
+				
+				<b:row>
+					<b:column>
+						<b:panel look="info" collapsible="false">
+							<f:facet name="heading">
+								<b:iconAwesome value="clipboard-list" solid="true" style="padding-right:20px" addon="true"/>
+								<h:outputLabel value="Seus produtos" />
+							</f:facet>
+						
+							<b:dataTable select="false" value="#{novoProdutoBean.getProdutos()}" var="produto">
+								<b:dataTableColumn label="Imagem">
 									<img src="#{request.contextPath}/#{produto.imagemProduto.nomeDiretorio}/#{produto.imagemProduto.nomeArquivo}" 
-										style="height:50%;width:100%;"/>
-								</p:column>
-
-								<p:column headerText="Nome">
-									<h:outputText value="#{produto.nome}" />
-								</p:column>
-
-								<p:column headerText="Descrição">
-									<h:outputText value="#{produto.descricao}" />
-								</p:column>
+										style="width:100px;height:100px" class="img-responsive center-block"/>
+								</b:dataTableColumn>
 								
-								<p:column headerText="Custo de compra">
-									<h:outputText value="#{produto.custoCompra}" />
-								</p:column>
+								<b:dataTableColumn label="Produto">
+									<h5 style="text-align:center"><h:outputText value="#{produto.nome}" /></h5>
+								</b:dataTableColumn>
 								
-								<p:column headerText="Margem de Lucro">
-									<h:outputText value="#{produto.porcentualMargemLucro}" />
-								</p:column>
+								<b:dataTableColumn label="Código">
+									<h5 style="text-align:center"><h:outputText value="#{produto.codigo}" /></h5>
+								</b:dataTableColumn>
 								
-								<p:column headerText="Data de Entrada">
-									<h:outputText value="#{produto.data}" />
-								</p:column>
+								<b:dataTableColumn label="Descrição">
+									<h5 style="text-align:center;overflow-wrap:truncate"><h:outputText value="#{produto.descricao}" /></h5>
+								</b:dataTableColumn>
 								
-								<p:column headerText="Código">
-									<h:outputText value="#{produto.codigo}" />
-								</p:column>
+								<b:dataTableColumn label="Custo de compra">
+									<h5 style="text-align:center"><h:outputText value="R$ #{produto.custoCompra}" /></h5>
+								</b:dataTableColumn>
 								
-								<p:column headerText="Editar">
-									<h:commandButton value="Editar" id="ajax" 
-										update=":formCadastroProduto"
-										action="#{novoProdutoBean.atualizarProduto(produto)}" >
-										<f:ajax execute="@this" render="@form" />
-									</h:commandButton>
-									</p:column>
-									<p:column headerText="Deletar">
-										<h:commandButton value="Deletar" 
-											ajax="true"
-											action="#{novoProdutoBean.deletaProduto(produto)}">
-											<f:ajax execute="@this" render="@form" />
-										</h:commandButton>
-									</p:column>
-
-								<f:facet name="paginatorTopLeft">
-									<p:commandButton type="button" icon="pi pi-refresh" />
-								</f:facet>
-
-								<f:facet name="paginatorBottomRight">
-									<p:commandButton type="button" icon="pi pi-cloud-upload" />
-								</f:facet>
-
-							</p:dataTable>
-						</h:form>
-					</b:panel>
-				</b:container>
-			</h:form>
-		</b:form>
-	</ui:define>
-</ui:composition>
+								<b:dataTableColumn label="Margem de lucro">
+									<h5 style="text-align:center"><h:outputText value="#{produto.porcentualMargemLucro}%" /></h5>
+								</b:dataTableColumn>
+								
+								<b:dataTableColumn label="Preço final">
+									<h5 style="text-align:center"><h:outputText value="R$ #{produto.calcularPreco()}" /></h5>
+								</b:dataTableColumn>
+								
+								<b:dataTableColumn label="Loja">
+									<h5 style="text-align:center"><h:outputText value="#{produto.lojaDoProduto.nomeFantasia}" /></h5>
+								</b:dataTableColumn>
+								
+								<b:dataTableColumn label="Opções">
+									<b:form>
+										<b:commandButton look="warning" ajax="true" action="#{novoProdutoBean.editar(produto)}" 
+											value="Editar" update=":formCadastroProduto" />
+										
+										<b:commandButton look="danger" action="#{novoProdutoBean.remover(produto)}" 
+											value="Remover" />
+									</b:form>
+								</b:dataTableColumn>
+							</b:dataTable>
+						</b:panel>
+					</b:column>
+				</b:row>
+			</b:container>
+		</ui:define>
+	</ui:composition>
 </html>

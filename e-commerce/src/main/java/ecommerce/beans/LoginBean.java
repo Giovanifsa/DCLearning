@@ -95,17 +95,12 @@ public class LoginBean implements Serializable {
 		
 		//Erro FacesMessage de usuário não encontrado
 		else {
-			FacesContext.getCurrentInstance().addMessage(campoEmailLogin.getClientId(), new FacesMessage() {
-				@Override
-				public Severity getSeverity() {
-					return SEVERITY_ERROR;
-				}
-				
-				@Override
-				public String getSummary() {
-					return "Usuário não encontrado!";
-				}
-			});
+			FacesContext.getCurrentInstance().addMessage(campoEmailLogin.getClientId(), 
+					new FacesMessage(FacesMessage.SEVERITY_ERROR, "Usuário não encontrado.", null));
+			
+			if (redirecionamento != null) {
+				return "login?redirecionamento=" + redirecionamento;
+			}
 		}
 		
 		return null;
@@ -123,7 +118,7 @@ public class LoginBean implements Serializable {
 			dadosSessao.setUsuarioLogado(null);
 			
 			//Redirecione para uma página de loja/login?
-			return "login?faces-redirect=true";
+			return "loja?faces-redirect=true";
 		}
 		
 		//Retorne null para continuar na mesma página
