@@ -2,9 +2,31 @@ package ecommerce.models;
 
 import java.math.BigDecimal;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+
+@Entity
 public class ItemCarrinho {
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private int id;
 	private int quantidade;
+	
+	@ManyToOne
 	private Produto produto;
+	
+	public ItemCarrinho() {
+		
+	}
+	
+	public ItemCarrinho(Produto p, int quantidade) {
+		this.quantidade = quantidade;
+		this.produto = p;
+	}
 	
 	public int getQuantidade() {
 		return quantidade;
@@ -23,7 +45,6 @@ public class ItemCarrinho {
 	}
 	
 	public BigDecimal precoTotal() {
-		
-		return produto.getPreco().multiply(new BigDecimal(quantidade));
+		return produto.calcularPrecoPelaQuantidade(quantidade);
 	}
 }

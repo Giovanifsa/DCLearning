@@ -11,9 +11,11 @@
 		<class>ecommerce.models.Produto</class>
 		<class>ecommerce.models.Loja</class>
 		<class>ecommerce.models.ArquivoRecurso</class>
+		<class>ecommerce.models.Venda</class>
+		<class>ecommerce.models.ItemCarrinho</class>
 
 		<properties>
-			<property name="javax.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver" />
+			<property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver" />
 			<property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost/ecommerce?serverTimezone=UTC" />
 			<property name="javax.persistence.jdbc.user" value="root" />
 			<property name="javax.persistence.jdbc.password" value="root" />

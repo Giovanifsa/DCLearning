@@ -1,0 +1,32 @@
+ <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:b="http://bootsfaces.net/ui" 
+	xmlns:p="http://primefaces.org/ui">
+	
+	<f:metadata>
+		<f:viewParam name="b32Buscando" value="#{buscarProdutosBean.b32Buscando}"></f:viewParam>
+		<f:viewAction action="#{buscarProdutosBean.processarBusca()}" />
+	</f:metadata>
+	
+	<ui:composition template="gnr_template.xhtml">
+		<ui:define name="body">
+			<b:container fluid="true">
+				<b:row>
+					<b:column>
+						<b:panel collapsible="false" look="info">
+							<f:facet name="heading">
+								<b:iconAwesome value="list-alt" solid="true" style="padding-right:20px"/>
+								<h:outputLabel value="Resultados da busca"/>
+							</f:facet>
+						</b:panel>
+					</b:column>
+				</b:row>
+			</b:container>
+		</ui:define>
+	</ui:composition>
+</html>

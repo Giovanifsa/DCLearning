@@ -3,6 +3,7 @@ package ecommerce.daos;
 import java.io.Serializable;
 import java.security.NoSuchAlgorithmException;
 
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
@@ -14,6 +15,7 @@ import ecommerce.models.Usuario;
 import ecommerce.tools.MecanismoDeHash;
 
 @Named
+@RequestScoped
 public class UsuarioDAO implements Serializable {
 	@Inject
 	private EntityManager em;
@@ -45,6 +47,7 @@ public class UsuarioDAO implements Serializable {
 	 * @return
 	 * @throws NoSuchAlgorithmException
 	 */
+	@Transactional
 	public Usuario adicionarUsuario(String nome, String email, String senha) throws NoSuchAlgorithmException {
 		Usuario u = new Usuario(nome, email, hasher.aplicarSHA256(senha.getBytes()));
 		em.persist(u);

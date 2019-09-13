@@ -14,10 +14,15 @@ import javax.faces.validator.ValidatorException;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.persistence.EntityExistsException;
+import javax.persistence.PersistenceException;
+
+import org.hibernate.exception.ConstraintViolationException;
 
 import ecommerce.control.Transactional;
 import ecommerce.daos.ProdutoDAO;
 import ecommerce.daos.UsuarioDAO;
+import ecommerce.models.LocalGrowl;
 import ecommerce.models.Produto;
 import ecommerce.models.Usuario;
 import ecommerce.tools.MecanismoDeHash;
@@ -47,6 +52,7 @@ public class LoginBean implements Serializable {
 	private String cadastroSenha;
 	private String cadastroSenha2;
 	
+	//ViewParam
 	private String redirecionamento;
 	
 	//UI
@@ -65,11 +71,7 @@ public class LoginBean implements Serializable {
 	@Inject
 	private TemplateBean pagTemplate;
 	
-	/**
-	 * Tenta iniciar a sessão do usuário
-	 * @return
-	 * @throws NoSuchAlgorithmException
-	 */
+	
 	public String iniciarSessao() throws NoSuchAlgorithmException {
 		if (emailLogin == null || emailLogin.isEmpty() ||
 				senhaLogin == null || senhaLogin.isEmpty()) {
@@ -85,22 +87,17 @@ public class LoginBean implements Serializable {
 					" - Seja bem vindo(a) novamente " + dadosSessao.getUsuarioLogado().getNome() + "!", true);
 			
 			//Redirecione para uma página após logar.
-			return processarRedirecionamento("login?faces-redirect=true");
+			return processarRedirecionamento("loja?faces-redirect=true");
 		}
 		
 		//Erro FacesMessage de usuário não encontrado
 		else {
-			FacesContext.getCurrentInstance().addMessage(campoEmailLogin.getClientId(), new FacesMessage() {
-				@Override
-				public Severity getSeverity() {
-					return SEVERITY_ERROR;
-				}
-				
-				@Override
-				public String getSummary() {
-					return "Usuário não encontrado!";
-				}
-			});
+			FacesContext.getCurrentInstance().addMessage(campoEmailLogin.getClientId(), 
+					new FacesMessage(FacesMessage.SEVERITY_ERROR, "Usuário não encontrado.", null));
+			
+			if (redirecionamento != null) {
+				return "login?redirecionamento=" + redirecionamento;
+			}
 		}
 		
 		return null;
@@ -118,7 +115,7 @@ public class LoginBean implements Serializable {
 			dadosSessao.setUsuarioLogado(null);
 			
 			//Redirecione para uma página de loja/login?
-			return "login?faces-redirect=true";
+			return "loja?faces-redirect=true";
 		}
 		
 		//Retorne null para continuar na mesma página
@@ -257,50 +254,59 @@ public class LoginBean implements Serializable {
 	 * @return String indicando a pagina para redirecionar.
 	 * @throws NoSuchAlgorithmException
 	 */
-	@Transactional
 	public String finalizarCadastro() throws NoSuchAlgorithmException {
 		boolean invalido = false;
 		
+		//Valida se o campo de email não está vazio.
+		if (cadastroEmail.isBlank()) {
+			FacesContext.getCurrentInstance().addMessage(campoCadastroEmail.getClientId(),
+					new FacesMessage(FacesMessage.SEVERITY_ERROR, "Campo de email preenchido com espaços!", null));
+			
+			invalido = true;
+		}
+		
+		//Valida se o campo de senha não está vazio.
+		if (cadastroSenha.isBlank()) {
+			FacesContext.getCurrentInstance().addMessage(campoCadastroSenha.getClientId(),
+					new FacesMessage(FacesMessage.SEVERITY_ERROR, "Campo de senha preenchido com espaços!", null));
+			
+			invalido = true;
+		}
+		
 		//Valida se ambos campos de email no cadastro são iguais
 		if (!cadastroEmail.equals(cadastroEmail2)) {
-			FacesContext.getCurrentInstance().addMessage(campoCadastroEmail.getClientId(), new FacesMessage() {
-				@Override
-				public Severity getSeverity() {
-					return SEVERITY_ERROR;
-				}
-				
-				@Override
-				public String getSummary() {
-					return "Ambos campos de e-mail devem ser iguais!";
-				}
-			});
+			FacesContext.getCurrentInstance().addMessage(campoCadastroEmail.getClientId(),
+					new FacesMessage(FacesMessage.SEVERITY_ERROR, "Ambos campos de e-mail devem ser iguais!", null));
 			
 			invalido = true;
 		}
 		
 		//Valida se ambos campos de senha no cadastro são iguais
 		if (!cadastroSenha.equals(cadastroSenha2)) {
-			FacesContext.getCurrentInstance().addMessage(campoCadastroSenha.getClientId(), new FacesMessage() {
-				@Override
-				public Severity getSeverity() {
-					return SEVERITY_ERROR;
-				}
-				
-				@Override
-				public String getSummary() {
-					return "Ambos campos de senha devem ser iguais!";
-				}
-			});
+			FacesContext.getCurrentInstance().addMessage(campoCadastroSenha.getClientId(),
+					new FacesMessage(FacesMessage.SEVERITY_ERROR, "Ambos campos de senha devem ser iguais!", null));
 			
 			invalido = true;
 		}
 		
 		if (!invalido) {
-			dadosSessao.setUsuarioLogado(usuarioDao.adicionarUsuario(cadastroNome, cadastroEmail, cadastroSenha));
-			pagTemplate.adicionarMensagem(FacesMessage.SEVERITY_INFO, "Usuário cadastrado com sucesso! Sessão iniciada automaticamente como " + 
-					dadosSessao.getUsuarioLogado().getEmail() + " - Seja bem vindo(a) " + dadosSessao.getUsuarioLogado().getNome() + "!", true);
-			
-			return processarRedirecionamento("login?faces-redirect=true");
+			try {
+				dadosSessao.setUsuarioLogado(usuarioDao.adicionarUsuario(cadastroNome, cadastroEmail, cadastroSenha));
+				pagTemplate.adicionarMensagem(FacesMessage.SEVERITY_INFO, "Usuário cadastrado com sucesso! Sessão iniciada automaticamente como " + 
+						dadosSessao.getUsuarioLogado().getEmail() + " - Seja bem vindo(a) " + dadosSessao.getUsuarioLogado().getNome() + "!", true);
+				
+				return processarRedirecionamento("loja?faces-redirect=true");
+			} catch (PersistenceException ex) {
+				//Implementação do hibernate para violação de unique
+				if (ex.getCause() instanceof ConstraintViolationException) {
+					FacesContext.getCurrentInstance().addMessage(campoCadastroEmail.getClientId(),
+							new FacesMessage(FacesMessage.SEVERITY_ERROR, "Este e-mail já está cadastrado.", null));
+					
+					if (redirecionamento != null) {
+						return "login?redirecionamento=" + redirecionamento;
+					}
+				}
+			}
 		}
 		
 		return null;

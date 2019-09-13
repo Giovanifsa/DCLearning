@@ -1,9 +1,19 @@
-target/
-*.class
-*.jar
-*.war
-*.ear
-*.logs
-*.iml
+# Eclipse
+.classpath
+.project
+.settings/
+ 
+# Intellij
 .idea/
-.eclipse
+*.iml
+*.iws
+ 
+# Mac
+.DS_Store
+ 
+# Maven
+log/
+target/
+
+# Java
+*.class

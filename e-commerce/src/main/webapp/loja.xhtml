@@ -1,0 +1,92 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:b="http://bootsfaces.net/ui" xmlns:p="http://primefaces.org/ui">
+
+<f:metadata>
+	<f:viewParam name="redirecionamento" value="#{loja.redirecionamento}"></f:viewParam>
+</f:metadata>
+
+<ui:composition template="gnr_template.xhtml">
+	<ui:define name="head">
+		<h:outputStylesheet library="css" name="loja.css" />
+	</ui:define>
+
+	<ui:define name="body">
+		<b:container fluid="true">
+
+			<b:panel look="primary" offset-lg="1" collapsible="false"
+				small-screen="12" medium-screen="7" large-screen="10"
+				showCollapseLink="false" tooltip-position="right" rendered="#{lojaBean.listarProdutos().isEmpty() == false}"
+				id="painel" icon-align="left" display="inline" icon="home"
+				icon-size="2x">
+				<b:form>
+						<h1 align="center" >DCStore
+						</h1>
+					<b:panel look="danger" style="text-align:right">
+					<p><img src="#{request.contextPath}/resources/images/ecommerce.png"
+						height="90px" width="100px" align="left" /></p>
+						<b:button value="Cadastre sua loja" size="sm"
+							style="background-color:yellowGreen; width:250px;height:28px"
+							title="Cadastrar loja" href="novaLoja.xhtml" />
+						<p></p>
+						<b:button value="Cadastre seus produtos" size="sm"
+							style="background-color:cyan; width:250px;height:28px"
+							title="Cadastrar produtos" href="novoProduto.xhtml"/>
+					</b:panel>
+				</b:form>
+				<b:panel style="background-color:darkCyan">
+					<ui:repeat value="#{lojaBean.listarProdutos()}" var="produto">
+						<b:thumbnail col-lg="4" style="height:20pc;width:15pc">
+							<img src="#{request.contextPath}/#{produto.imagemProduto.nomeDiretorio}/#{produto.imagemProduto.nomeArquivo}"
+								alt="#{produto.nome}" style="height: 170px;width: 200px"/>
+							<f:facet name="caption">
+								<h4 style="overflow-wrap: truncate">#{produto.nome}</h4>
+								<p class="descricao-css">#{produto.descricao}</p>
+								<h:outputLabel value="R$ #{produto.calcularPreco()}" />
+								<b:form>
+									<b:button value="Saiba mais" look="primary" col-lg="6"
+										ajax="true" href="produto.xhtml?produtoId=#{produto.id}"
+										size="md" title="Detalhes sobre o produto" style="width:200px" />
+									<br />
+									<br />
+								</b:form>
+							</f:facet>
+						</b:thumbnail>
+					</ui:repeat>
+				</b:panel>
+			</b:panel>
+			
+			<b:panel collapsible="false" look="warning" rendered="#{lojaBean.listarProdutos().isEmpty()}">
+				<f:facet name="heading">
+					<b:iconAwesome value="list-alt" solid="true" style="padding-right:20px"/>
+					<h:outputLabel value="Oops, algo está errado!" rendered="#{buscarProdutosBean.buscaGerouResultados() == false}"/>
+				</f:facet>
+			
+				<b:column>
+					<b:row>
+						<b:column>
+							<h2 style="text-align:center"><h:outputLabel value="Caramba! Não há nada em nossa loja!"/> </h2>
+						</b:column>
+					</b:row>
+					
+					<b:row>
+						<b:column>
+							<h4 style="text-align:center" ><h:outputLabel value="Volte mais tarde quanto estivermos concluídos! Ou..." /></h4>
+						</b:column>
+						
+						<b:column style="text-align:center">
+							<b:button look="warning" value="Cadastre um produto" href="novoProduto.xhtml" icon-awesome="angle-left" size="lg"/>
+						</b:column>
+					</b:row>
+				</b:column>
+			</b:panel>
+		</b:container>
+	</ui:define>
+</ui:composition>
+</html>

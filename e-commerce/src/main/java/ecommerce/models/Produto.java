@@ -1,6 +1,7 @@
 package ecommerce.models;
 
 import java.math.BigDecimal;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,12 +11,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
-import javax.validation.constraints.NotNull;
 
 @Entity
-public class Produto {
+public class Produto {	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
@@ -23,15 +22,15 @@ public class Produto {
 	@Column(unique = true)
 	private long codigo;
 
-	@NotNull
 	private String nome;
 
 	@Lob
 	private String descricao;
-	private BigDecimal preco = new BigDecimal(0);
+	private BigDecimal custoCompra;
+	private Date data;
 	
 	//Valor variando de 0-100 (deve ser dividido por 100 para ter a porcentagem real)
-	private BigDecimal margemDeLucroPorcentual = new BigDecimal(0);
+	private BigDecimal porcentualMargemLucro;
 	
 	@OneToOne(fetch = FetchType.EAGER)
 	private ArquivoRecurso imagemProduto;
@@ -42,6 +41,19 @@ public class Produto {
 	//Propriedade de vendas, com ela podemos organizar os produtos
 	//pela quantia de vendas
 	private int vendas = 0;
+	
+	public Produto(String nome, long codigo, String descricao, BigDecimal custoCompra,
+			BigDecimal porcentualMargemLucro, ArquivoRecurso imagemProduto, Loja lojaDoProduto) {
+		this.nome = nome;
+		this.codigo = codigo;
+		this.descricao = descricao;
+		this.custoCompra = custoCompra;
+		this.porcentualMargemLucro = porcentualMargemLucro;
+		this.imagemProduto = imagemProduto;
+		this.lojaDoProduto = lojaDoProduto;
+	}
+	
+	public Produto() {}
 	
 	/**
 	 * O equals é um método que deve ser preferido ser chamado para verificar se dois objetos
@@ -85,33 +97,33 @@ public class Produto {
 	public void setDescricao(String descricao) {
 		this.descricao = descricao;
 	}
-
-	public BigDecimal getPreco() {
-		return preco;
+	
+	public boolean contemImagem() {
+		return imagemProduto != null;
 	}
 
-	public void setPreco(BigDecimal preco) {
-		this.preco = preco;
+	public BigDecimal getCustoCompra() {
+		return custoCompra;
 	}
 
-	public BigDecimal getMargemDeLucroPorcentual() {
-		return margemDeLucroPorcentual;
+	public void setCustoCompra(BigDecimal custoCompra) {
+		this.custoCompra = custoCompra;
 	}
 	
-	/**
-	 * Calcula o preço final para o usuário (com a margem de lucro do vendedor).
-	 * @return Preço final calculado.
-	 */
-	public BigDecimal calcularPrecoFinal() {
-		return (preco.multiply(margemDeLucroPorcentual.divide(new BigDecimal(100))).add(preco));
+	public BigDecimal getPorcentualMargemLucro() {
+		return porcentualMargemLucro;
 	}
 
-	public void setMargemDeLucroPorcentual(BigDecimal margemDeLucroPorcentual) {
-		this.margemDeLucroPorcentual = margemDeLucroPorcentual;
+	public void setPorcentualMargemLucro(BigDecimal porcentualMargemLucro) {
+		this.porcentualMargemLucro = porcentualMargemLucro;
 	}
 
 	public ArquivoRecurso getImagemProduto() {
-		return imagemProduto;
+		if (imagemProduto != null) {
+			return imagemProduto;
+		}
+		
+		return new ArquivoRecurso("resources/images", "nao_encontrado.png");
 	}
 
 	public void setImagemProduto(ArquivoRecurso imagemProduto) {
@@ -132,5 +144,23 @@ public class Produto {
 
 	public void setVendas(int vendas) {
 		this.vendas = vendas;
+	}
+
+	public Date getData() {
+		return data;
+	}
+
+	public void setData(Date data) {
+		this.data = data;
+	}
+
+	public BigDecimal calcularPreco() {
+		return custoCompra.add(lojaDoProduto.calcularDespesaRateada())
+					.multiply(new BigDecimal(1).add(porcentualMargemLucro.divide(new BigDecimal(100))))
+					.setScale(2, BigDecimal.ROUND_HALF_UP);
+	}
+	
+	public BigDecimal calcularPrecoPelaQuantidade(int quantidade) {
+		return calcularPreco().multiply(new BigDecimal(quantidade));
 	}
 }

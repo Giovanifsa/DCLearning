@@ -9,16 +9,17 @@ import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.security.SecureRandom;
 
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
 
-import ecommerce.control.Transactional;
 import ecommerce.models.ArquivoRecurso;
 
 @Named
+@RequestScoped
 public class ArquivoDAO implements Serializable {
-	private static final Path DIRETORIO = Paths.get(System.getProperty("user.home") + File.separator + "ArquivosECommerce");
+	public static final Path DIRETORIO = Paths.get(System.getProperty("user.home") + File.separator + "ArquivosECommerce" + File.separator);
 	private final SecureRandom geradorAleatorio;
 	
 	@Inject
@@ -46,11 +47,11 @@ public class ArquivoDAO implements Serializable {
 	
 	/**
 	 * Salva um caminho para um arquivo no disco local no banco de dados, e 
-	 * grava o arquivo na pasta do usuário.
+	 * grava o arquivo na pasta do usu�rio.
 	 * @param nomeArquivo Nome do arquivo a ser salvo.
-	 * @param nomeDiretorio Diretório que será salvo na pasta do usuário.
-	 * @param dadosArquivo Bytes do arquivo que serão salvos.
-	 * @return ArquivoRecurso denotando o nome gerado para o arquivo e o diretório salvo.
+	 * @param nomeDiretorio Diret�rio que ser� salvo na pasta do usu�rio.
+	 * @param dadosArquivo Bytes do arquivo que ser�o salvos.
+	 * @return ArquivoRecurso denotando o nome gerado para o arquivo e o diret�rio salvo.
 	 * @throws IOException
 	 */
 	public ArquivoRecurso salvarArquivo(String nomeArquivo, String nomeDiretorio, byte[] dadosArquivo) throws IOException {
@@ -65,16 +66,16 @@ public class ArquivoDAO implements Serializable {
 		}
 		
 		Path arquivoPath;
+		String nomeFinalArquivo;
 		
 		do {
-			arquivoPath = construirCaminho(dir.toString(), gerarNomeAleatorio(32) + "." + extensao);
+			nomeFinalArquivo = gerarNomeAleatorio(32) + extensao;
+			arquivoPath = construirCaminho(dir.toString(), nomeFinalArquivo);
 		} while (Files.exists(arquivoPath));
 			
 		Files.write(arquivoPath, dadosArquivo, StandardOpenOption.CREATE, StandardOpenOption.WRITE);
 		
-		ArquivoRecurso recurso = new ArquivoRecurso();
-		recurso.setNomeArquivo(nomeArquivo);
-		recurso.setNomeDiretorio(nomeDiretorio);
+		ArquivoRecurso recurso = new ArquivoRecurso(nomeDiretorio, nomeFinalArquivo);
 		
 		em.persist(recurso);
 		
@@ -87,8 +88,8 @@ public class ArquivoDAO implements Serializable {
 	}
 	
 	/**
-	 * Constrói uma referência à um diretório de arquivos a partir de uma lista de strings.
-	 * Caso haja mais que uma string, os diretórios serão construídos dessa forma:
+	 * Constr�i uma refer�ncia � um diret�rio de arquivos a partir de uma lista de strings.
+	 * Caso haja mais que uma string, os diret�rios ser�o constru�dos dessa forma:
 	 * diretorio1/diretorio2/diretorio3/diretorio.../arquivo.png
 	 * 
 	 * @param caminhos

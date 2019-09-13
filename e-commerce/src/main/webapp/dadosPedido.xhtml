@@ -1,0 +1,83 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui" xmlns:b="http://bootsfaces.net/ui"
+	xmlns:jsf="http://xmlns.jcp.org/jsf/composite">
+	
+	<f:metadata>
+		<f:viewParam name="pedidoId" value="#{vendasBean.pedidoId}"></f:viewParam>
+		<f:viewAction action="#{vendasBean.carregarPedido()}" />
+	</f:metadata>
+
+	<ui:composition template="gnr_template.xhtml">
+		<ui:define name="body">
+			<b:form id="carrinho">
+				<h:outputLabel />
+	
+				<b:container id="container">
+					<b:row>
+						<b:column rendered="#{vendasBean.pedidoFoiCarregado()}">
+							<b:panel look="primary" collapsible="false" >
+								<f:facet name="heading">
+									<b:iconAwesome value="clipboard-list" solid="true" style="padding-right:20px" addon="true"/>
+									<h:outputLabel value="Dados do pedido" />
+								</f:facet>
+							
+								<b:row>
+									<b:column>
+										<b:dataTable value="#{vendasBean.pedido.produtosComprados}" var="itemCarrinho">
+											<b:dataTableColumn label="Produto">
+												<h5 style="text-align:center"><h:outputText value="#{itemCarrinho.produto.nome}" /></h5>
+											</b:dataTableColumn>
+											
+											<b:dataTableColumn label="Quantidade">
+												<h5 style="text-align:center"><h:outputText value="#{itemCarrinho.quantidade}" /></h5>
+											</b:dataTableColumn>
+											
+											<b:dataTableColumn label="Loja">
+												<h5 style="text-align:center"><h:outputText value="#{itemCarrinho.produto.lojaDoProduto.nomeFantasia}" /></h5>
+											</b:dataTableColumn>
+											
+											<b:dataTableColumn label="Valor unitário do produto">
+												<h5 style="text-align:center"><h:outputText value="R$ #{itemCarrinho.produto.calcularPreco()}" /></h5>
+											</b:dataTableColumn>
+											
+											<b:dataTableColumn label="Valor total">
+												<h5 style="text-align:center"><h:outputText value="R$ #{itemCarrinho.precoTotal()}" /></h5>
+											</b:dataTableColumn>
+										</b:dataTable>
+									</b:column>
+								</b:row>
+							</b:panel>
+						</b:column>
+						
+						<b:column rendered="#{vendasBean.pedidoFoiCarregado() == false}">
+						<b:panel look="danger" collapsible="false">
+							<f:facet name="heading">
+								<b:iconAwesome value="exclamation-triangle" solid="true" style="padding-right:20px"/>
+								<h:outputLabel value="ERRO 404 - Pedido não encontrado."/>
+							</f:facet>
+							
+							<b:row>
+								<b:column>
+									<h3 style="text-align:center"><h:outputLabel value="Desculpe, mas não encontramos dados do pedido indicado!"/></h3>
+								</b:column>
+							</b:row>
+							
+							<b:row>
+								<b:column>
+									<b:button look="warning" value="Voltar para seus pedidos?" href="pedidos.xhtml" icon-awesome="angle-left" size="lg"/>
+								</b:column>
+							</b:row>
+						</b:panel>
+					</b:column>
+					</b:row>
+				</b:container>
+			</b:form>
+		</ui:define>
+	</ui:composition>
+</html>
